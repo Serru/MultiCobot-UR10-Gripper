@@ -1,0 +1,31 @@
+ur10_4_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+     - ur10_4_shoulder_pan_joint
+     - ur10_4_shoulder_lift_joint
+     - ur10_4_elbow_joint
+     - ur10_4_wrist_1_joint
+     - ur10_4_wrist_2_joint
+     - ur10_4_wrist_3_joint
+  constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+      ur10_4_shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+      ur10_4_shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+      ur10_4_elbow_joint: {trajectory: 0.1, goal: 0.1}
+      ur10_4_wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+      ur10_4_wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+      ur10_4_wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+ur10_4_joint_group_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+     - ur10_4_shoulder_pan_joint
+     - ur10_4_shoulder_lift_joint
+     - ur10_4_elbow_joint
+     - ur10_4_wrist_1_joint
+     - ur10_4_wrist_2_joint
+     - ur10_4_wrist_3_joint
+
