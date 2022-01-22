@@ -19,45 +19,209 @@ except:  # For Python 2 compatibility
     def dist(p, q):
         return sqrt(sum((p_i - q_i) ** 2.0 for p_i, q_i in zip(p, q)))
 
-# r, p and y in rads
-def plan_cartesian_path_orientation(group, r, p, y, scale=1, bool_wait = True):
-    joint_target = group.get_current_joint_values()
-    joint_target[3] += scale * r
-    joint_target[4] += scale * p
-    joint_target[5] += scale * y
-    succeeded = group.go(joint_target, wait=bool_wait)
-    return succeeded
+def cartesian_pose_target(group, x, y, z, rot_x, rot_y, rot_z, rot_w):
+    success = False
+    group.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        target_pose = geometry_msgs.msg.PoseStamped()
+        target_pose.header.frame_id = "/ur10_1/world"
+        target_pose.pose.position.x = x
+        target_pose.pose.position.y = y
+        target_pose.pose.position.z = z
+        target_pose.pose.orientation.x = rot_x
+        target_pose.pose.orientation.y = rot_y
+        target_pose.pose.orientation.z = rot_z
+        target_pose.pose.orientation.w = rot_w
+        
+        group.set_pose_target(target_pose, "ee_link")
+        #group.set_pose_target([x, y, z, rot_x, rot_y, rot_z, rot_w], "ee_link")
+        success = group.go(wait = True)
+        if not success:
+            group.clear_pose_target("ee_link")
+            rospy.sleep(1)
+        group.stop()
+    print(success)
+   # group.stop()
 
-def plan_cartesian_path_pose(group, x, y, z, w, scale=1):
-    waypoints = []
+def pick_place(arm, gripper):
+    ## Planning to a Pose goal
+    ## ^^^^^^^^^^^^^^^^^^^^^^^
+    ## We can plan a motion for this group to a desired pose for the 
+    ## end-effector
 
-    wpose = group.get_current_pose().pose
-    wpose.position.x += scale * x  # Move forward/backwards in (x)
-    wpose.position.z += scale * z  # Move up/down (z)
-    wpose.position.y += scale * y  # Move sideways (y)
-    wpose.orientation.w += scale * w  # Rotation of the arm
-    waypoints.append(copy.deepcopy(wpose))
+    # Primer Cubo
+    success = False
+    arm.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        arm.set_named_target("home")        
+        success = arm.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        arm.stop()
+    print(success)
 
-    # We want the Cartesian path to be interpolated at a resolution of 1 cm
-    # which is why we will specify 0.01 as the eef_step in Cartesian
-    # translation.  We will disable the jump threshold by setting it to 0.0 disabling:
-    (plan, fraction) = group.compute_cartesian_path(
-        waypoints,  # waypoints to follow
-        0.001,  # eef_step
-        0.0)  # jump_threshold
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_open")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)
+        
+    cartesian_pose_target(arm, -0.29, -0.632, 0.62, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.29, -0.775, 0.62, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.29, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.29, -0.775, 0.08, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_close")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)
 
-    # Note: We are just planning, not asking move_group to actually move the robot yet:
-    return plan, fraction
+    cartesian_pose_target(arm, -0.10, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.0, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.28, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.40, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.50, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.60, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.70, -0.6, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_open")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)    
 
+    # Segundo Cubo
+    success = False
+    arm.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        arm.set_named_target("home")        
+        success = arm.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        arm.stop()
+    print(success)
 
-def execute_plan(group, plan, bool_wait = True):
-    ## Use execute if you would like the robot to follow
-    ## the plan that has already been computed:
-    succeeded = group.execute(plan, wait=bool_wait)
-    return succeeded
+    cartesian_pose_target(arm, -0.29, -0.632, 0.62, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.5, -0.632, 0.62, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.7, -0.632, 0.2, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.8, -0.5, 0.2, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.9, -0.5, 0.08, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+                        
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_close")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)
 
-    ## **Note:** The robot's current joint state must be within some tolerance of the
-    ## first waypoint in the `RobotTrajectory`_ or ``execute()`` will fail
+    cartesian_pose_target(arm, -0.7, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.6, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.5, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.4, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.3, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.2, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.1, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.28, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.40, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.50, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.60, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.70, -0.6, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_open")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)            
+
+    # Tercer Cubo
+    success = False
+    arm.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        arm.set_named_target("home")        
+        success = arm.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        arm.stop()
+    print(success)
+    
+    cartesian_pose_target(arm, -0.29, -0.632, 0.62, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.475, -0.632, 0.62, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.575, -0.632, 0.2, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.675, -0.88, 0.2, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.675, -0.88, 0.1, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.675, -0.88, 0.08, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+                        
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_close")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)
+
+    cartesian_pose_target(arm, -0.5, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.4, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.3, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.2, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, -0.1, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.1, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.28, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.40, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.50, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.60, -0.775, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+    cartesian_pose_target(arm, 0.70, -0.6, 0.15, -0.0173102007701, 0.699047127267, 0.0169648143179, 0.714664722709)
+                
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_open")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)
+
+    success = False
+    arm.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        arm.set_named_target("home")        
+        success = arm.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        arm.stop()
+    print(success)
+    
+    success = False
+    gripper.set_start_state_to_current_state()
+    while not success and not rospy.is_shutdown():
+        gripper.set_named_target("gripper_open")
+        success = gripper.go(wait = True)
+        if not success:
+            rospy.sleep(1)
+        gripper.stop()
+    print(success)
 
 def main():
     ## First initialize moveit_commander and rospy.
@@ -69,6 +233,7 @@ def main():
     PLANNING_GROUP_GRIPPER = "gripper"
     PLANNING_GROUP_ARM = "manipulator"
     PLANNING_NS = "/ur10_1/"
+    REFERENCE_FRAME = "/ur10_1/world"
 
     ## Instantiate a RobotCommander object.  This object is an interface to
     ## the robot as a whole.
@@ -104,202 +269,26 @@ def main():
     
     #arm.set_planner_id("RRT")
     arm.set_num_planning_attempts(15)
+    arm.set_planning_time(5)
     arm.allow_looking(True)
     arm.allow_replanning(True)
+    arm.set_pose_reference_frame(REFERENCE_FRAME)
+    arm.set_goal_position_tolerance(0.001)
+    arm.set_goal_orientation_tolerance(0.001)
+    minX = 1.5
+    maxX = -1.5
+    minY = 0.0
+    maxY = -1.5
+    minZ = 0
+    maxZ = 1.5
+    arm.set_workspace([minX, minY, minZ, maxX, maxY, maxZ])
 
     #gripper.set_planner_id("RRTConnect")
     gripper.set_num_planning_attempts(15)
     gripper.allow_replanning(True)
     gripper.allow_looking(True)
 
-
-    ## Planning to a Pose goal
-    ## ^^^^^^^^^^^^^^^^^^^^^^^
-    ## We can plan a motion for this group to a desired pose for the 
-    ## end-effector
-
-    # Primer Cubo
-    succeess = False
-    all_ok = False
-    while not all_ok:
-        arm.set_named_target("home")
-    
-        arm.go(wait=True)
-        gripper.set_named_target("gripper_open")
-        gripper.go(wait=True)
-        
-        cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.54, 0, 0, 0, 1)
-        succeess = execute_plan(arm, cartesian_plan)
-        if succeess:
-            cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, -0.143, 0, 0, 1)
-            succeess = execute_plan(arm, cartesian_plan)
-            if succeess:
-                cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0, -0.47, 0, 1)
-                succeess = execute_plan(arm, cartesian_plan)
-                if succeess:
-                    cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0, -0.07, 0, 1)
-                    succeess = execute_plan(arm, cartesian_plan)
-                    if succeess:
-                        pos_check = arm.get_current_pose().pose.position
-                        print(round(pos_check.x,2))
-                        print(round(pos_check.y,2))
-                        if round(pos_check.x,2) == -0.30:
-                            if round(pos_check.y,2) == -0.77:
-                                all_ok = True
-                                print(arm.get_current_pose())
-        print(succeess)
-        print(all_ok)
-
-    succeess = False
-    all_ok = False
-    while not all_ok:
-    
-        gripper.set_named_target("gripper_close")
-        gripper.go(wait=True)
-
-        arm.set_named_target("home")    
-        arm.go(wait=True)
-
-        cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.53, 0.0, 0.07, 0, 1)
-        succeess = execute_plan(arm, cartesian_plan)
-        if succeess:
-            cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0.98, 0, 0, 0, 1)
-            succeess = execute_plan(arm, cartesian_plan)
-            if succeess:
-                cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0.175, 0, 0, 1)
-                succeess = execute_plan(arm, cartesian_plan)
-                if succeess:
-                    pos_check = arm.get_current_pose().pose.position
-                    print(round(pos_check.x,2))
-                    print(round(pos_check.y,2))
-                    if round(pos_check.x,2) == 0.69:
-                        if round(pos_check.y,2) == -0.46:
-                            all_ok = True
-                            print(arm.get_current_pose())
-        print(succeess)
-
-    succeess = False
-    all_ok = False
-    while not all_ok:
-        gripper.set_named_target("gripper_open")
-        gripper.go(wait=True)
-    
-        # Segundo Cubo
-        arm.set_named_target("home")
-        arm.go(wait=True)
-
-        cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.53, 0, 0, 0, 1)
-        succeess = execute_plan(arm, cartesian_plan)
-        if succeess:
-            cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.61, 0, 0, 0, 1)
-            succeess = execute_plan(arm, cartesian_plan)
-            if succeess:
-                cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0, -0.42, 1.0)
-                succeess = execute_plan(arm, cartesian_plan)
-                if succeess:
-                    cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0.132, 0, 0, 1)
-                    succeess = execute_plan(arm, cartesian_plan)
-                    if succeess:
-                        cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0, -0.12, 0, 1)
-                        succeess = execute_plan(arm, cartesian_plan)
-                        if succeess:
-                            pos_check = arm.get_current_pose().pose.position
-                            print(round(pos_check.x,2))
-                            print(round(pos_check.y,2))
-                            if round(pos_check.x,2) == -0.9:
-                                if round(pos_check.y,2) == -0.50:
-                                    all_ok = True
-                                    print(arm.get_current_pose())
-    
-    succeess = False
-    all_ok = False
-    while not all_ok:
-        gripper.set_named_target("gripper_close")
-        gripper.go(wait=True)
-
-        arm.set_named_target("home")    
-        arm.go(wait=True)
-
-        cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.53, 0.0, 0.07, 0, 1)
-        succeess = execute_plan(arm, cartesian_plan)
-        if succeess:
-            cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0.98, 0, 0, 0, 1)
-            succeess = execute_plan(arm, cartesian_plan)
-            if succeess:
-                cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0.175, 0, 0, 1)
-                succeess = execute_plan(arm, cartesian_plan)
-                if succeess:
-                    pos_check = arm.get_current_pose().pose.position
-                    print(round(pos_check.x,2))
-                    print(round(pos_check.y,2))
-                    if round(pos_check.x,2) == 0.69:
-                        if round(pos_check.y,2) == -0.46:
-                            all_ok = True
-                            print(arm.get_current_pose())    
-    succeess = False
-    all_ok = False
-    while not all_ok:
-        gripper.set_named_target("gripper_open")
-        gripper.go(wait=True)
-        
-        # Tercer Cubo
-        arm.set_named_target("home")
-        arm.go(wait=True)
-    
-        cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.53, 0, 0, 0, 1)
-        succeess = execute_plan(arm, cartesian_plan)
-        if succeess:
-            cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.385, 0, 0, 0, 1)
-            succeess = execute_plan(arm, cartesian_plan)
-            if succeess:
-                cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0, -0.42, 1.0)
-                succeess = execute_plan(arm, cartesian_plan)
-                if succeess:
-                    cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, -0.248, 0, 0, 1)
-                    succeess = execute_plan(arm, cartesian_plan)
-                    if succeess:
-                        cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0, -0.12, 0, 1)
-                        succeess = execute_plan(arm, cartesian_plan)
-                        if succeess:
-                            pos_check = arm.get_current_pose().pose.position
-                            print(round(pos_check.x,2))
-                            print(round(pos_check.y,2))
-                            if round(pos_check.x,2) == -0.68:
-                                if round(pos_check.y,2) == -0.88:
-                                    all_ok = True
-                                    print(arm.get_current_pose())
-    succeess = False
-    all_ok = False
-    while not all_ok:
-        gripper.set_named_target("gripper_close")
-        gripper.go(wait=True)
-
-        arm.set_named_target("home")    
-        arm.go(wait=True)
-
-        cartesian_plan, fraction = plan_cartesian_path_pose(arm, -0.53, 0.0, 0.07, 0, 1)
-        succeess = execute_plan(arm, cartesian_plan)
-        if succeess:
-            cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0.98, 0, 0, 0, 1)
-            succeess = execute_plan(arm, cartesian_plan)
-            if succeess:
-                cartesian_plan, fraction = plan_cartesian_path_pose(arm, 0, 0.175, 0, 0, 1)
-                succeess = execute_plan(arm, cartesian_plan)
-                if succeess:
-                    pos_check = arm.get_current_pose().pose.position
-                    print(round(pos_check.x,2))
-                    print(round(pos_check.y,2))
-                    if round(pos_check.x,2) == 0.69:
-                        if round(pos_check.y,2) == -0.46:
-                            all_ok = True
-                            print(arm.get_current_pose())
-    gripper.set_named_target("gripper_open")
-    gripper.go(wait=True)
-
-    arm.set_named_target("home")
-    arm.go(wait=True)
-    gripper.set_named_target("gripper_open")
-    gripper.go(wait=True)
+    pick_place(arm, gripper)
 
     ## When finished shut down moveit_commander.
     moveit_commander.roscpp_shutdown()
