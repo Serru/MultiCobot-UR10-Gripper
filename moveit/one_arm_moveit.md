@@ -275,7 +275,7 @@ roslaunch moveit_setup_assistant setup_assistant.launch
 
 Se va a escoger como modelo del robot el fichero URDF: *~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro* (podría ser perfectamente ur10_robot.urdf.xacro).
 
-![ ](/home/miguel/tfg_multirobot/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
+![ ](/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
 
 Posteriormente, se le da al boton *Load Files*.
 ![ ](/home/miguel/tfg_multirobot/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
