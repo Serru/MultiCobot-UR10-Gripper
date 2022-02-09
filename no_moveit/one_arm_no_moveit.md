@@ -135,14 +135,14 @@ sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kin
 sudo apt-get install ros-kinetic-ros-control ros-kinetic-ros-controllers
 ```
 El resultado tras solventar  configurar Gazebo es similar a la siguiente.
-![setup stage](/home/miguel/tfg_multirobot/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
+![setup stage](/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
 * Se ha realizado modificaciones en el fichero de world y ur10.launch para obtener el escenario como en la imagen, estas modificaciones se pueden encontrar en los anexos.
 
 ### Agregación del robotiq_2f_85_gripper al robot ur10 [No ha sido posible, problemas con gazebo]
 Para agregar correctamente el gripper hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
  
  Tomando la siguiente imagen para entender el funcionamiento del controllador del gripper:
- ![esquema del gripper](/home/miguel/tfg_multirobot/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
+ ![esquema del gripper](/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
 
 Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El servidor es que se encarga de enviar las ordenes al gripper y el cliente envía ordenes al servidor.
 
@@ -194,7 +194,7 @@ No se sabe la razón exacta de porqué no es posible simular correctamente el gr
 
 Para la simulación con Gazebo no funciona, pero sí en la herramienta de rosviz
 
-![rviz-robotiq-2f-85-gripper](/home/miguel/tfg_multirobot/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
+![rviz-robotiq-2f-85-gripper](/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
 
 Por ello durante las pruebas en el robot real puede que sea necesario este repositorio, pero para realizar las simulaciones se va utilizar otro repositorio que sí es compatible con el simulador gazebo.
 
@@ -290,7 +290,7 @@ De la misma manera para le UR10 con sus movimientos limitados:
 </robot>
 ```
 Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen el gripper.
-![ ](/home/miguel/tfg_multirobot/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
+![ ](/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
 
 Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
 ```{bash}
