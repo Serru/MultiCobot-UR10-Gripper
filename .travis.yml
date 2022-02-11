@@ -47,9 +47,6 @@ cache:
 language: generic
 matrix:
   include:
-  - name: "Trusty indigo"
-    dist: trusty
-    env: ROS_DISTRO=indigo
   - name: "Xenial kinetic"
     dist: xenial
     env: ROS_DISTRO=kinetic
@@ -58,7 +55,7 @@ matrix:
 # trigger a build matrix for different ROS distributions if desired.
 env:
   global:
-    - ROS_CI_DESKTOP="`lsb_release -cs`"  # e.g. [trusty|xenial|...]
+    - ROS_CI_DESKTOP="`lsb_release -cs`"  # e.g. [xenial|...]
     - CI_SOURCE_PATH=$(pwd)
     - ROSINSTALL_FILE=$CI_SOURCE_PATH/dependencies.rosinstall
     - CATKIN_OPTIONS=$CI_SOURCE_PATH/catkin.options
