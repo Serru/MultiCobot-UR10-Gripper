@@ -1,4 +1,6 @@
-![image](https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/imgs_md/proyect-logo.png)
+<p align="center">
+<img alt="MultiCobot-UR10-Gripper imagen" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/imgs_md/proyect-logo.png" />
+  </a>
 
 # MultiCobot-UR10-Gripper
 <p align="center">
