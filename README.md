@@ -31,7 +31,7 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 
 
 
-## Requisitos del sistema:
+## Requisitos del sistema
 - Ubuntu 16.04
 - Python 2.7
 - ROS Kinetic Kame
