@@ -1,5 +1,5 @@
 # Realización de pruebas sobre la instalación realizada
-
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ENG/pruebas.md)
 ## Si hay *warnings* durante la compilación
 ### Warnings ignorados:
 ```{bash}
@@ -120,3 +120,20 @@ mkdir multirobot
 Este directorio será el directorio raíz de las implementaciones y con esto, la preparación para la reproducción de las diferentes soluciones está terminada.
 
 Añadir, que las modificaciones que sean comunes a todas las soluciones se modificarán sobre los recursos compartidos.
+
+<div>
+<p align="left">
+<button name="button">
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Menú</a>
+</button>
+</p>
+
+
+
+<p>
+<span style="float:left;">
+    <button name="button">
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/leap-motion.md">Previous</a>
+    	</button> 
+    </span>
+</p>
