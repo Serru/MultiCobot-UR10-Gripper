@@ -1,22 +1,16 @@
-# Replicación del proyecto de TFG: Sistema mutirobot para el transporte colaborativo de objetos
-Proceso de instalación y configuración para la reproducción del proyecto de TFG, titulado "*Sistema multirobot para el transporte colaborativo de objetos*". 
+# Setup del sistema base
 
-*No se garantiza que funcione una vez realizada la reproducción del proyecto, y se puede necesitar realizar cambios adecuados que el proyecto pueda requerir debido a las actualizaciones que puedan tener.
-*
+Se va a explicar paso a paso cómo instalar ROS Kinetic Kame y todos las herramientas y paquetes que se han necesitado.
 
-Se proveerá de un link al final, que redireccionará al github que contiene el proyecto funcionando.
 
-###Contribuidores
----
-* Autor: [Burgh Oliván, Miguel](mailto:647531@unizar.es)
-* Director: [López Nicolás, Gonzalo](mailto:gonlopez@unizar.es)
+** *No se garantiza que funcione una vez realizada la reproducción del proyecto. Esto es debido a las posibles actualizaciones que pueden haber sufrido los paquetes instalados y por ello una adecuación al contenido actualizado.* **
 
-## Instalación y configuración base del proyecto
-Se instala las dependencias y los repositorios comunes a todas las soluciones que tiene el proyecto. 
-### Requisitos del sistema
-* Ubuntu 16.04
-* Python 2.7
-* ROS Kinetic Kame
+## Requisitos mínimos del sistema
+- Sistema operativo: Ubuntu 16.04 (Xenial Xerus)
+
+## Instalación y configuración base del sistema
+Se instala las dependencias y los repositorios comunes a todas las soluciones.
+
 ### Instalación de ROS y dependecias
 ```{bash}
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
