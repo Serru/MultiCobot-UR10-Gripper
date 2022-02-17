@@ -7,7 +7,7 @@
 Sistema multirobot para el transporte de colaborativo de objetos, desarrollo del proyecto de fin de grado en la Universidad de Zaragoza.</p>
 
 <p align="center">
-  <a rel="license" href="http://creativecommons.org/licenses/by/2.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/2.0/80x15.png" />
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
   </a>
   
 </p>
@@ -46,14 +46,14 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 
 ## Documentación
 - [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
-### Con el paquete de MoveIt!
-- [Configuración para un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md)
-- [Configuración para dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md)
-- [Configuración para cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/four_arm_moveit.md)
 ### Sin el paquete de MoveIt!
 - [Configuración para un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md)
 - [Configuración para dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit.md)
 - [Configuración para cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/four_arm_no_moveit.md)
+### Con el paquete de MoveIt!
+- [Configuración para un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md)
+- [Configuración para dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md)
+- [Configuración para cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/four_arm_moveit.md)
 ### Configuración en el robot físico
 - [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
@@ -76,7 +76,7 @@ No se garantiza una respuesta, pero puedes contactar con los autores con la info
 
 <p align="left">
   <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">
-    <img src="https://licensebuttons.net/l/by/3.0/88x31.png" alt="Este repositorio está publicado bajo la licencia de Creative Commons Attribution 4.0 International." />
+    <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="Este repositorio está publicado bajo la licencia de Creative Commons Attribution 4.0 International." />
   </a>
   </br>
   </br>
@@ -101,7 +101,7 @@ El trabajo desarrollado ha sido evaluado y validado experimentalmente, mostrando
 
 ## Reconocimiento
 
-Porfavor, cita esta publicación si el contenido de este repositorio te ha sido útil:
+Por favor, cita esta publicación si el contenido de este repositorio te ha sido útil:
 
 BibTeX: 
 ```
