@@ -76,16 +76,18 @@ sudo service leapd restart
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Siguiente</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Menú</a>
 </button>
 </p>
 
 
 
-<p style="text-align:left;">
+<p>
+<span style="float:left;">
     <button name="button">
     	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ros-packages.md">Previous</a>
     	</button> 
+    </span> 
     <span style="float:right;">
         <button name="button">
             	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/pruebas.md">Siguiente</a>
