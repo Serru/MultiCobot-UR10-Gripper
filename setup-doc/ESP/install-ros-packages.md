@@ -13,10 +13,10 @@ Durante el proceso de instalación de los paquetes de ROS, no se ha realizado ni
 *Se han respetado las licencias de cada paquete instalado, en caso de que haya alguna licencia que debido por su actualización, modificación u otra situación, por favor contácte con los autores para su modificación o eliminación del paquete en este repositorio.*
 
 ## Instalación de paquetes de terceros
-Instalación de repositorios de terceros que se van a utilizar total o parcialmente.
+Instalación de paquetes de terceros que se van a utilizar total o parcialmente.
 
 ### [Universal Robots](https://github.com/ros-industrial/universal_robot)
-Este repositorio de Universal Robots se utilizará como base para realizar las modificaciones necesarias que el proyecto requiera. Los ficheros modificados irán debidamente detallados.
+Este paquete de Universal Robots se utilizará como base para realizar las modificaciones necesarias que el proyecto requiera, el paquete provee del modelado de los robots de la marca, como son el UR3, UR5, UR10, etc. así como ejemplos de uso con otros paquetes (MoveIt!) y herramientas (Gazebo). Los ficheros modificados irán debidamente detallados. 
 
 Clonar el repositorio:
 ```{bash}
@@ -38,7 +38,7 @@ catkin_make
 ```
 
 #### [Robotiq_2finger_grippers](https://github.com/Danfoa/robotiq_2finger_grippers)
-Este repositorio de Robotiq se utilizará para añadir el gripper que se utilizará al robot y los controladores necesarios para su funcionamiento.
+Este repositorio de Robotiq se utilizará para añadir el gripper que se utilizará al robot y los controladores necesarios para su funcionamiento. Este paquete está pensado para la comunicación con el gripper del robot físico
 
 Clonar el repositorio:
 ```{bash}
