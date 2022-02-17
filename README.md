@@ -52,7 +52,7 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 ### Configuración en el robot físico
 - [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
-## Enlances a los videos con los resultados 
+## Video con los resultados 
 Aquí se deja un video con los resultados obtenidos de las simulaciones realizadas en Gazebo. El vídeo contiene dos y cuatro robots realizando un *pick & place* sin intervención humana, después mediante el dispositivo Leap Motion se muestra el control de dos cobots por una persona y finalmente el resultado desarrollado se ha probado en el robot físico Campero.
 
 <p>
