@@ -235,7 +235,7 @@ add_compile_options(-std=c++11)
 <p>
 <span style="float:left;">
     <button name="button">
-    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md">Previous</a>
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md">Anterior</a>
     	</button> 
     </span> 
     <span style="float:right;">

@@ -133,7 +133,7 @@ Añadir, que las modificaciones que sean comunes a todas las soluciones se modif
 <p>
 <span style="float:left;">
     <button name="button">
-    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md">Previous</a>
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md">Anterior</a>
     	</button> 
     </span>
 </p>
