@@ -313,9 +313,9 @@ En la pestaña *Robot Poses* se va a configurar uno denominado *home*:
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando *home* 3/3")
 
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando "gripper open"")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando *gripper open*")
 
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_25.png  "Configurando "gripper close"")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_25.png  "Configurando *gripper close*")
 
 
 En la pestaña *End Effectors* se va añadir el gripper:
@@ -356,42 +356,42 @@ Por conveniencia, para su posible testeo en el robot, real se mantendrá el lanz
 Para comenzar y entender mejor el paquete de MoveIt!, se va a separar el contenido de los paquetes en MoveIt! y Gazebo:
 
 Gazebo:
--- launch:
-	-- gazebo.launch
-	-- ros_controllers.launch
--- config:
-	-- **ros_controllers.yaml**
+- launch:
+	- gazebo.launch
+	- ros_controllers.launch
+- config:
+	- **ros_controllers.yaml**
 
 No es necesario el gazebo.launch que provee MoveIt!, ya que se ha configurado previamente el paquete de gazebo que se usará. La configuración es muy similar si se da una ojeada a los ficheros involucrados.
 
 MoveIt!:
--- launch:
-	-- **demo.launch**
-		-- planning_context.launch
-			-- config:
-				-- ur10.srdf
-				-- joint_limits.yaml
-				-- kinematics.yaml
-		-- **move_group.launch**
-			--planning_context.launch
-			-- config:
-				-- ur10.srdf
-				-- joint_limits.yaml
-				-- kinematics.yaml
-			-- planning_pipeline.launch.xml
-				-- ompl_planning_pipeline.launch.xml
-			-- **trajectory_execution.launch.xml**
-				-- **ur10_moveit_controller_manager.launch.xml**
-				-- config:
-					-- **ros_controllers.yaml**
-			-- sensor_manager.launch.xml
-				-- config:
-					-- sensors_3d.yaml
-				-- ur10_moveit_sensor_manager.launch.xml
-			-- moveit_rviz.launch (Rviz)
-				-- moveit.rviz
-				-- config:
-					-- kinematics.yaml
+- launch:
+	- **demo.launch**
+		- planning_context.launch
+			- config:
+				- ur10.srdf
+				- joint_limits.yaml
+				- kinematics.yaml
+		- **move_group.launch**
+			- planning_context.launch
+			- config:
+				- ur10.srdf
+				- joint_limits.yaml
+				- kinematics.yaml
+			- planning_pipeline.launch.xml
+				- ompl_planning_pipeline.launch.xml
+			- **trajectory_execution.launch.xml**
+				- **ur10_moveit_controller_manager.launch.xml**
+				- config:
+					- **ros_controllers.yaml**
+			- sensor_manager.launch.xml
+				- config:
+					- sensors_3d.yaml
+				- ur10_moveit_sensor_manager.launch.xml
+			- moveit_rviz.launch (Rviz)
+				- moveit.rviz
+				- config:
+					- kinematics.yaml
 		
 		
 Se puede apreciar en el esquema de los directorios comó están relacionados los ficheros. Entre ellos los que se van a modificar manualmente están señalados en negrita.
@@ -995,7 +995,7 @@ if __name__=='__main__':
     pass
 ```
 
-Para ejecutar las prueba:
+Para ejecutar las pruebas:
 ```{bash}
 # Terminal 1
 roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch
