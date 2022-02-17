@@ -1,9 +1,11 @@
-#### Leap Motion
+# Instalación y configuración de Leap Motion
+
+## Configuración de Leap Motion
 Driver de ROS para el controlador de Leap Motion
 
-Para la correcta instación y configuración del controlador de Leap Motion en ROS Kinetic Kame, hay que realizar un poco más de trabajo que en los repositorios previos.
+Para la correcta instalación y configuración del controlador de Leap Motion en ROS Kinetic Kame, hay que realizar un poco más de trabajo que en los repositorios previos.
 
-Lo primero es reemplazar o crear el fichero que dar servicio al controlador: ***/lib/systemd/system/leapd.service***
+Lo primero es reemplazar o crear el fichero que da servicio al controlador: ***/lib/systemd/system/leapd.service***
 ```{bash}
 # Found by Kevin Cole 2014.11.22 at
 # https://github.com/atejeda/leap-fedora-rpm
@@ -25,15 +27,17 @@ ExecStart=/usr/sbin/leapd
 [Install]
 WantedBy=multi-user.target
 ```
+
+Se crea el acceso directo al fichero creado, que se guardará en */etc/systemd/system/* como *leapd.service*:
 ```{bash}
 sudo ln -s /lib/systemd/system/leapd.service /etc/systemd/system/leapd.service
 sudo systemctl daemon-reload
 ```
-
+## Instalación de Leap Motion
 
 Clonar el repositorio:
 ```{bash}
-cd ~/tfg_multirobot/src
+cd ~/MultiCobot-UR10-Gripper/src
 git clone https://github.com/ros-drivers/leap_motion.git
 ```
 
@@ -41,7 +45,7 @@ En los pasos de instalación dice de mover el directorio LeapSDK al directorio $
 
 ```{bash}
 # 64-bit operating system
-echo "export PYTHONPATH=$PYTHONPATH:$HOME/tfg_multirobot/src/leap_motion/LeapSDK/lib:$HOME/tfg_multirobot/src/leap_motion/LeapSDK/lib/x64" >> ~/.bashrc
+echo "export PYTHONPATH=$PYTHONPATH:$HOME/MultiCobot-UR10-Gripper/src/leap_motion/LeapSDK/lib:$HOME/MultiCobot-UR10-Gripper/src/leap_motion/LeapSDK/lib/x64" >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -53,14 +57,14 @@ sudo apt-get install ros-kinetic-leap-motion
 
 Instalación de dependencias que puedan faltar para ROS Kinetic Kame:
 ```{bash}
-cd ~/tfg_multirobot
+cd ~/MultiCobot-UR10-Gripper
 rosdep update
 rosdep install --rosdistro kinetic --ignore-src --from-paths src
 ```
 
 Compilación:
 ```{bash}
-cd ~/tfg_multirobot
+cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 
@@ -68,3 +72,4 @@ Si surgen errores durante el uso de los drivers de Leap Motion, con reiniciar el
 ```{bash}
 sudo service leapd restart
 ```
+***

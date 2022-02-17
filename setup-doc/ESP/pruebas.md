@@ -1,20 +1,22 @@
-### Warnings durante la compilación
-Warnings ignorados:
+# Realización de pruebas sobre la instalación realizada
+
+## Si hay *warnings* durante la compilación
+### Warnings ignorados:
 ```{bash}
 WARNING: Package 'ur_modern_driver' is deprecated (This package has been deprecated. Users of CB3 and e-Series controllers should migrate to ur_robot_driver.)
 
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:418 (message):
   catkin_package() include dir
-  '/home/miguel/tfg_multirobot/build/gazebo-pkgs/gazebo_grasp_plugin/..'
+  '/home/miguel/MultiCobot-UR10-Gripper/build/gazebo-pkgs/gazebo_grasp_plugin/..'
   should be placed in the devel space instead of the build space
 Call Stack (most recent call first):
   /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
   gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
   
-/home/miguel/tfg_multirobot/src/ros_control/hardware_interface/include/hardware_interface/internal/interface_manager.h:69:85: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+/home/miguel/MultiCobot-UR10-Gripper/src/ros_control/hardware_interface/include/hardware_interface/internal/interface_manager.h:69:85: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
    static const void callConcatManagers(typename std::vector<T*>& managers, T* result)
 ```
-Warnings resueltos:
+### Warnings resueltos:
 
 **gazebo_version_helpers warning:**
 ```{bash}
@@ -25,7 +27,7 @@ Call Stack (most recent call first):
   /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
   gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
 ```
-Modificar el fichero ~/tfg_multirobot/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, a partir de la línea 26 por lo siguiente:
+Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, a partir de la línea 26 por lo siguiente:
 
 ```{bash}
 catkin_package(
@@ -47,7 +49,7 @@ Call Stack (most recent call first):
   gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
 [...]
 ```
-Modificar el fichero ~/tfg_multirobot/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, a partir de la línea 31 por lo siguiente:
+Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, a partir de la línea 31 por lo siguiente:
 ```{bash}
 catkin_package(
   # Binary directory required for proto headers inclusion to work, because install commands don't
@@ -73,7 +75,7 @@ Call Stack (most recent call first):
   gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt:34 (catkin_package)
 [...]
 ```
-Modificar el fichero ~/tfg_multirobot/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, a partir de la línea 34 por lo siguiente:
+Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, a partir de la línea 34 por lo siguiente:
 ```{bash}
 catkin_package(
 #  INCLUDE_DIRS include
@@ -83,47 +85,38 @@ catkin_package(
 )
 ```
 
+## Pequeña comprobación de la instalación del sistema
 
 ### Activación del entorno de trabajo actual
 ```{bash}
-cd ~/tfg_multirobot
-source ~/tfg_multirobot/devel/setup.bash
+cd ~/MultiCobot-UR10-Gripper
+source ~/MultiCobot-UR10-Gripper/devel/setup.bash
 ```
 
 ### Testeo de la configuración base
-Tras realizar previamente toda la instalación y configuración del sistema se puede proceder a realizar pruebas para comprobar su funcionamiento antes de proceder a realizar otras modificaciones. No se va a indicar que pruebas se puede realizar, pero los repositorios de origen tiene indicaciones para ejecutar pequeñas demostracciones que son muy útiles para comprender lo que pueden realizar.
+Tras realizar previamente toda la instalación y configuración del sistema se puede proceder a realizar pruebas para comprobar su funcionamiento antes de proceder a realizar otras modificaciones. No se va a indicar que pruebas se puede efectuar porque los repositorios de origen tiene indicaciones para ejecutar pequeñas demostraciones que son muy útiles para comprender lo que pueden hacer.
 
-El entorno de trabajo debería quedarde la siguiente manera tras la instalación de todos los repositorios:
+El entorno de trabajo debería quedar de la siguiente manera tras la instalación de todos los repositorios:
 ```{bash}
-miguel@Omen:~/tfg_multirobot/src$ ls
+miguel@Omen:~/MultiCobot-UR10-Gripper/src$ ls
 CMakeLists.txt        geometry                  ros_control
 gazebo-pkgs           leap_motion               roslint
 gazebo_ros_pkgs       object_recognition_msgs   universal_robot
 general-message-pkgs  robotiq_2finger_grippers  ur_modern_driver
 ```
-Estos repositorios, serán la base para la implementación del proyecto, es decir, los recursos del sistema.
+Estos repositorios o paquetes de ROS, serán la base para la implementación que se quiere desarrollar, es decir, actuarán como recursos del sistema.
 
 
+## Preparación para la implementación del sistema multirobot
+Una vez que se tiene todos los recursos necesarios para el sistema, instalados correctamente, se procede a crear el paquete que contendrá las diferentes soluciones propuestas con sus ventajas y desventajas.
 
+Se ha decidido organizarlo de esta manera para que los recursos comunes estén compartidos entre las diferentes implementaciones, y las modificaciones específicas que se tengan que hacer se guardarán en sus respectivos directorios. Lo que permitirá ejecutar los ficheros modificados en vez de los ficheros originales de los que parten modificando simplemente el fichero a incluir en los ficheros con extensión *launch*.
 
-
-
-
-
-
-
-## Preparación para la implementación del proyecto
-Una vez que se tiene todos los recursos necesarios para el sistema instalados correctamente, se procede a crear el paquete que contendrá las diferentes soluciones propuestas con sus ventajas y desventajas.
-
-Se ha decidido organizarlo de esta manera para que los recursos estén compartidos entre las diferentes implementaciones, y las modificaciones que se tengan que realizar se guardarán en sus respectivos directorios que al ser lanzados ejecutarán estos ficheros modificados en vez de los ficheros originales de los que parten.
-
-Por ello se procede primero a crear el directorio que contendra todas las soluciones propuestas:
+Por ello se procede primero a crear el directorio que contendrá todas las soluciones propuestas:
 ```{bash}
-cd ~/tfg_multirobot/src
-mkdir tfg_project
+cd ~/MultiCobot-UR10-Gripper/src
+mkdir multirobot
 ```
-Este directorio, será el directorio raíz de las implementaciones
-
-Con esto, la preparación para la reproducción de las diferentes soluciones está terminada.
+Este directorio será el directorio raíz de las implementaciones y con esto, la preparación para la reproducción de las diferentes soluciones está terminada.
 
 Añadir, que las modificaciones que sean comunes a todas las soluciones se modificarán sobre los recursos compartidos.
