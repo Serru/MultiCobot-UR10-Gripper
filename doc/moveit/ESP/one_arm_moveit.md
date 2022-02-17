@@ -283,7 +283,7 @@ Posteriormente, se le da al boton *Load Files*.
 En la pestaña *Self-Collisions*, darle al boton *Generate Collision Matrix*, o que generará una matriz en donde los diferentes componentes del robot puedan tener colisiones:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matirz de colisiones")
 
-En la pestaña *VIrtual Joints*, hay que crear un joint entre la base del robot y el frame que lo contiene, en este caso, *world*, siendo la configuración la siguiente:
+En la pestaña *Virtual Joints*, hay que crear un joint entre la base del robot y el frame que lo contiene, en este caso, *world*, siendo la configuración la siguiente:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_4.png  "Definiendo Virtual Joint")
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_5.png  "Definido Virtual Joint")
 
@@ -305,12 +305,13 @@ Tras darle al botón *Add Joints*, hay que buscar por *robotiq_85_left_knucle_jo
 Tras guardar, el resultado en la pestaña de *Planning Group* debería ser la siguiente:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_11.png  "Configuración final del Planning Group")
 
-En la pestaña *Robot Poses* se va a configurar uno denominado "home":
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_12.png  "Configurando "home" 1/3")
+En la pestaña *Robot Poses* se va a configurar uno denominado *home*:
 
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_13.png  "Configurando "home" 2/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_12.png  "Configurando *home* 1/3")
 
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando "home" 3/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_13.png  "Configurando *home* 2/3")
+
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando *home* 3/3")
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando "gripper open"")
 
