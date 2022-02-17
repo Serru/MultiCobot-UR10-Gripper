@@ -1,5 +1,5 @@
 # Realización de pruebas sobre la instalación realizada
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ENG/pruebas.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/pruebas.md)
 ## Si hay *warnings* durante la compilación
 ### Warnings ignorados:
 ```{bash}
@@ -124,7 +124,7 @@ Añadir, que las modificaciones que sean comunes a todas las soluciones se modif
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Menú</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md">Menú</a>
 </button>
 </p>
 
@@ -133,7 +133,7 @@ Añadir, que las modificaciones que sean comunes a todas las soluciones se modif
 <p>
 <span style="float:left;">
     <button name="button">
-    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/leap-motion.md">Previous</a>
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md">Previous</a>
     	</button> 
     </span>
 </p>

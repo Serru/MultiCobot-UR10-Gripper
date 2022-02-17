@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="MultiCobot-UR10-Gripper imagen" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/imgs_md/proyect-logo.png" />
+<img alt="MultiCobot-UR10-Gripper imagen" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/proyect-logo.png" />
   </a>
 
 # MultiCobot-UR10-Gripper
@@ -45,15 +45,15 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 
 
 ## Documentación
-- [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md)
+- [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
 ### Con el paquete de MoveIt!
-- [Configuración para un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/ESP/one_arm_moveit.md)
-- [Configuración para dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/ESP/two_arm_moveit.md)
-- [Configuración para cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/ESP/four_arm_moveit.md)
+- [Configuración para un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md)
+- [Configuración para dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md)
+- [Configuración para cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/four_arm_moveit.md)
 ### Sin el paquete de MoveIt!
-- [Configuración para un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/ESP/one_arm_no_moveit.md)
-- [Configuración para dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/ESP/two_arm_no_moveit.md)
-- [Configuración para cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/ESP/four_arm_no_moveit.md)
+- [Configuración para un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md)
+- [Configuración para dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit.md)
+- [Configuración para cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/four_arm_no_moveit.md)
 ### Configuración en el robot físico
 - [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
@@ -62,7 +62,7 @@ Aquí se deja un video con los resultados obtenidos de las simulaciones efectuad
 
 <p>
 <a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
-	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/imgs_md/img-fondo-video.png" alt="Resultados del proyecto." />
+	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Resultados del proyecto." />
 </a>
 </p>
 

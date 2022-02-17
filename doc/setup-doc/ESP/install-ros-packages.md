@@ -1,5 +1,5 @@
 # Instalación de los paquetes de ROS
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ENG/install-ros-packages.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/install-ros-packages.md)
 ## Creación del directorio de trabajo
 
 ```{bash}
@@ -226,7 +226,7 @@ add_compile_options(-std=c++11)
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Menú</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md">Menú</a>
 </button>
 </p>
 
@@ -235,12 +235,12 @@ add_compile_options(-std=c++11)
 <p>
 <span style="float:left;">
     <button name="button">
-    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ROS.md">Previous</a>
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md">Previous</a>
     	</button> 
     </span> 
     <span style="float:right;">
         <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/leap-motion.md">Siguiente</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md">Siguiente</a>
             	</button>
     </span>
 </p>

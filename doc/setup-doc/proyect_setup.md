@@ -1,5 +1,5 @@
 # Configuración del sistema base
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup_eng.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md)
 
 Se va a explicar paso a paso cómo instalar ROS Kinetic Kame y todas las herramientas y paquetes que se han necesitado.
 
@@ -12,10 +12,10 @@ Se va a explicar paso a paso cómo instalar ROS Kinetic Kame y todas las herrami
 ## Instalación y configuración base del sistema
 Se instala las dependencias y los repositorios comunes a todas las soluciones.
 
-- [Instalación de ROS Kinetic y dependencias](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ROS.md)
-- [Instalación de los paquetes de ROS](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ros-packages.md)
-- [Instalación y configuración de Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/leap-motion.md)
-- [Realización de pruebas sobre la instalación realizada](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/pruebas.md)
+- [Instalación de ROS Kinetic y dependencias](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md)
+- [Instalación de los paquetes de ROS](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ros-packages.md)
+- [Instalación y configuración de Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md)
+- [Realización de pruebas sobre la instalación realizada](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/pruebas.md)
 
 
 <div>
@@ -30,7 +30,7 @@ Se instala las dependencias y los repositorios comunes a todas las soluciones.
 <p>
     <span style="float:right;">
         <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ROS.md">Siguiente</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md">Siguiente</a>
             	</button>
     </span>
 </p>

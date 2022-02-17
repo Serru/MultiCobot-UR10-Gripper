@@ -1,5 +1,5 @@
 # Instalación y configuración de Leap Motion
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ENG/leap-motion.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/leap-motion.md)
 
 ## Configuración de Leap Motion
 Driver de ROS para el controlador de Leap Motion
@@ -76,7 +76,7 @@ sudo service leapd restart
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Menú</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md">Menú</a>
 </button>
 </p>
 
@@ -85,12 +85,12 @@ sudo service leapd restart
 <p>
 <span style="float:left;">
     <button name="button">
-    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ros-packages.md">Previous</a>
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ros-packages.md">Previous</a>
     	</button> 
     </span> 
     <span style="float:right;">
         <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/pruebas.md">Siguiente</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/pruebas.md">Siguiente</a>
             	</button>
     </span>
 </p>
