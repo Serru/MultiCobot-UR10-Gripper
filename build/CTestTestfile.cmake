@@ -1,0 +1,32 @@
+# CMake generated Testfile for 
+# Source directory: /home/miguel/MultiCobot-UR10-Gripper/src
+# Build directory: /home/miguel/MultiCobot-UR10-Gripper/build
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+subdirs(gtest)
+subdirs(multirobot/four_arm_moveit/four_arm_moveit_description)
+subdirs(multirobot/four_arm_moveit/four_arm_moveit_config)
+subdirs(multirobot/four_arm_moveit/four_arm_moveit_gazebo)
+subdirs(multirobot/four_arm_moveit/four_arm_moveit_manipulator)
+subdirs(multirobot/four_arm_no_moveit/four_arm_no_moveit_description)
+subdirs(multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo)
+subdirs(multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator)
+subdirs(multirobot/one_arm_moveit/one_arm_moveit_description)
+subdirs(multirobot/one_arm_moveit/one_arm_moveit_config)
+subdirs(multirobot/one_arm_moveit/one_arm_moveit_gazebo)
+subdirs(multirobot/one_arm_moveit/one_arm_moveit_leap_motion)
+subdirs(multirobot/one_arm_moveit/one_arm_moveit_manipulator)
+subdirs(multirobot/one_arm_no_moveit/one_arm_no_moveit_description)
+subdirs(multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo)
+subdirs(multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion)
+subdirs(multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator)
+subdirs(multirobot/two_arm_moveit/two_arm_moveit_description)
+subdirs(multirobot/two_arm_moveit/two_arm_moveit_config)
+subdirs(multirobot/two_arm_moveit/two_arm_moveit_gazebo)
+subdirs(multirobot/two_arm_moveit/two_arm_moveit_leap_motion)
+subdirs(multirobot/two_arm_moveit/two_arm_moveit_manipulator)
+subdirs(multirobot/two_arm_no_moveit/two_arm_no_moveit_description)
+subdirs(multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo)
+subdirs(multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion)
+subdirs(multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator)

@@ -1,0 +1,8 @@
+prefix=/home/miguel/MultiCobot-UR10-Gripper/devel
+
+Name: four_arm_moveit_manipulator
+Description: Description of four_arm_moveit_manipulator
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
