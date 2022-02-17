@@ -1,8 +1,0 @@
-prefix=/home/miguel/MultiCobot-UR10-Gripper/devel
-
-Name: one_arm_moveit_leap_motion
-Description: Description of one_arm_moveit_leap_motion
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

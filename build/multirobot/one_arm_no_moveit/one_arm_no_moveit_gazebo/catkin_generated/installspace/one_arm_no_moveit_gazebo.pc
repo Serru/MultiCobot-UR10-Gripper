@@ -1,8 +1,0 @@
-prefix=/home/miguel/MultiCobot-UR10-Gripper/install
-
-Name: one_arm_no_moveit_gazebo
-Description: Description of one_arm_no_moveit_gazebo
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

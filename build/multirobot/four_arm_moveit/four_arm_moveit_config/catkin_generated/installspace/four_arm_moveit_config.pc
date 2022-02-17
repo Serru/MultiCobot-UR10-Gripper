@@ -1,8 +1,0 @@
-prefix=/home/miguel/MultiCobot-UR10-Gripper/install
-
-Name: four_arm_moveit_config
-Description: Description of four_arm_moveit_config
-Version: 0.3.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

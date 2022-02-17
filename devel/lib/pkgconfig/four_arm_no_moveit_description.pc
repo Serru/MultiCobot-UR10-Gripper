@@ -1,8 +1,0 @@
-prefix=/home/miguel/MultiCobot-UR10-Gripper/devel
-
-Name: four_arm_no_moveit_description
-Description: Description of four_arm_no_moveit_description
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
