@@ -36,19 +36,24 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 - Python 2.7
 - ROS Kinetic Kame
 
+## 🚀 Quickstart
 
+1. **paso 1**
+2. **paso 2**
+3. **paso 3**
+4. **paso 4**
 
 
 ## Documentación
-- [Setup del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/proyect_setup.md)
+- [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md)
 ### Con el paquete de MoveIt!
-- [Configuración para un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/one_arm_moveit.md)
-- [Configuración para dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/two_arm_moveit.md)
-- [Configuración para cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/four_arm_moveit.md)
+- [Configuración para un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/ESP/one_arm_moveit.md)
+- [Configuración para dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/ESP/two_arm_moveit.md)
+- [Configuración para cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/moveit/ESP/four_arm_moveit.md)
 ### Sin el paquete de MoveIt!
-- [Configuración para un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/one_arm_no_moveit.md)
-- [Configuración para dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/two_arm_no_moveit.md)
-- [Configuración para cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/four_arm_no_moveit.md)
+- [Configuración para un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/ESP/one_arm_no_moveit.md)
+- [Configuración para dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/ESP/two_arm_no_moveit.md)
+- [Configuración para cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/no_moveit/ESP/four_arm_no_moveit.md)
 ### Configuración en el robot físico
 - [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
