@@ -76,11 +76,11 @@ No se garantiza una respuesta, pero puedes contactar con los autores con la info
 
 <p align="left">
   <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">
-    <img src="https://licensebuttons.net/l/by/3.0/88x31.png" alt="Este repositorio está publicado bajo la licencia de CC0 1.0 Universal." />
+    <img src="https://licensebuttons.net/l/by/3.0/88x31.png" alt="Este repositorio está publicado bajo la licencia de Creative Commons Attribution 4.0 International." />
   </a>
   </br>
   </br>
-Este repositorio está publicado bajo la licencia de <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">Creative Commons Attribution 2.0 Generic License</a>.
+Este repositorio está publicado bajo la licencia de <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">Creative Commons Attribution 4.0 International</a>.
 </p>
 
 ## Autores
