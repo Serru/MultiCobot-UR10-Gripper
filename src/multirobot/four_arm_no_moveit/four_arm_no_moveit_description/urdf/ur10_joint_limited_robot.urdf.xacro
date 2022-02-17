@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro"
+       name="ur10" >
+
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+
+  <!-- common stuff -->
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+  <!-- ur10 -->
+  <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />
+
+  <!-- robotiq_85_gripper [Para robot simulación en Gazebo] -->
+  <xacro:include filename="$(find robotiq_85_description)/urdf/robotiq_85_gripper.urdf.xacro" />
+
+  <xacro:include filename="$(find four_arm_no_moveit_description)/urdf/gzplugin_grasp_fix.urdf.xacro"/>
+
+  <!-- arm -->
+  <xacro:ur10_robot prefix="ur10_1_" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+/>
+
+  <!-- Limita los movimientos del brazo, es importante la pose inicial
+    shoulder_pan: rotacion des de a base, 6*pi, para que no haga rotaciones raras
+    shoulder_lift: de -180 a 0, impide que el brazo se mueva bajo la mesa
+  -->
+  <!--xacro:ur10_robot prefix="" joint_limited="true"
+    shoulder_pan_lower_limit="${0}" shoulder_pan_upper_limit="${4*pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${0}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+/-->
+
+  <link name="world" />
+
+  <joint name="ur10_1_world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "ur10_1_base_link" />
+    <origin xyz="0.6 -0.6 1.1" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- gripper -->
+  <xacro:robotiq_85_gripper prefix="ur10_1_" parent="ur10_1_ee_link" >
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:robotiq_85_gripper>
+
+  <xacro:gzplugin_grasp_fix prefix="ur10_1_" prefix2="ur10_2_" prefix3="ur10_3_" prefix4="ur10_4_"/>
+  <!--xacro:gzplugin_grasp_fix prefix="ur10_1_"/-->
+
+  <!-- arm -->
+  <xacro:ur10_robot prefix="ur10_2_" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface="$(arg transmission_hw_interface)" />
+
+  <joint name="ur10_2_world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "ur10_2_base_link" />
+    <origin xyz="0.6 1.38 1.1" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- gripper -->
+  <xacro:robotiq_85_gripper prefix="ur10_2_" parent="ur10_2_ee_link" >
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:robotiq_85_gripper>
+
+
+  <!-- arm -->
+  <xacro:ur10_robot prefix="ur10_3_" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface="$(arg transmission_hw_interface)" />
+
+  <joint name="ur10_3_world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "ur10_3_base_link" />
+    <origin xyz="0.6 3.36 1.1" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- gripper -->
+  <xacro:robotiq_85_gripper prefix="ur10_3_" parent="ur10_3_ee_link" >
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:robotiq_85_gripper>
+
+
+    <!-- arm -->
+  <xacro:ur10_robot prefix="ur10_4_" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface="$(arg transmission_hw_interface)" />
+
+  <joint name="ur10_4_world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "ur10_4_base_link" />
+    <origin xyz="0.6 5.34 1.1" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- gripper -->
+  <xacro:robotiq_85_gripper prefix="ur10_4_" parent="ur10_4_ee_link" >
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:robotiq_85_gripper>
+
+  <!--xacro:gzplugin_grasp_fix prefix="ur10_2_"/-->
+
+</robot>

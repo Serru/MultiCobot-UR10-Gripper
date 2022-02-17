@@ -1,0 +1,24 @@
+<!-- Launch file for Segway platform startup -->
+
+<launch>
+    <!--arg name="dual_gripper" default="false"/ -->
+    <arg name="comport" default="/dev/ttyUSB0"/>
+    <arg name="baud" default="115200"/>
+    <arg name="run_test" default="false"/>
+    <arg name="prefix" default=""/>
+
+    <!-- Robotiq 85 ROS Driver -->
+    <node pkg="robotiq_85_driver" type="robotiq_85_driver" name="robotiq_85_driver" respawn="true" output="screen" ns="$(arg prefix)">
+    <param name="num_grippers" value="1" /> 
+    <param name="comport" value="$(arg comport)" />
+    <param name="baud" value="$(arg baud)" />
+    <param name="prefix" value="$(arg prefix)" />
+    </node>
+
+    <!-- Robotiq 85 ROS Test -->
+    <node pkg="robotiq_85_driver" type="robotiq_85_test" name="robotiq_85_test" output="screen" if="$(arg run_test)">
+        <param name="num_grippers" value="1" unless="$(arg dual_gripper)"/>
+        <param name="num_grippers" value="2" if="$(arg dual_gripper)"/>
+    </node>
+
+</launch>

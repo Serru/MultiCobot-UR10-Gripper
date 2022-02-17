@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
+  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts gazebo gui" />
+  
+  <arg name="world" default="$(find four_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(arg world)"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- send robot urdf to param server -->
+  <include file="$(find four_arm_no_moveit_description)/launch/ur10_upload.launch">
+    <arg name="limited" value="$(arg limited)"/>
+  </include>
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -param robot_description -model robot " />
+
+  <include file="$(find four_arm_no_moveit_gazebo)/launch/controller_utils.launch"/>
+
+  <!-- ur10_1_arm_controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_1_arm_controller.yaml" command="load"/>
+  <node name="ur10_1_arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn ur10_1_arm_controller" respawn="false" output="screen"/>
+
+  <!-- ur10_1_robotiq_85_gripper controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_1_gripper_controller_robotiq.yaml" command="load"/> 
+  <node name="ur10_1_gripper_controller_spawner" pkg="controller_manager" type="spawner" args="ur10_1_gripper" />
+
+  <!-- ur10_2_arm_controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_2_arm_controller.yaml" command="load"/>
+  <node name="ur10_2_arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn ur10_2_arm_controller" respawn="false" output="screen"/>
+
+  <!-- ur10_2_robotiq_85_gripper controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_2_gripper_controller_robotiq.yaml" command="load"/> 
+  <node name="ur10_2_gripper_controller_spawner" pkg="controller_manager" type="spawner" args="ur10_2_gripper" />
+
+  <!-- ur10_3_arm_controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_3_arm_controller.yaml" command="load"/>
+  <node name="ur10_3_arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn ur10_3_arm_controller" respawn="false" output="screen"/>
+
+  <!-- ur10_3_robotiq_85_gripper controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_3_gripper_controller_robotiq.yaml" command="load"/> 
+  <node name="ur10_3_gripper_controller_spawner" pkg="controller_manager" type="spawner" args="ur10_3_gripper" />
+
+  <!-- ur10_4_arm_controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_4_arm_controller.yaml" command="load"/>
+  <node name="ur10_4_arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn ur10_4_arm_controller" respawn="false" output="screen"/>
+
+  <!-- ur10_4_robotiq_85_gripper controller -->
+  <rosparam file="$(find four_arm_no_moveit_gazebo)/controller/ur10_4_gripper_controller_robotiq.yaml" command="load"/> 
+  <node name="ur10_4_gripper_controller_spawner" pkg="controller_manager" type="spawner" args="ur10_4_gripper" />
+
+  <!-- load other controllers -->
+  <node name="ur10_1_ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load ur10_1_joint_group_position_controller" />
+
+  <node name="ur10_2_ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load ur10_2_joint_group_position_controller" />
+
+  <node name="ur10_3_ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load ur10_3_joint_group_position_controller" />
+
+  <node name="ur10_4_ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load ur10_4_joint_group_position_controller" />
+
+</launch>

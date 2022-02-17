@@ -1,0 +1,14 @@
+<!-- Robotiq 85 ROS Test -->
+<launch>
+  <arg name="dual_gripper" default="false"/>
+  <arg name="prefix" default=""/>
+
+  <node pkg="robotiq_85_driver" type="robotiq_85_test_close" name="robotiq_85_test" output="screen">
+      <param name="num_grippers" value="1" unless="$(arg dual_gripper)"/>
+      <param name="num_grippers" value="2" if="$(arg dual_gripper)"/>
+      <param name="open" value="true"/>
+      <param name="close" value="false"/>
+      <param name="prefix" value="$(arg prefix)"/>
+  </node>
+
+</launch>

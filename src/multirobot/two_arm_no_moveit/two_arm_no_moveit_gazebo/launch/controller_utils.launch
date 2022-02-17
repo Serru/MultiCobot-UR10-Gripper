@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" respawn="true" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" type="string" value="" />
+  </node>
+
+  <!-- Fake Calibration -->
+  <node pkg="rostopic" type="rostopic" name="fake_joint_calibration"
+        args="pub /calibrated std_msgs/Bool true" />
+  
+  <!-- joint_state_controller -->
+  <rosparam file="$(find ur_gazebo)/controller/joint_state_controller.yaml" command="load"/>
+  
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
+  
+  <!-- get the robot position [Own Script]-->
+  <node name="ur10_1_robot_pose" pkg="two_arm_no_moveit_gazebo" type="ur10_1_robot_pose.py" respawn="true" />
+
+  <!-- send the arms commands [Own Script]-->
+  <node name="ur10_1_cmd_ik_trajectory_pub" pkg="two_arm_no_moveit_gazebo" type="ur10_1_pub_ik_trajectory.py" respawn="true" />
+
+  <!-- send the gripper commands [Own Script]-->
+  <node name="ur10_1_cmd_gripper_value_pub" pkg="two_arm_no_moveit_gazebo" type="ur10_1_pub_gripper_cmd.py" respawn="true" />
+
+    <!-- get the robot position [Own Script]-->
+  <node name="ur10_2_robot_pose" pkg="two_arm_no_moveit_gazebo" type="ur10_2_robot_pose.py" respawn="true" />
+
+  <!-- send the arms commands [Own Script]-->
+  <node name="ur10_2_cmd_ik_trajectory_pub" pkg="two_arm_no_moveit_gazebo" type="ur10_2_pub_ik_trajectory.py" respawn="true" />
+
+  <!-- send the gripper commands [Own Script]-->
+  <node name="ur10_2_cmd_gripper_value_pub" pkg="two_arm_no_moveit_gazebo" type="ur10_2_pub_gripper_cmd.py" respawn="true" />
+</launch>
