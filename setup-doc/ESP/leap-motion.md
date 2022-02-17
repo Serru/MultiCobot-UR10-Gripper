@@ -1,4 +1,5 @@
 # Instalación y configuración de Leap Motion
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ENG/leap-motion.md)
 
 ## Configuración de Leap Motion
 Driver de ROS para el controlador de Leap Motion
@@ -37,7 +38,7 @@ sudo systemctl daemon-reload
 
 Clonar el repositorio:
 ```{bash}
-cd ~/MultiCobot-UR10-Gripper/src
+cd ~/tfg_multirobot/src
 git clone https://github.com/ros-drivers/leap_motion.git
 ```
 
@@ -45,7 +46,7 @@ En los pasos de instalación dice de mover el directorio LeapSDK al directorio $
 
 ```{bash}
 # 64-bit operating system
-echo "export PYTHONPATH=$PYTHONPATH:$HOME/MultiCobot-UR10-Gripper/src/leap_motion/LeapSDK/lib:$HOME/MultiCobot-UR10-Gripper/src/leap_motion/LeapSDK/lib/x64" >> ~/.bashrc
+echo "export PYTHONPATH=$PYTHONPATH:$HOME/tfg_multirobot/src/leap_motion/LeapSDK/lib:$HOME/tfg_multirobot/src/leap_motion/LeapSDK/lib/x64" >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -57,14 +58,14 @@ sudo apt-get install ros-kinetic-leap-motion
 
 Instalación de dependencias que puedan faltar para ROS Kinetic Kame:
 ```{bash}
-cd ~/MultiCobot-UR10-Gripper
+cd ~/tfg_multirobot
 rosdep update
 rosdep install --rosdistro kinetic --ignore-src --from-paths src
 ```
 
 Compilación:
 ```{bash}
-cd ~/MultiCobot-UR10-Gripper
+cd ~/tfg_multirobot
 catkin_make
 ```
 
@@ -72,4 +73,22 @@ Si surgen errores durante el uso de los drivers de Leap Motion, con reiniciar el
 ```{bash}
 sudo service leapd restart
 ```
-***
+<div>
+<p align="left">
+<button name="button">
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/proyect_setup.md">Siguiente</a>
+</button>
+</p>
+
+
+
+<p style="text-align:left;">
+    <button name="button">
+    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/install-ros-packages.md">Previous</a>
+    	</button> 
+    <span style="float:right;">
+        <button name="button">
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/setup-doc/ESP/pruebas.md">Siguiente</a>
+            	</button>
+    </span>
+</p>
