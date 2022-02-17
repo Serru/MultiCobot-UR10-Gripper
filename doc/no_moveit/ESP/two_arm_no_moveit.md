@@ -4,28 +4,28 @@ Se va a realizar la solución para dos robots esta vez, de la misma manera que s
 
 ### Creación del directorio
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project
+cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir two_arm_no_moveit
 ```
 ### Puesta en marcha de Gazebo para dos robots
 Se va a crear el paquete para gazebo, y copiar el contenido de la solución anterior para su posterior modificación:
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit
 catkin_create_pkg two_arm_no_moveit_gazebo rospy
 ```
 En el directorio creado para gazebo, se copiara del directorio de *one_arm_no_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, *scripts* y *world*.
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_gazebo/models .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_gazebo/world .
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/models .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world .
 ```
 
 Se compila:
 ```{bash}
-cd ~/tfg_multirobot
+cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 ### Modificaciones a realizar para simular dos robots en gazebo
@@ -35,7 +35,7 @@ Se comenzará con los controladores:
 
 * Fichero *ur10_1_arm_controller.yaml*
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
 mv arm_controller_ur10.yaml ur10_1_arm_controller.yaml
 ```
 
@@ -78,7 +78,7 @@ Por ahora se procede a modificar el resto de ficheros así como la adicción del
 
 * Fichero *ur10_1_gripper_controller_robotiq.yaml*
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
 mv gripper_controller_robotiq.yaml ur10_1_gripper_controller_robotiq.yaml
 ```
 
@@ -99,7 +99,7 @@ ur10_1_gripper:
 
 * Fichero *ur10_2_arm_controller.yaml*
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
 cp ur10_1_arm_controller.yaml ur10_2_arm_controller.yaml
 ```
 
@@ -139,7 +139,7 @@ ur10_2_joint_group_position_controller:
 
 * Fichero *ur10_2_gripper_controller_robotiq.yaml*
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/controllers
 mv ur10_1_gripper_controller_robotiq.yaml ur10_2_gripper_controller_robotiq.yaml
 ```
 
@@ -161,7 +161,7 @@ ur10_2_gripper:
 Hay que modificar ahora el launch file para lanzar los controladores de ambos orbots en gazebo.
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch
 nano ur10.launch
 ```
 
@@ -218,7 +218,7 @@ Tras modificarlo, el fichero queda de la siguiente manera:
 ```
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch
 nano ur10_joint_limited.launch
 ```
 
@@ -238,7 +238,7 @@ Tras modificarlo, el fichero queda de la siguiente manera:
 
 Falta modificar el fichero que lanza los scripts que se crearon, previamente así como esos ficheros, ya que se han corregido para adaptarse a los namesapces correctamente:
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch/controller_utils.launch*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch/controller_utils.launch*
 ```{xml}
 <?xml version="1.0"?>
 <launch>
@@ -279,7 +279,7 @@ Falta modificar el fichero que lanza los scripts que se crearon, previamente as�
 
 ```
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_1_pub_gripper_cmd.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_1_pub_gripper_cmd.py*
 ```{C}
 #!/usr/bin/env python
 import rospy
@@ -324,7 +324,7 @@ if __name__ == "__main__":
     sm.callGripperCmdService()
 ```
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_1_pub_ik_trajectory.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_1_pub_ik_trajectory.py*
 ```{C}
 #!/usr/bin/env python
 import rospy
@@ -369,7 +369,7 @@ if __name__ == "__main__":
     sm.callIkTrajectoryService()
 ```
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_1_robot_pose.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_1_robot_pose.py*
 ```{C}
 #!/usr/bin/env python  
 import roslib
@@ -418,7 +418,7 @@ if __name__ == "__main__":
     sm = RobotPose()
     sm.callRobotPoseService()
 ```
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_2_pub_gripper_cmd.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_2_pub_gripper_cmd.py*
 ```{C}
 #!/usr/bin/env python
 import rospy
@@ -464,7 +464,7 @@ if __name__ == "__main__":
     sm.callGripperCmdService()
 ```
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_2_pub_ik_trajectory.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_2_pub_ik_trajectory.py*
 ```{C}
 #!/usr/bin/env python
 import rospy
@@ -509,7 +509,7 @@ if __name__ == "__main__":
     sm.callIkTrajectoryService()
 ```
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_2_robot_pose.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/scripts/ur10_2_robot_pose.py*
 ```{C}
 #!/usr/bin/env python  
 import roslib
@@ -566,16 +566,16 @@ if __name__ == "__main__":
 Siguiendo la misma línea, se crea un nuevo paquete y se copia los directorios del proyecto anterior para su posterior modificación.
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit
 catkin_create_pkg two_arm_no_moveit_description rospy
 ```
 En el directorio creado para description, se copiara del directorio de *one_arm_no_moveit_description*, las carpetas *launch* y *urdf*.
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_description
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_description/launch .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_description/urdf .
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf .
 ```
-Ligera modificación el el fichero *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_descriptio/launch/ur10_upload.launch*:
+Ligera modificación el el fichero *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_descriptio/launch/ur10_upload.launch*:
 ```{xml}
 <?xml version="1.0"?>
 <launch>
@@ -589,7 +589,7 @@ Ligera modificación el el fichero *~/tfg_multirobot/src/tfg_project/two_arm_no_
 ```
  Después hay que modificar los ficheros *.urdf*, *ur10_joint_limited_robot.urdf.xacro* y *ur10_robot.urdf.xacro*:
  
- * Modificando el fichero *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro* con:
+ * Modificando el fichero *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro* con:
  
  ```{xml}
 <?xml version="1.0"?>
@@ -677,7 +677,7 @@ Ligera modificación el el fichero *~/tfg_multirobot/src/tfg_project/two_arm_no_
  ```
  
  
- * Modificando el fichero *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro* con:
+ * Modificando el fichero *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro* con:
 ```{xml}
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro"
@@ -754,18 +754,18 @@ Ligera modificación el el fichero *~/tfg_multirobot/src/tfg_project/two_arm_no_
  ### Pruebas de pick and place con lo implementado
  Siguiendo el mismo procedimiento que en los apartados anteriores, se va a crear el paquete para gazebo, y copiar el contenido de la solución anterior para su posterior modificación:
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit
 catkin_create_pkg two_arm_no_moveit_manipulator rospy
 ```
 
 En el directorio creado, se copiara del directorio de *one_arm_no_moveit_manipulator*, la carpeta *scripts*.
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_manipulator
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts .
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts .
 ```
 
 En esta carpeta solamente hay que modificarlo para cada robot:
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_manipulator/ur10_1_robot_manipulator.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/ur10_1_robot_manipulator.py*
 ```{C}
 #!/usr/bin/env python
 
@@ -998,7 +998,7 @@ if __name__ == '__main__':
     cmd.pick_place()
 ```
 
-* *~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_manipulator/ur10_2_robot_manipulator.py*
+* *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/ur10_2_robot_manipulator.py*
 ```{C}
 #!/usr/bin/env python
 
@@ -1232,7 +1232,7 @@ if __name__ == '__main__':
 ```
 
 Falta arreglar el plugin de gazebo para que pueda agarrar objetos con ambos grippers:
-* Fichero *~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro*
+* Fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro*
 ```{xml}
 <?xml version="1.0" encoding="UTF-8"?>
 <root 
@@ -1284,7 +1284,7 @@ Falta arreglar el plugin de gazebo para que pueda agarrar objetos con ambos grip
 </root>
 ```
  Y finalmente, adecuar el fichero world para que realice las simulaciones en un entorno adecuado:
- * Fichero *~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world*:
+ * Fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world*:
  ```{xml}
  <sdf version='1.6'>
   <world name='default'>

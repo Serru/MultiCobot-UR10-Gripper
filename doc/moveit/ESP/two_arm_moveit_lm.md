@@ -17,14 +17,14 @@ Hay otra posibilidad y es tratar leap motion como si fuese un Joystick, que se i
 
 #### Creación del paquete
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_leap_motion rospy
 cd two_arm_moveit_leap_motion
 mkdir scripts
 cd scripts
-cp ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/leap_interface.py .
-cp ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/sender.py .
-cp ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_leap_motion/scripts/lm_robot_manipulator.py .
+cp ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/leap_interface.py .
+cp ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/sender.py .
+cp ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/lm_robot_manipulator.py .
 ```
 
 ünicamente modificar y replicar el contenido del fichero *lm_robot_manipulator.py*:
@@ -426,35 +426,35 @@ Para realizar las pruebas, se necesitarán al menos 5 terminales, aunque se pued
 
 Terminal 1:
 ```{bash}
-cd ~/tfg_mutilrobot
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 roslaunch two_arm_moveit_manipilator two_arm_moveit_gazebo.launch
 ```
 
 Terminal 2:
 ```{bash}
-cd ~/tfg_mutilrobot
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 roslaunch one_arm_moveit_manipulator two_arm_moveit_execution.launch
 ```
 
 Terminal 3:
 ```{bash}
-cd ~/tfg_mutilrobot
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun two_arm_moveit_leap_motion sender.py
 ```
 
 Terminal 4:
 ```{bash}
-cd ~/tfg_mutilrobot
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun two_arm_moveit_leap_motion ur10_1_lm_robot_manipulator.py 
 ```
 
 Terminal 5:
 ```{bash}
-cd ~/tfg_mutilrobot
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun two_arm_moveit_leap_motion ur10_2_lm_robot_manipulator.py 
 ```

@@ -3,23 +3,23 @@
 
 ### Creación del directorio para la solución
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project
+cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir two_arm_moveit
 ```
 
 ### Puesta en marcha de Gazebo
 Se va a crear el paquete para gazebo, y copiar el contenido de la solución partiendo del la solución *one_arm_moveit* para su posterior modificación:
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_gazebo rospy
 ```
 En el directorio creado para gazebo, se copiara del directorio de *one_arm_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, y *world* de *two_arm_no_moveit*.
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_gazebo
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_gazebo/controller .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_gazebo/launch .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_gazebo/models .
-cp -r ~/tfg_multirobot/src/tfg_project/two_arm_no_moveit/two_arm_no_moveit_gazebo/world .
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/models .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/world .
 ```
 
 Sustituir el directorio *one_arm_moveit_gazebo* por *two_arm_moveit_gazebo* y *one_arm_moveit_description* por *two_arm_moveit_description* en los ficheros.
@@ -105,16 +105,16 @@ Y modificar el fichero *controller_utils.launch*
 Siguiendo la misma línea, se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_moveit* para su posterior modificación.
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_description rospy
 ```
 
 En el directorio creado para description, se copiara del directorio de *one_arm_moveit_description*, las carpetas *launch* y *urdf*.
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_description
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_description/launch .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_description/urdf .
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_description
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf .
 ```
 
 ### Modificación de los ficheros de description
@@ -125,88 +125,88 @@ Sustituir el directorio *one_arm_moveit_description* por *two_arm_moveit_descrip
 Tras la preparación de los directorios que contiene el modelo de robot (descripton) y para su simulación (Gazebo), se procede a configurar MoveIt!
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 mkdir two_arm_moveit_config
 roslaunch moveit_setup_assistant setup_assistant.launch
 ```
 #### MoveIt! Setup Assistant
 
-Se va a escoger como modelo del robot el fichero URDF: *~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro* (podría ser perfectamente ur10_robot.urdf.xacro).
+Se va a escoger como modelo del robot el fichero URDF: *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro* (podría ser perfectamente ur10_robot.urdf.xacro).
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 mkdir two_arm_moveit_config
 roslaunch moveit_setup_assistant setup_assistant.launch
 ```
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
 
 Posteriormente, se le da al boton *Load Files*.
-![ ](/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
 
 En la pestaña *Self-Collisions*, darle al boton *Generate Collision Matrix*, o que generará una matriz en donde los diferentes componentes del robot puedan tener colisiones:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matirz de colisiones")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matirz de colisiones")
 
 En la pestaña *VIrtual Joints*, hay que crear un joint entre la base del robot y el frame que lo contiene, en este caso, *world*, siendo la configuración la siguiente:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_4.png  "Definiendo Virtual Joint")
-![ ](/imgs_md/one_arm_moveit_setup_assistant_5.png  "Definido Virtual Joint")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_4.png  "Definiendo Virtual Joint")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_5.png  "Definido Virtual Joint")
 
 Una de las pestañas más importantes es definir bien los Planning groups, en este caso se tiene dos grupos, el grupo *manipulator* que controlará el brazo del robot y el grupo *gripper* que controlará la pinza:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_6.png  "Manipulator kdl")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_6.png  "Manipulator kdl")
 
 Después hay que darle al botón *Add Kin. Chain*:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_7.png  "Manipulator Kinetic Chain configuración")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_7.png  "Manipulator Kinetic Chain configuración")
 
 Finalmente se guarda la configuración:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_8.png  "Grupo manipulator configurado")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_8.png  "Grupo manipulator configurado")
 
 Ahora hay que hacerlo para el grupo *Gripper* que controlará la pinza, se pulsa el botón *Add Group*, se rellena con el nombre del grupo y se pone *kdl* como *Kinematic Solver*:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_9.png  "Gripper kdl")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_9.png  "Gripper kdl")
 
 Tras darle al botón *Add Joints*, hay que buscar por *robotiq_85_left_knucle_joint* y añadirlo a con la flecha *->* yse guarda la configuración:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_10.png  "Gripper Joint configuración")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_10.png  "Gripper Joint configuración")
 
 Tras guardar, el resultado en la pestaña de *Planning Group* debería ser la siguiente:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_11.png  "Configuración final del Planning Group")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_11.png  "Configuración final del Planning Group")
 
 En la pestaña *Robot Poses* se va a configurar uno denominado "home":
-![ ](/imgs_md/one_arm_moveit_setup_assistant_12.png  "Configurando "home" 1/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_12.png  "Configurando "home" 1/3")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_13.png  "Configurando "home" 2/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_13.png  "Configurando "home" 2/3")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando "home" 3/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando "home" 3/3")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando "gripper open"")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando "gripper open"")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_25.png  "Configurando "gripper close"")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_25.png  "Configurando "gripper close"")
 
 
 En la pestaña *End Effectors* se va añadir el gripper:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_15.png  "Configurando end effector 1/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_15.png  "Configurando end effector 1/3")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_16.png  "Configurando end effector 2/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_16.png  "Configurando end effector 2/3")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_17.png  "Configurando end effector 3/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_17.png  "Configurando end effector 3/3")
 
 En la pestaña *Passive Joints*, para este caso, es la siguiente:
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_18.png  "Configurando Passive Joints")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_18.png  "Configurando Passive Joints")
 
 En la pestaña *ROS Control*, se añadirá de forma automática, los ficheros generados, serán posteriormente modificado manualmente.
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_19.png  "Configurando ROS Control")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_19.png  "Configurando ROS Control")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_20.png  "Configurando ROS Control")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_20.png  "Configurando ROS Control")
 
 Hay que rellenar la pestaña *Author Information* para que la configuración pueda terminar:
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_21.png  "Configurando Author Information")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_21.png  "Configurando Author Information")
 
 La útima pestaña *Configuration Files*, permite decidir dónde se guardará la configuración de MoveIt!, en este caso en *one_arm_moveit_config* creado previamente, se genera la configuración mediante el botón *Generate Package* y finalmente
  *Exit Setup Assistant* para terminar:
-![ ](/imgs_md/one_arm_moveit_setup_assistant_22.png  "Configurando Author Information")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_22.png  "Configurando Author Information")
 
-![ ](/imgs_md/one_arm_moveit_setup_assistant_23.png  "Configurando Author Information")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_23.png  "Configurando Author Information")
 
 
 ### Conexión entre Gazebo y MoveIt!
@@ -214,11 +214,11 @@ La útima pestaña *Configuration Files*, permite decidir dónde se guardará la
 Se va a modificar los siguientes ficheros teniendo como base sus ficheros originales *demo.launch*, *move_group.launch*, *trajectory_execution.launch.xml*  y *ur10_moveit_controller_manager.launch.xml* y se añadirá los controladores creando dos ficheros *controllers.yaml* y *joint_names.yaml*:
 
 ```{bash}
-cd ~/tfg_multirobot/src/tfg_project/two_arm_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_manipulator rospy
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_manipulator/config .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_manipulator/launch .
-cp -r ~/tfg_multirobot/src/tfg_project/one_arm_moveit/one_arm_moveit_manipulator/scripts .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/scripts .
 ```
 Sustituir el directorio *one_arm_moveit_gazebo* por *two_arm_moveit_gazebo* y *one_arm_moveit_description* por *two_arm_moveit_description* en los ficheros y renombrar los ficheros *one_arm_moveit* por *two_arm_moveit*
 
@@ -230,7 +230,7 @@ Para ello se crea un fichero *launch* que lanzará la configuración de los dos 
 touch launch/two_arm_moveit_gazebo.launch
 ```
 
-Fichero: *~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_gazebo.launch*
+Fichero: *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_gazebo.launch*
 
 ```{xml}
 <launch>
@@ -282,9 +282,9 @@ Fichero: *~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_manipul
 Los nodos de tf son muy importantes porque MoveIt! tomo el frame */world* como refrencia como referencia a la hora de realizar el planing. 
 
 Y no es posible modificarlo con la API de python, hay que crear un nodo que realize las transformaciones necesarias como en la solución sin MoveIt! o añadir el frame */world* como se ha realizado que será la raíz del resto de los frames, como aparece enla imagen.
-![ ](/imgs_md/two_arm_moveit_frames.pdf  "Robots frames")
+![ ](/doc/imgs_md/two_arm_moveit_frames.pdf  "Robots frames")
 
-Fichero: *~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_execution.launch*
+Fichero: *~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_execution.launch*
 
 ```{xml}
 <launch>
@@ -373,7 +373,7 @@ Fichero: *~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_manipul
 
 Finalmente, se realiza una prueba:
 ```{bash}
-cd ~/tfg_multirobot
+cd ~/MultiCobot-UR10-Gripper
 catkin_make clean
 catkin_make
 rospack profile 
@@ -385,11 +385,11 @@ roslaunch two_arm_moveit_manipulator two_arm_moveit_gazebo.launch
 roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
 ```
 
-![ ](/imgs_md/two_arm_moveit_gazebo.png  "Example gazebo+rviz+moveit!")
+![ ](/doc/imgs_md/two_arm_moveit_gazebo.png  "Example gazebo+rviz+moveit!")
 
 Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede apreciar cómo ahorá el nodo *move_group* tiene comunicación con los controladores. En la imagen no se aprecia, pero hay dos nodos *move_group*s con el mismo contenido pero diferente namespaces, se recomienda generar el proyecto y obtener le gráfica mediante la herramienta *rqt_graph*.
 
-![ ](/imgs_md/two_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
+![ ](/doc/imgs_md/two_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
 
 ### Pick and Place
 Como en las soluciones anteriores, se procederáa realizar unas pruebas muy sencillas. Para ello primero hay que crear los scripts necesarios para controlar el brazo del robot y el gripper correctamente y posterioremente, se realizará los mismos movimientos que en las soluciones anteriormente propuestas.
@@ -400,7 +400,7 @@ touch two_arm_moveit_1.py
 touch two_arm_moveit_2.py
 ```
 
-Fichero ~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py
+Fichero ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py
 ```{C}
 #!/usr/bin/env python
 from __future__ import print_function
@@ -715,7 +715,7 @@ if __name__=='__main__':
     pass
 ```
 
-Fichero ~/tfg_multirobot/src/tfg_project/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py
+Fichero ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py
 ```{C}
 #!/usr/bin/env python
 from __future__ import print_function
@@ -1046,7 +1046,7 @@ rosrun two_arm_moveit_manipulator two_arm_moveit_2.py
 ```
 
 En la terminal al lanzar rosrun puede salir el siguiente mensaje:
-![ ](/imgs_md/two_arm_moveit_manipulator_info.png  "")
+![ ](/doc/imgs_md/two_arm_moveit_manipulator_info.png  "")
 No ha solución para este mensaje, ya que no es un error de funcionamiento. 
 
 Puede indicar varias razones, porque ha realizado el planining pero los controladores no son capaces de llevarlo acabo, pero si se reintenta llega un momento que lo realiza correctamente, por tanto no es un problema con los controladores.
