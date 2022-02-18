@@ -7,14 +7,23 @@
 Sistema multirobot para el transporte de colaborativo de objetos, desarrollo del proyecto de fin de grado en la Universidad de Zaragoza.</p>
 
 <p align="center">
-  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+  <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://img.shields.io/travis/Serru/MultiCobot-UR10-Gripper?style=plastic&logo=travisci" />
+    </a>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://img.shields.io/github/license/Serru/MultiCobot-UR10-Gripper?style=plastic" />
   </a>
-  <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://app.travis-ci.com/Serru/MultiCobot-UR10-Gripper.svg?branch=main" />
+
+  <a rel="stars" href=""><img alt="Stars of the repository" style="border-width:0" src="https://img.shields.io/github/stars/Serru/MultiCobot-UR10-Gripper?style=plastic" />
   </a>
   
+    <a rel="repo-size" href="http://wiki.ros.org/kinetic"><img alt="Repository Size" style="border-width:0" src="https://img.shields.io/github/repo-size/Serru/MultiCobot-UR10-Gripper?style=plastic" />
+  </a>
+
+  <a rel="ubuntu16.04" href="https://releases.ubuntu.com/16.04/"><img alt="Ubuntu 16.04" style="border-width:0" src="https://img.shields.io/badge/OS-ubuntu%2016.04-important?style=plastic&logo=ubuntu" />
+  </a>
+
+  <a rel="ros" href="http://wiki.ros.org/kinetic"><img alt="ROS Kinetic Kame" style="border-width:0" src="https://img.shields.io/badge/ROS-Kinetic%20Kame-important?style=plastic&logo=ros" />
+  </a>  
 </p>
-
-
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md)
 
