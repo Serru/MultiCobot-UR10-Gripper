@@ -10,7 +10,7 @@ Se va a explicar paso a paso cómo instalar ROS Kinetic Kame y todas las herrami
 - Sistema operativo: Ubuntu 16.04 (Xenial Xerus)
 
 ## Instalación y configuración base del sistema
-Se instala las dependencias y los repositorios comunes a todas las soluciones.
+Se instalan las dependencias y los paquetes que harán la función de `recursos compartidos` para todas las soluciones desarrolladas.
 
 - [Instalación de ROS Kinetic y dependencias](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md)
 - [Instalación de los paquetes de ROS](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ros-packages.md)
