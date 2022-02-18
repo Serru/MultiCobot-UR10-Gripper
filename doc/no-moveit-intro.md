@@ -1,6 +1,7 @@
 <a name="planificador">
 ## Soluciones propuestas utilizando un planificador propio o de terceros (sin el paquete de `MoveIt!`)
 </a>
+
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
 

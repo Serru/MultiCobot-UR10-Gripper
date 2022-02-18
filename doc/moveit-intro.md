@@ -7,6 +7,7 @@
 <a name="modelado">
 ### Modelando varios robots en el fichero URDF
 </a>
+
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion-urdf.png  "Sistema multirobot mediante el modelado del fichero URDF")
 
 En el diseño del esquema, el componente principal que realiza las funciones de planificador es el paquete MoveIt!, se basa en la adición de robots en el fichero URDF y el planificador de MoveIt! lo reconocerı́a como un único robot, el cual obtendrı́a los valores articulares con el planificador de movimiento de sus `end effectors` y se enviarı́a esos valores obtenidos como una única trayectoria a los controladores para que ejecute el movimiento deseado.
@@ -40,6 +41,7 @@ Esta propuesta está ya implementada por [*TEAM O2AC para la World Robot Summit 
 <a name="replicacion">
 ### Replicando el nodo de `MoveIt!`
 </a>
+
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png  "Sistema multirobot mediante replicación de nodos")
 
 En el diseño del esquema, el componente principal que realiza las funciones de planificador es el paquete MoveIt!. Este diseño se basa
