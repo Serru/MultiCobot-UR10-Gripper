@@ -77,7 +77,7 @@ Aquí se deja un video con los resultados obtenidos de las simulaciones efectuad
 ## Ayuda y asistencia
 Desgraciadamente, este repositorio no está mantenido activamente. El objetivo principal es la divulgación de lo aprendido a la comunidad, que puedan necesitar del conocimiento y contenido de este repositorio para el desarrollo de su proyecto o investigación.
 
-No se garantiza una respuesta, pero puedes contactar con los autores con la información contenida en la sección de "Autores".
+No se garantiza una respuesta, pero puedes contactar con los autores con la información contenida en la sección de [Autores](#autores).
 
 ## Licencia
 
