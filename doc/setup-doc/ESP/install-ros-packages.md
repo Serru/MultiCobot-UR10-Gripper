@@ -37,7 +37,7 @@ cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 
-#### [Robotiq_2finger_grippers](https://github.com/Danfoa/robotiq_2finger_grippers)
+### [Robotiq_2finger_grippers](https://github.com/Danfoa/robotiq_2finger_grippers)
 Este repositorio de Robotiq se usará para añadir la pinza que empleará el robot y los controladores necesarios para su funcionamiento. Este paquete está pensado para la comunicación con la pinza del robot físico porque está conectado al robot mediante USB, y entre las funcionalidades que provee este paquete, está la de comunicarse con la pinza mediante USB y proveer una interfaz de comunicación entre el sistema de ROS con la pinza.
 
 Clonar el repositorio:
@@ -59,7 +59,7 @@ cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 
-#### [Robotiq_85_gripper](https://github.com/PickNikRobotics/robotiq_85_gripper)
+### [Robotiq_85_gripper](https://github.com/PickNikRobotics/robotiq_85_gripper)
 Este repositorio de Robotiq se utilizará para añadir la pinza que se utilizará al robot y los controladores necesarios para su funcionamiento. Parecido al paquete anterior, pero está orientado para la simulación de la pinza en Gazebo.
 
 Clonar el repositorio:
@@ -74,7 +74,7 @@ cd ~/MultiCobot-UR10-Gripper
 rosdep update
 rosdep install --rosdistro kinetic --ignore-src --from-paths src
 ```
-#### [ros_control](https://github.com/ros-controls/ros_control)
+### [ros_control](https://github.com/ros-controls/ros_control)
 Este repositorio contiene: "*A set of packages that include controller interfaces, controller managers, transmissions and hardware_interfaces*".
 
 Clonar el repositorio:
@@ -97,7 +97,7 @@ catkin_make
 ```
 
 
-#### [ur_modern_driver](https://github.com/ros-industrial/ur_modern_driver)
+### [ur_modern_driver](https://github.com/ros-industrial/ur_modern_driver)
 Este repositorio está obsoleto, pero por compatibilidad con ROS Kinetic Kame hay que usarlo. Contiene drivers para los robots de Universal Robots (UR3/UR5/UR10) y es compatible con ros_control.
 
 Clonar el repositorio:
@@ -121,7 +121,7 @@ catkin_make
 
 Puede dar error de compilación para ROS Kinetic Kame, para solucionarlo hay que modificar el fichero *ur_hardware_interface.cpp*, para realizarlo rápido, sustituir el contenido del fichero por el contenido que hay en [aquí](https://github.com/iron-ox/ur_modern_driver/blob/883070d0b6c0c32b78bb1ca7155b8f3a1ead416c/src/ur_hardware_interface.cpp) y volverlo a compilar.
 
-#### [gazebo-pkgs](https://github.com/JenniferBuehler/gazebo-pkgs)
+### [gazebo-pkgs](https://github.com/JenniferBuehler/gazebo-pkgs)
 Es una colección de plugings para Gazebo, principalmente nos interesa el pluging que permite agarrar objetos.
 
 
