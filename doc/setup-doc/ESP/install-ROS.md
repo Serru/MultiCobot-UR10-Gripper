@@ -23,7 +23,7 @@ source ~/.bashrc
 source /opt/ros/kinetic/setup.bash
 ```
 
-## Instalación de dependencias de ROS:
+## Instalación de dependencias de ROS
 
 ```{bash}
 sudo apt-get install ros-kinetic-$(dependencia_name)
@@ -35,7 +35,7 @@ Si la dependencia es *moveit_ros_planning*, entonces *dependencia_name* será *m
 sudo apt-get install ros-kinetic-moveit-ros-planning
 ```
 
-### Dependencias a instalar:
+### Dependencias a instalar
 - moveit_ros_planning 
 - moveit_kinematics
 - moveit_simple_controller_manager
