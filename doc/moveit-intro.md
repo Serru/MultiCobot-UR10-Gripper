@@ -5,7 +5,9 @@
 - [Replicando el nodo de `MoveIt!`](#replicacion)
 
 <a name="modelado">
-## Modelando varios robots en el fichero URDF
+  <h2>
+  Modelando varios robots en el fichero URDF
+  </h2>
 </a>
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion-urdf.png  "Sistema multirobot mediante el modelado del fichero URDF")
@@ -39,7 +41,9 @@ Esta propuesta está ya implementada por [*TEAM O2AC para la World Robot Summit 
 
 
 <a name="replicacion">
-## Replicando el nodo de `MoveIt!`
+  <h2>
+  Replicando el nodo de `MoveIt!`
+  </h2>
 </a>
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png  "Sistema multirobot mediante replicación de nodos")
@@ -69,5 +73,11 @@ planificar trayectorias evitando colisiones entre los robots no funcionarı́a a
 - Pérdida de eficiencia conforme se escala: al escalar el sistema y aumentar el número de cobots que controla, se replica también las funcionalidades que en ese momento ocupan un recurso, pero no hacen ningún trabajo.
 - Complicado realizar cambios en el código fuente de las funcionalidades del paquete de MoveIt!.
 
-#### Desarrollo e implementación de la solución y sus pruebas paso a paso
-[moveit menu]()
+### Desarrollo e implementación de la solución y sus pruebas paso a paso
+- [Un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md)
+- [Dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md)
+- [Cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/four_arm_moveit.md)
+
+### Incorporación del dispositivo Leap Motion al sistema
+- [Un UR10 con pinza mediante el paquete MoveIt! y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit_lm.md)
+- [Dos UR10s con pinzas mediante el paquete MoveIt! y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit_lm.md)

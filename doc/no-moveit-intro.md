@@ -1,6 +1,4 @@
-<a name="planificador">
-## Soluciones propuestas utilizando un planificador propio o de terceros (sin el paquete de `MoveIt!`)
-</a>
+# Soluciones propuestas utilizando un planificador propio o de terceros (sin el paquete de `MoveIt!`)
 
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
@@ -28,4 +26,10 @@ al sistema.
 - La configuración puede ser tediosa (controladores, topics, tratamiento de los mensajes, interacción entre lo que se ha creado con lo creado por terceros, etc.), es necesario cierta familiaridad con el entorno.
 
 #### Desarrollo e implementación de la solución y sus pruebas paso a paso
-[no moveit menu]()
+- [Un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md)
+- [Dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit.md)
+- [Cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/four_arm_no_moveit.md)
+
+### Incorporación del dispositivo Leap Motion al sistema
+- [Un UR10 con pinza mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit_lm.md)
+- [Dos UR10s con pinzas mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit_lm.md)
