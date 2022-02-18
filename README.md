@@ -4,7 +4,7 @@
 
 # MultiCobot-UR10-Gripper
 <p align="center">
-Sistema multirobot de robots colaborativos (cobots) [UR10s](https://www.universal-robots.com/products/ur10-robot/) con pinzas de robotiq ([robotiq_85_gripper](https://robotiq.com/products/2f85-140-adaptive-robot-gripper)) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
+Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> con pinzas de robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
 
 <p align="center">
   <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://img.shields.io/travis/Serru/MultiCobot-UR10-Gripper?style=plastic&logo=travisci" />
