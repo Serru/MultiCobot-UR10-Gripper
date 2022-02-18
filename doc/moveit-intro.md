@@ -1,11 +1,11 @@
-<a name="moveit">
-## Soluciones propuestas utilizando el paquete `MoveIt!`
-</a>
+# Soluciones propuestas utilizando el paquete `MoveIt!`
 
-
+## Índice
+- [Modelando varios robots en el fichero URDF](#modelado)
+- [Replicando el nodo de `MoveIt!`](#replicacion)
 
 <a name="modelado">
-### Modelando varios robots en el fichero URDF
+## Modelando varios robots en el fichero URDF
 </a>
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion-urdf.png  "Sistema multirobot mediante el modelado del fichero URDF")
@@ -39,7 +39,7 @@ Esta propuesta está ya implementada por [*TEAM O2AC para la World Robot Summit 
 
 
 <a name="replicacion">
-### Replicando el nodo de `MoveIt!`
+## Replicando el nodo de `MoveIt!`
 </a>
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png  "Sistema multirobot mediante replicación de nodos")
