@@ -7,10 +7,13 @@
 Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> con pinzas de robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
 
 <p align="center">
+  <img alt="Doc" style="border-width:0" src="https://img.shields.io/badge/doc-incomplete-red?logo=markdown&style=plastic" />
   <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://img.shields.io/travis/Serru/MultiCobot-UR10-Gripper?style=plastic&logo=travisci" />
     </a>
   <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://img.shields.io/github/license/Serru/MultiCobot-UR10-Gripper?style=plastic" />
   </a>
+  <img alt="Python 2.7" style="border-width:0" src="https://img.shields.io/badge/Python-14354C?logo=python&logoColor=white&style=plastic" />
+  <img alt="C++" style="border-width:0" src="https://img.shields.io/badge/C%2B%2B-00599C?logo=c%2B%2B&logoColor=white&style=plastic" />
   <a rel="stars" href="https://github.com/Serru/MultiCobot-UR10-Gripper/stargazers"><img alt="Stars of the repository" style="border-width:0" src="https://img.shields.io/github/stars/Serru/MultiCobot-UR10-Gripper?style=plastic" />
   </a> 
     <a rel="Repository Size" href="https://github.com/Serru/MultiCobot-UR10-Gripper"><img alt="Repository Size" style="border-width:0" src="https://img.shields.io/github/repo-size/Serru/MultiCobot-UR10-Gripper?style=plastic" />
