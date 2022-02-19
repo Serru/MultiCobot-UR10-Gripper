@@ -56,8 +56,11 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 
 ## Documentación
 - [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
+
 ### Configuración en el simulador de Gazebo
-- [Diseño y desarrollo para uno, dos y cuatro robots con y sin Leap Motion integrado](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)
+- [Diseño y desarrollo para uno, dos y cuatro robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)
+- [Diseño e integración del dispositivo Leap Motion en el sistema para el control de uno y dos robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
+
 ### Configuración en el robot físico
 - [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
