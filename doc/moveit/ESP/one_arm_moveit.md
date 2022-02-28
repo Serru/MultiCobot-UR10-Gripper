@@ -70,7 +70,7 @@ Fase 2: Configuración de MoveIt!
 
 ### Configuración de MoveIt!
 
-Tras la preparación de los directorios que contiene el modelo de robot (descripton) y para su simulación (Gazebo), se procede a configurar MoveIt!
+Antes de realizar la configuración con el `Setup Assitant` hay que tener el `URDF` bien definido previamente, con ese hecho se lanza el asistente de configuración con el siguiente comando en la terminal:
 
 ```{bash}
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/
@@ -79,40 +79,42 @@ roslaunch moveit_setup_assistant setup_assistant.launch
 ```
 
 #### MoveIt! Setup Assistant
+Se va a escoger como modelo del robot el fichero URDF: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro) (podría ser perfectamente [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro)).
 
-Se va a escoger como modelo del robot el fichero URDF: *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro* (podría ser perfectamente ur10_robot.urdf.xacro).
+- Comenzando la configuración del Setup Assistant, hay que decirle donde está el fichero ur10 joint limited robot.urdf.xacro, es decir, el modelo del robot que se quiere configurar:
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
 
 Posteriormente, se le da al boton *Load Files*.
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
 
-En la pestaña *Self-Collisions*, darle al boton *Generate Collision Matrix*, o que generará una matriz en donde los diferentes componentes del robot puedan tener colisiones:
+- En la pestaña *Self-Collisions*, darle al botón *Generate Collision Matrix*, lo que generará una matriz entre los diferentes componentes del robot que puedan generar autocolisiones durante la planificación de las trayectorias:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matirz de colisiones")
 
-En la pestaña *Virtual Joints*, hay que crear un joint entre la base del robot y el frame que lo contiene, en este caso, *world*, siendo la configuración la siguiente:
+- En la pestaña *Virtual Joints* está dirigida especialmente para brazos robóticos instalados sobre una base móvil, en este caso no afecta en la configuración, ya que la base es fija, pero se configurará igualmente para configuraciones futuras, hay que crear un joint entre el robot `base_link` y el frame `world`, siendo la configuración la siguiente:
+
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_4.png  "Definiendo Virtual Joint")
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_5.png  "Definido Virtual Joint")
 
-Una de las pestañas más importantes es definir bien los Planning groups, en este caso se tiene dos grupos, el grupo *manipulator* que controlará el brazo del robot y el grupo *gripper* que controlará la pinza:
+- Una de las pestañas más importantes es definir bien los *Planning groups*, en este caso se tiene dos grupos, el grupo *manipulator* que controlará el brazo del robot y el grupo *gripper* que controlará la pinza:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_6.png  "Manipulator kdl")
 
-Después hay que darle al botón *Add Kin. Chain*:
+- Después hay que darle al botón *Add Kin. Chain*:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_7.png  "Manipulator Kinetic Chain configuración")
 
-Finalmente se guarda la configuración:
+- Finalmente se guarda la configuración:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_8.png  "Grupo manipulator configurado")
 
-Ahora hay que hacerlo para el grupo *Gripper* que controlará la pinza, se pulsa el botón *Add Group*, se rellena con el nombre del grupo y se pone *kdl* como *Kinematic Solver*:
+- Ahora hay que hacerlo para el grupo *Gripper* que controlará la pinza, se pulsa el botón *Add Group*, se rellena con el nombre del grupo y se pone *kdl* como *Kinematic Solver*:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_9.png  "Gripper kdl")
 
-Tras darle al botón *Add Joints*, hay que buscar por *robotiq_85_left_knucle_joint* y añadirlo a con la flecha *->* yse guarda la configuración:
+- Tras darle al botón *Add Joints*, hay que buscar por *robotiq_85_left_knucle_joint* y añadirlo a con la flecha *->* y se guarda la configuración:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_10.png  "Gripper Joint configuración")
 
-Tras guardar, el resultado en la pestaña de *Planning Group* debería ser la siguiente:
+- Tras guardar, el resultado en la pestaña de *Planning Group* debería ser la siguiente:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_11.png  "Configuración final del Planning Group")
 
-En la pestaña *Robot Poses* se va a configurar uno denominado *home*:
+- En la pestaña *Robot Poses* es donde se configura poses fijas de antemano en el robot, se va a configurar la pose *home* el cual reflejará la posición inicial del cobot:
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_12.png  "Configurando *home* 1/3")
 
@@ -120,33 +122,35 @@ En la pestaña *Robot Poses* se va a configurar uno denominado *home*:
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando *home* 3/3")
 
+- En la pestaña *Robot Poses* se va a configurar la pose *gripper_open*:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando *gripper open*")
 
+- En la pestaña *Robot Poses* se va a configurar la pose *gripper_close*:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_25.png  "Configurando *gripper close*")
 
 
-En la pestaña *End Effectors* se va añadir el gripper:
+- En la pestaña *End Effectors* se va añadir el gripper:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_15.png  "Configurando end effector 1/3")
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_16.png  "Configurando end effector 2/3")
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_17.png  "Configurando end effector 3/3")
 
-En la pestaña *Passive Joints*, para este caso, es la siguiente:
+- En la pestaña *Passive Joints* representa las articulaciones que no se pueden mover activamente, en el caso del *gripper* definido en el su fichero *URDF* son los joints que imitan el movimiento de otro joint. Los joints definidos como pasivos no se tendrán en cuenta en la planificación, para este caso la configuración es la siguiente:
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_18.png  "Configurando Passive Joints")
 
-En la pestaña *ROS Control*, se añadirá de forma automática, los ficheros generados, serán posteriormente modificado manualmente.
+- En la pestaña *ROS Control*, se añadirá de forma automática, los ficheros generados, serán posteriormente modificado manualmente.
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_19.png  "Configurando ROS Control")
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_20.png  "Configurando ROS Control")
 
-Hay que rellenar la pestaña *Author Information* para que la configuración pueda terminar:
+- Hay que rellenar la pestaña *Author Information* para que la configuración pueda terminar:
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_21.png  "Configurando Author Information")
 
-La útima pestaña *Configuration Files*, permite decidir dónde se guardará la configuración de MoveIt!, en este caso en *one_arm_moveit_config* creado previamente, se genera la configuración mediante el botón *Generate Package* y finalmente
+La útima pestaña *Configuration Files*, permite decidir dónde se guardará la configuración de MoveIt!, en este caso en `one_arm_moveit_config` creado previamente, se genera la configuración mediante el botón *Generate Package* y finalmente
  *Exit Setup Assistant* para terminar:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_22.png  "Configurando Author Information")
 
