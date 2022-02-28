@@ -89,10 +89,9 @@ roslaunch moveit_setup_assistant setup_assistant.launch
 Se va a escoger como modelo del robot el fichero URDF: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro) (podría ser perfectamente [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro)).
 
 - Comenzando la configuración del Setup Assistant, hay que decirle donde está el fichero ur10 joint limited robot.urdf.xacro, es decir, el modelo del robot que se quiere configurar:
-
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
 
-Posteriormente, se le da al boton *Load Files*.
+- Posteriormente, se le da al boton *Load Files*.
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
 
 - En la pestaña *Self-Collisions*, darle al botón *Generate Collision Matrix*, lo que generará una matriz entre los diferentes componentes del robot que puedan generar autocolisiones durante la planificación de las trayectorias:
