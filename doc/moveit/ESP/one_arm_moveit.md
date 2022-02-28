@@ -283,10 +283,10 @@ Por tanto se puede añadir los controladores (ficheros .yaml) de Gazebo en el pa
 
 Si se lanza gazebo y moveit! sin realizar ninguna modificación, se obtiene la siguiente gráfica de nodos y topics:
 ```{bash}
-##### terminal 1
+# terminal 1
 roslaunch one_arm_moveit_config demo.launch
 
-##### terminal 2
+# terminal 2
 roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch
 ```
 ![ ](/doc/imgs_md/one_arm_moveit_graph_no_changes.png  "Esquema sin cambios")
