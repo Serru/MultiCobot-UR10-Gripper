@@ -421,11 +421,7 @@ roslaunch two_arm_moveit_manipulator two_arm_moveit_gazebo.launch
 roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
 ```
 
-![ ](/doc/imgs_md/two_arm_moveit_gazebo.png  "Example gazebo+rviz+moveit!")
 
-Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede apreciar cómo ahorá el nodo *move_group* tiene comunicación con los controladores. En la imagen no se aprecia, pero hay dos nodos *move_group*s con el mismo contenido pero diferente namespaces, se recomienda generar el proyecto y obtener le gráfica mediante la herramienta *rqt_graph*.
-
-![ ](/doc/imgs_md/two_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
 
 ### Pick and Place
 Como en las soluciones anteriores, se procederáa realizar unas pruebas muy sencillas. Para ello primero hay que crear los scripts necesarios para controlar el brazo del robot y el gripper correctamente y posterioremente, se realizará los mismos movimientos que en las soluciones anteriormente propuestas.
@@ -507,6 +503,12 @@ Tras la descripción detallada del código, para que el script controlase otro c
 En el siguiente Capı́tulo 8 se mostrará unas imágenes que dan una idea de cómo funcionan durante la simulación.
 ---
 
+<a name="pruebas">
+  <h2>
+Ejecución de las pruebas
+  </h2>
+</a>
+
 ```bash
 cd scripts
 touch two_arm_moveit_1.py
@@ -546,3 +548,11 @@ Se puede aplicar alguna o varias soluciones como trabajo futuro:
 - Utilizar un diccionario para almacenar las posiciones con sus correspondientes valores articulares
 - Utilizar la utilidad de MoveIt! para implementar *constraints* a las soluciones del planificador
 - Utilizar Interligencia artificial para decidir que soluciones propuestas son las más adecuadas
+
+---
+
+![ ](/doc/imgs_md/two_arm_moveit_gazebo.png  "Example gazebo+rviz+moveit!")
+
+Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede apreciar cómo ahorá el nodo *move_group* tiene comunicación con los controladores. En la imagen no se aprecia, pero hay dos nodos *move_group*s con el mismo contenido pero diferente namespaces, se recomienda generar el proyecto y obtener le gráfica mediante la herramienta *rqt_graph*.
+
+![ ](/doc/imgs_md/two_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
