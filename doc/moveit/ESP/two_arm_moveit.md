@@ -228,19 +228,16 @@ Si se quiere añadir más cobots al sistema, simplemente hay que copiar el conte
 	</include>
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-	<!--arg name="world_name" default="worlds/empty.world"/-->
+		<!--arg name="world_name" default="worlds/empty.world"/-->
 		<arg name="verbose" value="true"/>
-		<arg name="world_name" default="$(find two_arm_moveit_gazebo)/world/
-multiarm_bot.world"/>
+		<arg name="world_name" default="$(find two_arm_moveit_gazebo)/world/multiarm_bot.world"/>
 		<arg name="paused" value="$(arg paused)"/>
-		<!--arg name="gui" value="$(arg gui)"/-->
 		<arg name="gui" value="$(arg gui)"/>
 	</include>
 	
 	<group ns="ur10_1">
 		<param name="tf_prefix" value="ur10_1" />
-		<include file="$(find two_arm_moveit_gazebo)/launch/
-ur10_joint_limited.launch">
+		<include file="$(find two_arm_moveit_gazebo)/launch/ur10_joint_limited.launch">
 			<arg name="init_pose" value="-x 0.6 -y -0.6 -z 1.1"/>
 			<arg name="robot_name" value="ur10_1"/>
 		</include>
@@ -248,19 +245,14 @@ ur10_joint_limited.launch">
 
 	<group ns="ur10_2">
 		<param name="tf_prefix" value="ur10_2" />
-		<include file="$(find two_arm_moveit_gazebo)/launch/
-ur10_joint_limited.launch">
+		<include file="$(find two_arm_moveit_gazebo)/launch/ur10_joint_limited.launch">
 			<arg name="robot_name" value="ur10_2"/>
 			<arg name="init_pose" value="-x 0.6 -y 1.38 -z 1.1"/>
 		</include>
 	</group>
 
-	<node pkg="tf" type="static_transform_publisher"
-name="world_frames_connection_1" args="0 0 0 0 0 0
-/world /ur10_1/world 100"/>
-	<node pkg="tf" type="static_transform_publisher"
-name="world_frames_connection_2" args="0 0 0 0 0 0
-/world /ur10_2/world 100"/>
+	<node pkg="tf" type="static_transform_publisher" name="world_frames_connection_1" args="0 0 0 0 0 0 /world /ur10_1/world 100"/>
+	<node pkg="tf" type="static_transform_publisher" name="world_frames_connection_2" args="0 0 0 0 0 0 /world /ur10_2/world 100"/>
 
 </launch>
 ```
