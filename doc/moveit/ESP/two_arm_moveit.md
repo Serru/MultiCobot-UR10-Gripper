@@ -156,116 +156,64 @@ Fase 3: Simulación de un <i>pick & place</i> en Gazebo
 Para poder controlador varios dos o más cobots simultáneamente y con diferentes controladores, lo que implica que pueden ser cobots de diferentes marcas y modelos, se realiza mediante la replicación del nodo de MoveIt! y del robot simulado en Gazebo.
 
 Si se quiere realizar una replicación correcta hay que aplicar el concepto
-de *namespace*, se puede ver como fuese un directorio que contiene nodos, topics o incluso otros directorios (namespaces) lo que permite también una organización jerarquizada y ROS permite ejecutar instancias del mismo nodo siempre y cuando estén dentro de diferentes namespaces. Partiendo de lo realizado hasta la Fase 2, se realiza cambios en los paquetes de `two_arm_moveit_gazebo` y `two_arm_moveit_manipulator` que contiene las modificaciones realizadas sobre el paquete configurado por el setup assistant de MoveIt! (`two_arm_moveit_config)`. Se va a dividir el proceso de la configuración en dos, configuración realizada en Gazebo y en MoveIt!.
+de *namespace*, se puede ver como fuese un directorio que contiene nodos, topics o incluso otros directorios (namespaces) lo que permite también una organización jerarquizada y ROS permite ejecutar instancias del mismo nodo siempre y cuando estén dentro de diferentes namespaces. Partiendo de lo realizado hasta la Fase 2, se realiza cambios en los paquetes de `two_arm_moveit_gazebo` y `two_arm_moveit_manipulator` que contiene las modificaciones realizadas sobre el paquete configurado por el setup assistant de MoveIt! (`two_arm_moveit_config)`. 
+
+Se va a dividir el proceso de la configuración en dos, configuración realizada en Gazebo y en MoveIt!.
 
 ### Configuración realizada en Gazebo
 ---
-Hay que tener en cuenta que se debe tener dos o más cobots en simulación,
-por ello se va a explicar qué cambios hay que realizar en los ficheros launch
-para permitir la adicción de dos o más cobots en la simulación correctamente.
-La idea es crear un fichero externo que replique (lance instancias) de tantos
-cobots como se quieran añadir en la simulación. Por ello primero se preparan
-los ficheros de Gazebo del paquete one arm moveit gazebo.
+Lo primero que hay que hacer en esta fase es configurar Gazebo y los
+controladores para que pueda simular adecuadamente los movimientos de los cobots. Se crea el paquete *two_arm_moveit_gazebo*, que contendrá toda la configuración relacionada con Gazebo, entre ellos los controladores. Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio *controller*, aunque todos los controladores pueden estar definidos en un único fichero por claridad se ha distribuido en tres ficheros.
 
-◦ Fichero ur10 joint limited.launch: El contenido del fichero
-contendrá el Código Fuente 6.17, respecto al fichero original se le ha
-añadido dos argumentos, el nombre del robot (robot name) y la
-posición inicial (init pose). Estos dos argumentos serán obtenidos
+Los controladores se definen en ficheros con extensión *yaml*, para definir estos controladores hay que darles un nombre y definir el tipo del controlador, los joints dinámicos que se quieren controlar, las restricciones que tiene, el ratio de publicación y otras opciones.
+
+Se procede a explicar brevemente estos controladores:
+
+- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquı́ se define el nombre del controlador `arm_controller`, el tipo de controlador
+position `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con éste. Después está
+el campo `joints`, que es donde se indica qué joints del cobot forma
+parte del controlador, todos estos joints son dinámicos. El resto de
+campos no se han tocado, pero hay que mantener la consistencia en
+cómo se nombran.
+
+- Fichero [gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml): En este fichero se define el controlador para la pinza de *Robotiq*, aquı́ se define el nombre del controlador `gripper`, el tipo de controlador `position controllers/JointTrajectoryController` que define el tipo de mensajes y la información necesaria para comunicarse con éste. Después está el campo `joints`, que es donde se indica qué joints del cobot forma parte del controlador en este caso un único `joint_robotiq_85_left_knuckle_joint` porque el resto de joints del controlador imitan los movimientos de este. El resto de campos
+no se han tocado, pero hay que mantener la consistencia en cómo se
+nombran como en el caso anterior.
+
+- Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los joints que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después
+publicarlo. Es fundamental para el correcto funcionamiento, tanto en
+simulación como con el robot real, forma parte del paquete de ROS
+*ros_control*.
+
+Una vez configurado los controladores de Gazebo, hay que tener en cuenta que se debe tener dos o más cobots en simulación, por ello se va a explicar qué cambios hay que realizar en los ficheros *launch* para permitir la adicción de dos o más cobots en la simulación correctamente.
+
+La idea es crear un fichero externo que replique (lance instancias) de tantos cobots como se quieran añadir en la simulación. Por ello primero se preparan los ficheros de Gazebo del paquete `two_arm_moveit_gazebo`.
+
+- Fichero [ur10_joint_limited.launch](): Respecto al fichero original se le ha añadido dos argumentos, el nombre del robot (`robot_name`) y la
+posición inicial (`init_pose`). Estos dos argumentos serán obtenidos
 del fichero que incluirá este launch.
-<?xml version="1.0"?>
-<launch>
-<arg name="robot_name"/>
-<arg name="init_pose"/>
-<include file="$(find one_arm_moveit_gazebo)/launch/ur10.launch">
-<arg name="limited" value="true"/>
-<!--arg name="gui" value="$(arg gui)"/-->
-<arg name="robot_name" value="$(arg robot_name)"/>
-<arg name="init_pose" value="$(arg init_pose)"/>
-</include>
-</launch>
-Código Fuente 6.17 : Fase 3: Fichero ur10 joint limited.launch modificado
-◦ Fichero ur10.launch: De forma similar al fichero launch anterior
-(ur10 joint limited.launch), a este fichero se le ha añadido los
-dos argumentos, el nombre del robot (robot name) y la pose y posición
-inicial (init pose), que se definirán del fichero que lo incluya. Aparte
+
+- Fichero [ur10.launch](): De forma similar al fichero *launch* anterior
+(`ur10_joint_limited.launch`), a este fichero se le ha añadido los
+dos argumentos, el nombre del robot (`robot_name`) y la posición inicial (`init_pose`), que se definirán del fichero que lo incluya. Aparte
 de la adicción de los argumentos, se ha eliminado la instanciación
 del mundo virtual de Gazebo y la carga del modelo del cobot en el
-servidor de parámetros (robot description) como se puede ver en
-el Código Fuente 6.18.
-<?xml version="1.0"?>
-<launch>
-<arg name="limited" default="false" doc="If true, limits joint range
-[-PI, PI] on all joints." />
-<arg name="paused" default="false" doc="Starts gazebo in paused mode" />
-<!--arg name="gui" default="true" doc="Starts gazebo gui" /-->
-<arg name="robot_name"/>
-<arg name="init_pose"/>
-<!-- push robot_description to factory and spawn robot in gazebo -->
-<node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
-respawn="false" output="screen" args="-urdf -param /robot_description
--model $(arg robot_name) $(arg init_pose)" />
-<include file="$(find one_arm_moveit_gazebo)/launch/controller_utils.launch"/>
-<!-- start this controller -->
-<rosparam file="$(find one_arm_moveit_gazebo)/controller/arm_controller_ur10.yaml"
-command="load"/>
-<node name="arm_controller_spawner" pkg="controller_manager"
-type="controller_manager" args="spawn arm_controller" respawn="false"
-output="screen"/>
-<!-- robotiq_85_gripper controller -->
-<rosparam file="$(find one_arm_moveit_gazebo)/controller/
-gripper_controller_robotiq.yaml" command="load"/>
-<node name="gripper_controller_spawner" pkg="controller_manager"
-type="spawner" args="gripper" />
-<!-- load other controllers -->
-<node name="ros_control_controller_manager" pkg="controller_manager"
-type="controller_manager" respawn="false" output="screen"
+servidor de parámetros (`robot_description`).
 
-args="load joint_group_position_controller" />
-</launch>
-Código Fuente 6.18 : Fase 3: Fichero ur10.launch modificado
-◦ Fichero controller utils.launch: En este fichero simplemente
-hay que comentar el parámetro tf prefix, su valor por defecto es
+- Fichero [controller_utils.launch](): En este fichero simplemente
+hay que comentar el parámetro `tf_prefix`, su valor por defecto es
 una cadena vacı́a, pero eso interfiere a la hora de modificar su valor por
-defecto. Como se muestra en el Código Fuente 6.19, simplemente hay
-que dejar comentar ese trozo de código respecto al su contenido original,
-el resto se deja igual.
-[...]
-<!-- Robot state publisher -->
-<node pkg="robot_state_publisher" type="robot_state_publisher"
-name="robot_state_publisher" respawn="true" output="screen">
-<param name="publish_frequency" type="double" value="50.0" />
-<!-- param name="tf_prefix" type="string" value="" / -->
-</node>
-[...]
-Código Fuente 6.19 : Fase 3: Contenido de la parte modificada del Fichero
-controller utils.launch
-Una
-vez
-configurado
-los
-ficheros
-del
-paquete
-de
-Gazebo
-one arm moveit gazebo, se procede a instanciar varios cobots en este,
-para ello se crea dentro del paquete one arm moveit manipulator
-(puede ser cualquier otro paquete) un fichero launch llamado
-two arm moveit gazebo.launch.
-El contenido del fichero es el siguiente Código Fuente 6.20, lo primero que
-se aprecia es que carga el modelo del robot en el servidor de parámetros
-e instancia el mundo virtual de Gazebo, lo que se eliminó del fichero
-ur10.launch, esto debe estar aquı́ porque solo se quiere instanciar una
-vez el mundo de Gazebo.
-Después aparecen dos grupos, ur10 1 y ur10 2, esta es la forma de definir
-los namespaces, la configuración de estos cobots es idéntica excepto por
-tres cosas, el valor del parámetro tf prefix que será el prefijo que irá
-en las transfromadas, es importante que coincida con el nombre del grupo
-(namespace), el nombre (robot name) y su posición inicial (init pose).
-Si se quiere añadir más cobots al sistema, simplemente hay que copiar el
-contenido de grupo y modificar el contenido adecuadamente. Y las últimas
-dos lı́neas de código unen la base de los cobots con el frame world.
+defecto. 
 
+Una vez configurado los ficheros del paquete de Gazebo `two_arm_moveit_gazebo`, se procede a instanciar varios cobots en este, para ello se crea dentro del paquete `two_arm_moveit_manipulator` (puede ser cualquier otro paquete) un fichero *launch* llamado `two_arm_moveit_gazebo.launch`.
+
+Lo primero que se aprecia en el contenido del fichero (`two_arm_moveit_gazebo.launch`) es que carga el modelo del robot en el servidor de parámetros e instancia el mundo virtual de Gazebo, lo que se eliminó del fichero [ur10.launch](), esto debe estar aquı́ porque solo se quiere instanciar una vez el mundo de Gazebo.
+
+Después aparecen dos grupos, `ur10_1` y `ur10_2`, esta es la forma de definir los namespaces, la configuración de estos cobots es idéntica excepto por tres cosas, el valor del parámetro `tf_prefix` que será el prefijo que irá en las transfromadas, es importante que coincida con el nombre del grupo (*namespace*), el nombre (`robot_name`) y su posición inicial (`init_pose`).
+
+Si se quiere añadir más cobots al sistema, simplemente hay que copiar el contenido de grupo y modificar el contenido adecuadamente. Y las últimas dos lı́neas de código unen la base de los cobots con el frame world.
+
+```{xml}
 <launch>
 <param name="/use_sim_time" value="true"/>
 <arg name="robot_name"/>
@@ -275,13 +223,13 @@ dos lı́neas de código unen la base de los cobots con el frame world.
 <arg name="limited" default="true" doc="If true, limits joint range
 [-PI, PI] on all joints." />
 <!-- send robot urdf to param server -->
-<include file="$(find one_arm_moveit_description)/launch/ur10_upload.launch">
+<include file="$(find two_arm_moveit_description)/launch/ur10_upload.launch">
 <arg name="limited" value="$(arg limited)"/>
 </include>
 <include file="$(find gazebo_ros)/launch/empty_world.launch">
 <!--arg name="world_name" default="worlds/empty.world"/-->
 <arg name="verbose" value="true"/>
-<arg name="world_name" default="$(find one_arm_moveit_gazebo)/world/
+<arg name="world_name" default="$(find two_arm_moveit_gazebo)/world/
 multiarm_bot.world"/>
 <arg name="paused" value="$(arg paused)"/>
 <!--arg name="gui" value="$(arg gui)"/-->
@@ -289,7 +237,7 @@ multiarm_bot.world"/>
 </include>
 <group ns="ur10_1">
 <param name="tf_prefix" value="ur10_1" />
-<include file="$(find one_arm_moveit_gazebo)/launch/
+<include file="$(find two_arm_moveit_gazebo)/launch/
 ur10_joint_limited.launch">
 <arg name="init_pose" value="-x 0.6 -y -0.6 -z 1.1"/>
 <arg name="robot_name" value="ur10_1"/>
@@ -297,7 +245,7 @@ ur10_joint_limited.launch">
 </group>
 <group ns="ur10_2">
 <param name="tf_prefix" value="ur10_2" />
-<include file="$(find one_arm_moveit_gazebo)/launch/
+<include file="$(find two_arm_moveit_gazebo)/launch/
 ur10_joint_limited.launch">
 <arg name="robot_name" value="ur10_2"/>
 <arg name="init_pose" value="-x 0.6 -y 1.38 -z 1.1"/>
@@ -310,42 +258,12 @@ name="world_frames_connection_1" args="0 0 0 0 0 0
 name="world_frames_connection_2" args="0 0 0 0 0 0
 /world /ur10_2/world 100"/>
 </launch>
-Código Fuente 6.20 : Fase 3: Contenido del Fichero two arm moveit gazebo.launch
-Con esto, Gazebo ya está configurado, se procede a lanzar el fichero
-two arm moveit gazebo para comprobar que se han realizado las
-modificaciones adecuadamente. En la Figura 6.14 se ve que está simulando
-dos cobots correctamente. Hay más resultados en el Anexo C, en la
-Subsección C.2.1 está el árbol de transformadas, en donde se puede ver
-cómo se han definido los namespaces correctamente y están representadas
-ambos cobots y finalmente está la representación de los nodos y los topics en la Subsección C.2.2, lo más importante de aquı́ es la aparición de dos
-grandes recuadros que contienen a cada uno de los cobots y sus controladores
-sin tener que configurarlo de nuevo, finalmente se puede apreciar que
-ambos cobots están conectados al simulador Gazebo, la configuración se
-ha realizado correctamente.
+```
 
+Con esto, Gazebo ya está configurado, se procede a lanzar el fichero `two_arm_moveit_gazebo.launch` para comprobar que se han realizado las modificaciones adecuadamente. 
 ---
-Lo primero que hay que hacer en esta fase es configurar Gazebo y los
-controladores para que pueda simular adecuadamente los movimientos del cobot. Se crea el paquete *one_arm_moveit_gazebo*, que contendrá toda la configuración relacionada con Gazebo, entre ellos los controladores. Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio *controller*, aunque todos los controladores pueden estar definidos en un único fichero por claridad se ha distribuido en tres ficheros.
 
-Los controladores se definen en ficheros con extensión *yaml*, para definir estos controladores hay que darles un nombre y definir el tipo del controlador, los joints dinámicos que se quieren controlar, las restricciones que tiene, el ratio de publicación y otras opciones.
 
-Se procede a explicar brevemente estos controladores:
-
-- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquı́ se define el nombre del controlador `arm_controller`, el tipo de controlador
-position `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con éste. Después está
-el campo `joints`, que es donde se indica qué joints del cobot forma
-parte del controlador, todos estos joints son dinámicos. El resto de
-campos no se han tocado, pero hay que mantener la consistencia en
-cómo se nombran.
-
-- Fichero [gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml): En este fichero se define el controlador para la pinza de *Robotiq*, aquı́ se define el nombre del controlador `gripper`, el tipo de controlador `position controllers/JointTrajectoryController` que define el tipo de mensajes y la información necesaria para comunicarse con éste. Después está el campo `joints`, que es donde se indica qué joints del cobot forma parte del controlador en este caso un único `joint_robotiq_85_left_knuckle_joint` porque el resto de joints del controlador imitan los movimientos de este. El resto de campos
-no se han tocado, pero hay que mantener la consistencia en cómo se
-nombran como en el caso anterior.
-
-- Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los joints que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después
-publicarlo. Es fundamental para el correcto funcionamiento, tanto en
-simulación como con el robot real, forma parte del paquete de ROS
-*ros_control*.
 
 
 
