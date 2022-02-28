@@ -32,7 +32,7 @@ Dicho esto, se realiza una representación de los componentes del robot:
 En la imagen se representa el contenido del [fichero URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando world (color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
 
 #### Creación del directorio para la solución
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir two_arm_moveit
 ```
@@ -40,14 +40,14 @@ mkdir two_arm_moveit
 ### Configuración del directorio descripción
 Siguiendo la misma línea, se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_moveit* para su posterior modificación.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_description rospy
 ```
 
 En el directorio creado para description, se copiara del directorio de *one_arm_moveit_description*, las carpetas *launch* y *urdf*.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_description
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/launch .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf .
@@ -58,7 +58,7 @@ Sustituir el directorio *one_arm_moveit_description* por *two_arm_moveit_descrip
 
 
 Se compila:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
@@ -74,7 +74,7 @@ Fase 2: Configuración de MoveIt!
 
 Antes de realizar la configuración con el `Setup Assitant` hay que tener el `URDF` bien definido previamente, con ese hecho se lanza el asistente de configuración con el siguiente comando en la terminal:
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/
 mkdir two_arm_moveit_config
 roslaunch moveit_setup_assistant setup_assistant.launch
@@ -269,12 +269,12 @@ Con esto, Gazebo ya está configurado, se procede a lanzar el fichero `two_arm_m
 
 ### Puesta en marcha de Gazebo
 Se va a crear el paquete para gazebo, y copiar el contenido de la solución partiendo del la solución *one_arm_moveit* para su posterior modificación:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_gazebo rospy
 ```
 En el directorio creado para gazebo, se copiara del directorio de *one_arm_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, y *world* de *two_arm_no_moveit*.
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch .
@@ -293,7 +293,7 @@ Modificar el fichero [ur10_joint_limited.launch](https://github.com/Serru/MultiC
 Y modificar el fichero [controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/controller_utils.launch)
 
 Se compila:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
@@ -393,7 +393,7 @@ verlo en detalle.
 
 Se va a modificar los siguientes ficheros teniendo como base sus ficheros originales *demo.launch*, *move_group.launch*, *trajectory_execution.launch.xml*  y *ur10_moveit_controller_manager.launch.xml* y se añadirá los controladores creando dos ficheros *controllers.yaml* y *joint_names.yaml*:
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
 catkin_create_pkg two_arm_moveit_manipulator rospy
 
@@ -407,7 +407,7 @@ Sustituir el directorio *one_arm_moveit_gazebo* por *two_arm_moveit_gazebo* y *o
 Se va a proceder a añadir los controladores para su interacción con Gazebo de dos robots:
 
 Para ello se crea un fichero *launch* que lanzará la configuración de los dos robots con diferente *namespaces*.
-```{bash}
+```bash
 touch launch/two_arm_moveit_gazebo.launch
 ```
 
@@ -423,7 +423,7 @@ Fichero: [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit
 
 
 Finalmente, se realiza una prueba:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make clean
 catkin_make
@@ -641,7 +641,7 @@ En el siguiente Capı́tulo 8 se mostrará unas imágenes que dan una idea de c�
 funcionan durante la simulación.
 ---
 
-```{bash}
+```bash
 cd scripts
 touch two_arm_moveit_1.py
 touch two_arm_moveit_2.py
@@ -652,7 +652,7 @@ Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_
 Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py)
 
 Para ejecutar la prueba:
-```{bash}
+```bash
 # Terminal 1
 roslaunch two_arm_moveit_manipulator two_arm_moveit_gazebo.launch
 
