@@ -160,7 +160,7 @@ de *namespace*, se puede ver como fuese un directorio que contiene nodos, topics
 
 Se va a dividir el proceso de la configuración en dos, configuración realizada en Gazebo y en MoveIt!.
 
-### Configuración realizada en Gazebo
+Configuración realizada en Gazebo
 ---
 Lo primero que hay que hacer en esta fase es configurar Gazebo y los
 controladores para que pueda simular adecuadamente los movimientos de los cobots. Se crea el paquete *two_arm_moveit_gazebo*, que contendrá toda la configuración relacionada con Gazebo, entre ellos los controladores. Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio *controller*, aunque todos los controladores pueden estar definidos en un único fichero por claridad se ha distribuido en tres ficheros.
@@ -296,7 +296,7 @@ catkin_make
 ```
 
 
-### Configuración realizada en MoveIt!
+Configuración realizada en MoveIt!
 ---
 
 Los cambios realizados para la configuración de MoveIt! son muy
@@ -369,7 +369,6 @@ nodos y las lı́neas de comunicación no se aprecian bien, en la
 Subsección C.2.3 del Anexo C están las imágenes, pero se recomienda
 reproducirlo (ver Anexo F) y obtener la gráfica con la herramienta para
 verlo en detalle.
-
 
 ---
 
