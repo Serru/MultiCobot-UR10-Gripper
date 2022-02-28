@@ -355,28 +355,15 @@ to="/ur10_2/arm_controller/follow_joint_trajectory"/>
 </group>
 </launch>
 ```
-Código
-Fuente
-6.21 :
-Fase
-two arm moveit execution.launch
-3:
-Contenido
-del
-Fichero
-Se procede a comprobar si la comunicación entre Gazebo y las réplicas de
-MoveIt! se comunican correctamente. Se puede ver dos grandes agrupaciones,
-en donde cada cobot se está comunicando con su move group asignado,
-la comunicación con los controladores y el camino de las transformadas y
-valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la
-frecuencia en que se produzcan esas interferencias.
+
+Se procede a comprobar si la comunicación entre Gazebo y las réplicas de MoveIt! se comunican correctamente. Se puede ver dos grandes agrupaciones, en donde cada cobot se está comunicando con su move group asignado, la comunicación con los controladores y el camino de las transformadas y valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
+
 El camino parte del nodo de gazebo es el único que publica a los topics
 /joint states de ambos namespaces, el nodo move group está suscrito
 a este topic también, después llega al nodo robot state publisher que
 realiza las transformadas y se las envı́a por el topic /tf el cual el nodo
-move group también está suscrito, esto es importante porque move group
-utiliza la información que proviene de ambos para realizar la planificación
-de las trayectorias.
+move group también está suscrito, esto es importante porque move group utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
+
 Las imágenes obtenidas de la herramienta rqt graph tienen ya muchos
 nodos y las lı́neas de comunicación no se aprecian bien, en la
 Subsección C.2.3 del Anexo C están las imágenes, pero se recomienda
@@ -501,98 +488,24 @@ Como en las soluciones anteriores, se procederáa realizar unas pruebas muy senc
 54     ## When finished shut down moveit_commander.
 55     moveit_commander.roscpp_shutdown()
 ```
-Código Fuente 6.22 : Fase 3: Parte del contenido del Fichero two arm moveit 1.py
-Como se puede ver en el Código Fuente 6.22, se ha definido la configuración
-en la función main, pero no es necesario que sea aquı́, es más es preferible
-modularlo y pasarle la configuración por parámetros, pero para esta explicación
-es suficiente.
-• Lı́nea 2: Lo primero es inicializar moveit commander que es una API
-sobre la interfaz desarrollada en C++, lo que es definido como Wrappers,
-este provee la mayorı́a de las funcionalidades que provee la interfaz de
-la versión para C++ pero no están todas las funcionalidades de MoveIt!.
-Es necesario porque entre sus funcionalidades permite calcular trayectorias
-cartesianas que es la funcionalidad que principalmente se requiere.
-• Lı́nea 3: Inicializa el nodo al que se le ha nombrado ur10 1 arm moveit.
-• Lı́neas 6-9 : Se definen las constantes para facilitar la configuración, las dos
-primeras lı́neas (6 y 7) definen los nombres que se pusieron a los grupos
-de planificación, esto se puede comprobar en el Anexo B, en este caso
-se les llamó gripper para la pinza y manipulator para el brazo del cobot
-UR10. Las lı́neas 8 y 9 definen la información necesaria para configurar el
-planificador, PLANNING NS contiene el nombre del namespace donde está el
-nodo move group con el que se quiere comunicar y REFERENCE FRAME es
-el link que se tomará como referencia para realizar los cálculos de trayectoria
-con respecto al end-effector (el end-effector es ee link), en este caso
-darı́a igual que sea /ur10 1/world pero lo correcto serı́a tomar el link
-/ur10 1/base link como referencia.
-• Lı́nea
-13 :
-Inicializa
-el
-RobotCommander,
-como
-en
-el
-código
-indica, se utiliza para controlar el robot, hay que pasarle como
-parámetros el namespace y qué robot description debe utilizar
-para definir el robot, porque en el momento hay tres descripciones,
-que son el de Gazebo (robot description) y los otros dos
-definidos
-en
-el
-fichero
-planning context.launch
-que
-son
-instanciadas dentro de sus corresponientes namespaces por ello se tiene
-/ur10 1/robot description y /ur10 2/robot description.
-• Lı́nea 18 y 24 : Se crea una interfaz para un conjunto de Joints, en este caso
-la interfaz arm para el conjunto de joints dinámicos del brazo del cobot
-UR10 y la interfaz gripper para el joint que controla la pinza. A través
-de estas interfaces se realizarán las planificaciones de las trayectorias y su
-ejecución (es posible realizarlo con la interfaz de robot, ya que contiene a
-estas dos interfaces, pero es más claro y cómodo realizarlo de esta manera.
-• Lı́nea
-32 :
-Como
-dice
-display trajectory publisher
-en
-realiza
-el
-publicaciones
-comentario,
-al
-topic
-/move group/display planned path y el cual Rviz se suscribe
-para visualizar las trayectorias, no es necesario, pero para depuración es
-recomendable.
-• Lı́nea 38 : Simplemente espera dos segundos, se asegura que las instancias
-anteriores se han cargado correctamente en el sistema, hay que tener en
-cuenta alguno de ellos instancian nodos y si el ordenador sobre el que se
-está lazando es lento puede provocar una situación de no deseada.
-• Lı́neas 40-50 : Aquı́ se está configurando algunas opciones del planificador
-que se va a utilizar, por defecto es RTT, pero se puede modificar. Los más
-importantes son los últimos en las lı́neas 44, 45 y 46. En la lı́nea 44 se
-define el link de referencia que se utilizará para realizar las planificaciones,
-la lı́nea 45 y 45 definen el margen de error aceptable del resultado obtenido
-del planificador para la posición y la orientación, hay que tener cuidado
-porque cuanto más pequeño es el error que se defina más tiempo tardará
-el planificador en dar una respuesta, está definidos para permitir errores de
-milı́metros. El mismo proceso para la interfaz de la pinza (gripper).
-• Lı́nea 52 : aquı́ se lanza la tarea de pick & place.
-• Lı́nea 55 : Una vez que termine la tarea pick & place finaliza.
 
-Tras la descripción detallada del código, para que el script controlase otro cobot
-que esté en otro namespace es tan sencillo como cambiarle el valor de la variable
-PLANNING NS por la del nombre del namespace donde esté definido el cobot
-objetivo (el código completo está en Github, ver Anexo F).
-Si se ejecuta el pick & place con ambos brazos, se aprecia que realizan la
-tarea simultáneamente y con un poco de retraso entre ellos debido a que uno
-empieza un poco más tarde que otro, se puede realizar pruebas a lanzar los
-scripts a destiempo y comprobar que efectivamente se mueven simultáneamente.
-En el siguiente Capı́tulo 8 se mostrará unas imágenes que dan una idea de cómo
-funcionan durante la simulación.
+Se ha definido la configuración en la función main, pero no es necesario que sea aquı́, es más es preferible modularlo y pasarle la configuración por parámetros, pero para esta explicación es suficiente.
+
+- Lı́nea 2: Lo primero es inicializar moveit commander que es una API sobre la interfaz desarrollada en C++, lo que es definido como Wrappers, este provee la mayorı́a de las funcionalidades que provee la interfaz de la versión para C++ pero no están todas las funcionalidades de MoveIt!. Es necesario porque entre sus funcionalidades permite calcular trayectorias cartesianas que es la funcionalidad que principalmente se requiere.
+- Lı́nea 3: Inicializa el nodo al que se le ha nombrado ur10 1 arm moveit.
+- Lı́neas 6-9 : Se definen las constantes para facilitar la configuración, las dos primeras lı́neas (6 y 7) definen los nombres que se pusieron a los grupos de planificación, esto se puede comprobar en el Anexo B, en este caso se les llamó gripper para la pinza y manipulator para el brazo del cobot UR10. Las lı́neas 8 y 9 definen la información necesaria para configurar el planificador, PLANNING NS contiene el nombre del namespace donde está el nodo move group con el que se quiere comunicar y REFERENCE FRAME es el link que se tomará como referencia para realizar los cálculos de trayectoria con respecto al end-effector (el end-effector es ee link), en este caso darı́a igual que sea /ur10 1/world pero lo correcto serı́a tomar el link /ur10 1/base link como referencia.
+- Lı́nea 13 : Inicializa el RobotCommander, como en el código indica, se utiliza para controlar el robot, hay que pasarle como parámetros el namespace y qué robot description debe utilizar para definir el robot, porque en el momento hay tres descripciones, que son el de Gazebo (robot description) y los otros dos definidos en el fichero planning context.launch que son instanciadas dentro de sus corresponientes namespaces por ello se tiene /ur10 1/robot description y /ur10 2/robot description.
+- Lı́nea 18 y 24 : Se crea una interfaz para un conjunto de Joints, en este caso la interfaz arm para el conjunto de joints dinámicos del brazo del cobot UR10 y la interfaz gripper para el joint que controla la pinza. A través de estas interfaces se realizarán las planificaciones de las trayectorias y su ejecución (es posible realizarlo con la interfaz de robot, ya que contiene a estas dos interfaces, pero es más claro y cómodo realizarlo de esta manera.
+- Lı́nea 32 : Como dice display trajectory publisher en realiza el
+publicaciones comentario, al topic /move group/display planned path y el cual Rviz se suscribe para visualizar las trayectorias, no es necesario, pero para depuración es recomendable.
+- Lı́nea 38 : Simplemente espera dos segundos, se asegura que las instancias anteriores se han cargado correctamente en el sistema, hay que tener en cuenta alguno de ellos instancian nodos y si el ordenador sobre el que se está lazando es lento puede provocar una situación de no deseada.
+- Lı́neas 40-50 : Aquı́ se está configurando algunas opciones del planificador que se va a utilizar, por defecto es RTT, pero se puede modificar. Los más importantes son los últimos en las lı́neas 44, 45 y 46. En la lı́nea 44 se define el link de referencia que se utilizará para realizar las planificaciones, la lı́nea 45 y 45 definen el margen de error aceptable del resultado obtenido del planificador para la posición y la orientación, hay que tener cuidado porque cuanto más pequeño es el error que se defina más tiempo tardará el planificador en dar una respuesta, está definidos para permitir errores de milı́metros. El mismo proceso para la interfaz de la pinza (gripper).
+- Lı́nea 52 : aquı́ se lanza la tarea de pick & place.
+- Lı́nea 55 : Una vez que termine la tarea pick & place finaliza.
+
+Tras la descripción detallada del código, para que el script controlase otro cobot que esté en otro namespace es tan sencillo como cambiarle el valor de la variable PLANNING NS por la del nombre del namespace donde esté definido el cobot objetivo (el código completo está en Github, ver Anexo F). Si se ejecuta el pick & place con ambos brazos, se aprecia que realizan la tarea simultáneamente y con un poco de retraso entre ellos debido a que uno empieza un poco más tarde que otro, se puede realizar pruebas a lanzar los scripts a destiempo y comprobar que efectivamente se mueven simultáneamente.
+
+En el siguiente Capı́tulo 8 se mostrará unas imágenes que dan una idea de cómo funcionan durante la simulación.
 ---
 
 ```bash
