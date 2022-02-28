@@ -1,10 +1,10 @@
 # Diseño del sistema multirobot
 
-Tras realizar numerosas pruebas en el entorno de ROS para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero URDF que define el modelo del robot y los paquetes de ros que en el esquema está representado por el paquete de MoveIt! que su función principal es la de planificador.
+Tras realizar numerosas pruebas en el entorno de ROS para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero URDF que define el modelo del robot y los paquetes de ROS que en el esquema está representado por el paquete de `MoveIt!` que su función principal es la de planificador.
 
 ![image](/doc/imgs_md/Diseno-General-focus.png  "Herramientas y Drivers de ROS en el diseño")
 
-Es decir, las variaciones posibles:
+Las variaciones posibles son:
 
 - *Fichero URDF*: describe el modelo del robot, en este modelo se puede integrar varios robots, objetos o lo que se quiera modelar.
 - *Paquetes de ROS*: son los paquetes de ROS, pueden ser propios o instalados de terceros sobre el que se realizarán modificaciones para adaptarlos a la solución a desarrollar.

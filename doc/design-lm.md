@@ -11,7 +11,12 @@ Es decir, las variaciones posibles:
 
 Las soluciones que se proponen giran en torno a las modificaciones y combinaciones entre el modelado del robot (`URDF`) y los `paquetes de ROS` que se utilicen, por organización las soluciones propuestas se van a dividir en las soluciones que utilicen el paquete  `MoveIt!` y las que no. Hay que tener en cuenta que el entorno de trabajo es complejo y hay muchos elementos que interaccionan o tienen dependencias entre sı́, por lo que durante el desarrollo de los diseños propuestos pueden surgir problemas que no tienen solución o que el coste de corregirlos es muy alto.
 
-## Desarrollo y análisis de las soluciones propuestas
-- [Mediante el paquete `MoveIt!`](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md)
-- [Mediante un planificador propio o de terceros (sin el paquete de `MoveIt!`)](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md)
+
+### Incorporación del dispositivo Leap Motion al sistema `con` el paquete de `MoveIt!`
+- [Un UR10 con pinza mediante el paquete MoveIt! y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit_lm.md)
+- [Dos UR10s con pinzas mediante el paquete MoveIt! y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit_lm.md)
+
+### Incorporación del dispositivo Leap Motion al sistema `sin` el paquete de `MoveIt!`
+- [Un UR10 con pinza mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit_lm.md)
+- [Dos UR10s con pinzas mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit_lm.md)
 

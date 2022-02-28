@@ -1,105 +1,21 @@
 <!--- Para un robot  opción B--->
-## Instalación y configuración para un único robot UR10 con MoveIt!
+# Instalación y configuración para un único robot UR10 con MoveIt!
 
-### Creación del directorio para la solución
-```{bash}
-cd ~/MultiCobot-UR10-Gripper/src/multirobot
-mkdir one_arm_moveit
-```
+## Requisito previo
+- Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
 
-### Puesta en marcha de Gazebo
-Se va a crear el paquete para gazebo, y copiar el contenido de la solución partiendo del la solución *one_arm_no_moveit* para su posterior modificación:
-```{bash}
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
-catkin_create_pkg one_arm_moveit_gazebo rospy
-```
-En el directorio creado para gazebo, se copiara del directorio de *one_arm_no_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, y *world*.
-```{bash}
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo
-cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller .
-cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch .
-cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/models .
-cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world .
-```
-
-### Modificación de los ficheros de gazebo
-
-* *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10_joint_limited.launch*
-
-```{xml}
-<?xml version="1.0"?>
-<launch>
-  <arg name="gui" default="true" doc="Starts gazebo gui" />
-
-  <include file="$(find one_arm_moveit_gazebo)/launch/ur10.launch">
-    <arg name="limited" value="true"/>
-    <arg name="gui" value="$(arg gui)"/>
-  </include>
-
-</launch>
-```
-
-* *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10.launch*
-
-```{xml}
-<?xml version="1.0"?>
-<launch>
-  <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
-  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
-  <arg name="gui" default="true" doc="Starts gazebo gui" />
-  
-  <arg name="world" default="$(find one_arm_moveit_gazebo)/world/multiarm_bot.world" />
-
-  <!-- startup simulated world -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(arg world)"/>
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="gui" value="$(arg gui)"/>
-  </include>
-
-  <!-- send robot urdf to param server -->
-  <include file="$(find one_arm_moveit_description)/launch/ur10_upload.launch">
-    <arg name="limited" value="$(arg limited)"/>
-  </include>
-
-  <!-- push robot_description to factory and spawn robot in gazebo -->
-  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf 
-                          -param robot_description 
-                          -model robot 
-                          -x 0.6 
-                          -y -0.6 
-                          -z 1.1
-                          -J shoulder_pan_joint 2.17
-                          -J shoulder_lift_joint -1.52  
-                          -J elbow_joint -1.67  
-                          -J wrist_1_joint -1.51  
-                          -J wrist_2_joint 1.58 
-                          -J wrist_3_joint -1.01" />
-  <!--[2.1760905965722426, -1.5183196482450523, -1.6715145082510372, -1.5111554264043052, 1.5891351190432503, -1.014601195078888]-->
+## Índice
+- [Fase 1: Configuración del URDF](#fase1)
+- [Fase 2: Configuración de MoveIt!](#fase2)
+- [Fase 3: Simulación de un `pick & place` en Gazebo](#fase3)
+- [Ejecución de las pruebas](#pruebas)
 
 
-  <include file="$(find one_arm_moveit_gazebo)/launch/controller_utils.launch"/>
-
-  <!-- start this controller -->
-  <rosparam file="$(find one_arm_moveit_gazebo)/controller/arm_controller_ur10.yaml" command="load"/>
-  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/>
-
-  <!-- robotiq_85_gripper controller -->
-  <rosparam file="$(find one_arm_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
-  <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
-
-  <!-- load other controllers -->
-  <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load joint_group_position_controller" />
-
-</launch>
-```
-
-Se compila:
-```{bash}
-cd ~/MultiCobot-UR10-Gripper
-catkin_make
-```
-
+<a name="fase1">
+  <h2>
+Fase 1: Configuración del URDF
+  </h2>
+</a>
 ### Configuración del directorio descripción
 Siguiendo la misma línea, se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_no_moveit* para su posterior modificación.
 
@@ -261,6 +177,13 @@ Se compila:
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
+
+<a name="fase2">
+  <h2>
+Fase 2: Configuración de MoveIt!
+  </h2>
+</a>
+
 ### Configuración de MoveIt!
 
 Tras la preparación de los directorios que contiene el modelo de robot (descripton) y para su simulación (Gazebo), se procede a configurar MoveIt!
@@ -344,6 +267,113 @@ La útima pestaña *Configuration Files*, permite decidir dónde se guardará la
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_22.png  "Configurando Author Information")
 
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_23.png  "Configurando Author Information")
+
+
+<a name="fase3">
+  <h2>
+Fase 3: Simulación de un `pick & place` en Gazebo
+  </h2>
+</a>
+
+### Creación del directorio para la solución
+```{bash}
+cd ~/MultiCobot-UR10-Gripper/src/multirobot
+mkdir one_arm_moveit
+```
+
+### Puesta en marcha de Gazebo
+Se va a crear el paquete para gazebo, y copiar el contenido de la solución partiendo del la solución *one_arm_no_moveit* para su posterior modificación:
+```{bash}
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
+catkin_create_pkg one_arm_moveit_gazebo rospy
+```
+En el directorio creado para gazebo, se copiara del directorio de *one_arm_no_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, y *world*.
+```{bash}
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/models .
+cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world .
+```
+
+### Modificación de los ficheros de gazebo
+
+* *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10_joint_limited.launch*
+
+```{xml}
+<?xml version="1.0"?>
+<launch>
+  <arg name="gui" default="true" doc="Starts gazebo gui" />
+
+  <include file="$(find one_arm_moveit_gazebo)/launch/ur10.launch">
+    <arg name="limited" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+</launch>
+```
+
+* *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10.launch*
+
+```{xml}
+<?xml version="1.0"?>
+<launch>
+  <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
+  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts gazebo gui" />
+  
+  <arg name="world" default="$(find one_arm_moveit_gazebo)/world/multiarm_bot.world" />
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(arg world)"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- send robot urdf to param server -->
+  <include file="$(find one_arm_moveit_description)/launch/ur10_upload.launch">
+    <arg name="limited" value="$(arg limited)"/>
+  </include>
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf 
+                          -param robot_description 
+                          -model robot 
+                          -x 0.6 
+                          -y -0.6 
+                          -z 1.1
+                          -J shoulder_pan_joint 2.17
+                          -J shoulder_lift_joint -1.52  
+                          -J elbow_joint -1.67  
+                          -J wrist_1_joint -1.51  
+                          -J wrist_2_joint 1.58 
+                          -J wrist_3_joint -1.01" />
+  <!--[2.1760905965722426, -1.5183196482450523, -1.6715145082510372, -1.5111554264043052, 1.5891351190432503, -1.014601195078888]-->
+
+
+  <include file="$(find one_arm_moveit_gazebo)/launch/controller_utils.launch"/>
+
+  <!-- start this controller -->
+  <rosparam file="$(find one_arm_moveit_gazebo)/controller/arm_controller_ur10.yaml" command="load"/>
+  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/>
+
+  <!-- robotiq_85_gripper controller -->
+  <rosparam file="$(find one_arm_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
+  <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
+
+  <!-- load other controllers -->
+  <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load joint_group_position_controller" />
+
+</launch>
+```
+
+Se compila:
+```{bash}
+cd ~/MultiCobot-UR10-Gripper
+catkin_make
+```
+
 
 
 ### Conexión entre Gazebo y MoveIt!
@@ -995,7 +1025,12 @@ if __name__=='__main__':
     pass
 ```
 
-Para ejecutar las pruebas:
+<a name="pruebas">
+  <h2>
+Ejecución de las pruebas
+  </h2>
+</a>
+
 ```{bash}
 # Terminal 1
 roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch

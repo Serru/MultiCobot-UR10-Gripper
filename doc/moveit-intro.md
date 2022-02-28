@@ -77,7 +77,3 @@ planificar trayectorias evitando colisiones entre los robots no funcionarı́a a
 - [Un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md)
 - [Dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md)
 - [Cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/four_arm_moveit.md)
-
-### Incorporación del dispositivo Leap Motion al sistema
-- [Un UR10 con pinza mediante el paquete MoveIt! y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit_lm.md)
-- [Dos UR10s con pinzas mediante el paquete MoveIt! y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit_lm.md)
