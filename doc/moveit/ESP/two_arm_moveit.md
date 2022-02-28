@@ -213,7 +213,7 @@ Después aparecen dos grupos, `ur10_1` y `ur10_2`, esta es la forma de definir l
 
 Si se quiere añadir más cobots al sistema, simplemente hay que copiar el contenido de grupo y modificar el contenido adecuadamente. Y las últimas dos lı́neas de código unen la base de los cobots con el frame world.
 
-```{xml}
+```xml
 <launch>
 <param name="/use_sim_time" value="true"/>
 <arg name="robot_name"/>
@@ -445,6 +445,7 @@ Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede 
 ### Pick and Place
 Como en las soluciones anteriores, se procederáa realizar unas pruebas muy sencillas. Para ello primero hay que crear los scripts necesarios para controlar el brazo del robot y el gripper correctamente y posterioremente, se realizará los mismos movimientos que en las soluciones anteriormente propuestas.
 ---
+```python
 1
 2
 3
@@ -545,6 +546,7 @@ pick_place(arm, gripper)
 55
 ## When finished shut down moveit_commander.
 moveit_commander.roscpp_shutdown()
+```
 Código Fuente 6.22 : Fase 3: Parte del contenido del Fichero two arm moveit 1.py
 Como se puede ver en el Código Fuente 6.22, se ha definido la configuración
 en la función main, pero no es necesario que sea aquı́, es más es preferible
