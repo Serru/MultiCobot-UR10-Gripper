@@ -446,106 +446,61 @@ Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede 
 Como en las soluciones anteriores, se procederáa realizar unas pruebas muy sencillas. Para ello primero hay que crear los scripts necesarios para controlar el brazo del robot y el gripper correctamente y posterioremente, se realizará los mismos movimientos que en las soluciones anteriormente propuestas.
 ---
 ```python
-1
-2
-3
-4
-def main():
-moveit_commander.roscpp_initializer.roscpp_initialize(sys.argv)
-rospy.init_node(’ur10_1_arm_moveit’,
-anonymous=True)
+1 def main():
+2     moveit_commander.roscpp_initializer.roscpp_initialize(sys.argv)
+3     rospy.init_node('ur10_1_arm_moveit',
+4                   anonymous=True)
 5
-6
-7
-8
-9
-PLANNING_GROUP_GRIPPER = "gripper"
-PLANNING_GROUP_ARM = "manipulator"
-PLANNING_NS = "/ur10_1/"
-REFERENCE_FRAME = "/ur10_1/world"
-10
-11
-12
-13
-14
-15
-16
-## Instantiate a RobotCommander object. This object is an interface to
-## the robot as a whole.
-robot = moveit_commander.RobotCommander(
-"%srobot_description"%PLANNING_NS,
-ns="/ur10_1/"
-)
-17
-18
-19
-20
-21
-22
-arm = moveit_commander.move_group.MoveGroupCommander(
-PLANNING_GROUP_ARM,
-"%srobot_description"%PLANNING_NS,
-ns="/ur10_1/"
-)
+6     PLANNING_GROUP_GRIPPER = "gripper"
+7     PLANNING_GROUP_ARM = "manipulator"
+8     PLANNING_NS = "/ur10_1/"
+9     REFERENCE_FRAME = "/ur10_1/world"
+10 
+11     ## Instantiate a RobotCommander object.  This object is an interface to
+12     ## the robot as a whole.
+13     robot = moveit_commander.RobotCommander(
+14 		"%srobot_description"%PLANNING_NS, 
+15 		ns="/ur10_1/"
+16 	 )
+17 
+18     arm = moveit_commander.move_group.MoveGroupCommander(
+19 		PLANNING_GROUP_ARM,
+20 		"%srobot_description"%PLANNING_NS, 
+21 		ns="/ur10_1/"
+22 	 )
 23
-24
-25
-26
-27
-28
-gripper = moveit_commander.move_group.MoveGroupCommander(
-PLANNING_GROUP_GRIPPER,
-"%srobot_description"%PLANNING_NS,
-ns="/ur10_1/"
-)
+24     gripper = moveit_commander.move_group.MoveGroupCommander(
+25 		PLANNING_GROUP_GRIPPER, 
+26 		"%srobot_description"%PLANNING_NS, 
+27 		ns="/ur10_1/"
+28 	)
 29
-30
-31
-32
-33
-34
-35
-36
-## We create this DisplayTrajectory publisher which is used below to publish
-## trajectories for RVIZ to visualize.
-display_trajectory_publisher = rospy.Publisher(
-’/move_group/display_planned_path’,
-moveit_msgs.msg.DisplayTrajectory,
-queue_size=10
-)
+30     ## We create this DisplayTrajectory publisher which is used below to publish
+31     ## trajectories for RVIZ to visualize.
+32     display_trajectory_publisher = rospy.Publisher(
+33 		'/move_group/display_planned_path',
+34 		moveit_msgs.msg.DisplayTrajectory, 
+35		queue_size=10
+36 	 )
 37
-38
-rospy.sleep(2)
-39
-40
-41
-42
-43
-44
-45
-46
-arm.set_num_planning_attempts(15)
-arm.set_planning_time(5)
-arm.allow_looking(True)
-arm.allow_replanning(True)
-arm.set_pose_reference_frame(REFERENCE_FRAME)
-arm.set_goal_position_tolerance(0.001)
-arm.set_goal_orientation_tolerance(0.001)
-47
-48
-49
-50
-gripper.set_num_planning_attempts(15)
-gripper.allow_replanning(True)
-gripper.allow_looking(True)
+38     rospy.sleep(2)
+39 
+40     arm.set_num_planning_attempts(15)
+41     arm.set_planning_time(5)
+42     arm.allow_looking(True)
+43     arm.allow_replanning(True)
+44     arm.set_pose_reference_frame(REFERENCE_FRAME)
+45     arm.set_goal_position_tolerance(0.001)
+46     arm.set_goal_orientation_tolerance(0.001)
+47 
+48     gripper.set_num_planning_attempts(15)
+49     gripper.allow_replanning(True)
+50     gripper.allow_looking(True)
 51
-52
-pick_place(arm, gripper)
+52     pick_place(arm, gripper)
 53
-54
-55
-## When finished shut down moveit_commander.
-moveit_commander.roscpp_shutdown()
+54     ## When finished shut down moveit_commander.
+55     moveit_commander.roscpp_shutdown()
 ```
 Código Fuente 6.22 : Fase 3: Parte del contenido del Fichero two arm moveit 1.py
 Como se puede ver en el Código Fuente 6.22, se ha definido la configuración
