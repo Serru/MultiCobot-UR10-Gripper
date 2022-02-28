@@ -16,7 +16,8 @@
 Fase 1: Configuración del URDF
   </h2>
 </a>
-### Configuración del directorio descripción
+
+### Descripción del fichero URDF
 El fichero URDF (United Robotics Description Format) modela el cobot utilizando el formato XML el cual será utilizado por las diferentes aplicaciones que ROS necesite, pero principalmente para realizar una simulación del robot modelado.
 
 El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son
@@ -26,14 +27,13 @@ Además como en los huesos, estas etiquetas pueden ir con información adicional
 que podrı́a ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
 
 Dicho esto, se realiza una representación de los componentes del robot:
+ 
+ ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
 
+En la imagen se representa el contenido del [fichero URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando world (color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
 
-En el Código Fuente 6.2, se encuentra en el paquete de one arm moveit description en su directorio urdf (basado en el contenido
-del fichero ur10 robot.urdf.xacro del paquete universal robot), se
-puede ver cómo se conecta el componente del brazo ur10 robot con el link world, esto puede apreciarse en la Figura 6.2 representando world (color amarillo) y la base del brazo del UR10 base link (color verde) situado justo encima, además el joint world joint es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza robotiq 85 gripper, está conectado al brazo del UR10 (ur10 robot), esto se aprecia en la Figura 6.2 en donde la esfera que representa el joint robotiq 85 base joint que une ambos componentes (color morado), uniendo el link robotiq 85 base link de la pinza con el link ee link del brazo de UR10.
-
-
-Siguiendo la misma línea, se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_no_moveit* para su posterior modificación.
+### Configuración del directorio descripción
+Se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_no_moveit* para su posterior modificación.
 
 ```{bash}
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
