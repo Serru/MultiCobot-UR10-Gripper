@@ -215,48 +215,53 @@ Si se quiere añadir más cobots al sistema, simplemente hay que copiar el conte
 
 ```xml
 <launch>
-<param name="/use_sim_time" value="true"/>
-<arg name="robot_name"/>
-<arg name="init_pose"/>
-<arg name="paused" default="false"/>
-<arg name="gui" default="true"/>
-<arg name="limited" default="true" doc="If true, limits joint range
-[-PI, PI] on all joints." />
-<!-- send robot urdf to param server -->
-<include file="$(find two_arm_moveit_description)/launch/ur10_upload.launch">
-<arg name="limited" value="$(arg limited)"/>
-</include>
-<include file="$(find gazebo_ros)/launch/empty_world.launch">
-<!--arg name="world_name" default="worlds/empty.world"/-->
-<arg name="verbose" value="true"/>
-<arg name="world_name" default="$(find two_arm_moveit_gazebo)/world/
+	<param name="/use_sim_time" value="true"/>
+	<arg name="robot_name"/>
+	<arg name="init_pose"/>
+	<arg name="paused" default="false"/>
+	<arg name="gui" default="true"/>
+	<arg name="limited" default="true" doc="If true, limits joint range [-PI, PI] on all joints." />
+
+	<!-- send robot urdf to param server -->
+	<include file="$(find two_arm_moveit_description)/launch/ur10_upload.launch">
+		<arg name="limited" value="$(arg limited)"/>
+	</include>
+
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+	<!--arg name="world_name" default="worlds/empty.world"/-->
+		<arg name="verbose" value="true"/>
+		<arg name="world_name" default="$(find two_arm_moveit_gazebo)/world/
 multiarm_bot.world"/>
-<arg name="paused" value="$(arg paused)"/>
-<!--arg name="gui" value="$(arg gui)"/-->
-<arg name="gui" value="$(arg gui)"/>
-</include>
-<group ns="ur10_1">
-<param name="tf_prefix" value="ur10_1" />
-<include file="$(find two_arm_moveit_gazebo)/launch/
+		<arg name="paused" value="$(arg paused)"/>
+		<!--arg name="gui" value="$(arg gui)"/-->
+		<arg name="gui" value="$(arg gui)"/>
+	</include>
+	
+	<group ns="ur10_1">
+		<param name="tf_prefix" value="ur10_1" />
+		<include file="$(find two_arm_moveit_gazebo)/launch/
 ur10_joint_limited.launch">
-<arg name="init_pose" value="-x 0.6 -y -0.6 -z 1.1"/>
-<arg name="robot_name" value="ur10_1"/>
-</include>
-</group>
-<group ns="ur10_2">
-<param name="tf_prefix" value="ur10_2" />
-<include file="$(find two_arm_moveit_gazebo)/launch/
+			<arg name="init_pose" value="-x 0.6 -y -0.6 -z 1.1"/>
+			<arg name="robot_name" value="ur10_1"/>
+		</include>
+	</group>
+
+	<group ns="ur10_2">
+		<param name="tf_prefix" value="ur10_2" />
+		<include file="$(find two_arm_moveit_gazebo)/launch/
 ur10_joint_limited.launch">
-<arg name="robot_name" value="ur10_2"/>
-<arg name="init_pose" value="-x 0.6 -y 1.38 -z 1.1"/>
-</include>
-</group>
-<node pkg="tf" type="static_transform_publisher"
+			<arg name="robot_name" value="ur10_2"/>
+			<arg name="init_pose" value="-x 0.6 -y 1.38 -z 1.1"/>
+		</include>
+	</group>
+
+	<node pkg="tf" type="static_transform_publisher"
 name="world_frames_connection_1" args="0 0 0 0 0 0
 /world /ur10_1/world 100"/>
-<node pkg="tf" type="static_transform_publisher"
+	<node pkg="tf" type="static_transform_publisher"
 name="world_frames_connection_2" args="0 0 0 0 0 0
 /world /ur10_2/world 100"/>
+
 </launch>
 ```
 
@@ -312,6 +317,7 @@ cobot, esencialmente se ha agrupado todo en un namespace y se ha
 añadido el nombre del namespace como prefijo en los nombres de los
 topics del remap para la correcta comunicación con los controladores.
 
+```xml
 <launch>
 <arg name="sim" default="false" />
 <arg name="debug" default="false" />
@@ -356,6 +362,7 @@ to="/ur10_2/arm_controller/follow_joint_trajectory"/>
 </include>
 </group>
 </launch>
+```
 Código
 Fuente
 6.21 :
