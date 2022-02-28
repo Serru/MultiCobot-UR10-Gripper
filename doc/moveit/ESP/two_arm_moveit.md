@@ -75,7 +75,7 @@ Fase 2: Configuración de MoveIt!
 Antes de realizar la configuración con el `Setup Assitant` hay que tener el `URDF` bien definido previamente, con ese hecho se lanza el asistente de configuración con el siguiente comando en la terminal:
 
 ```{bash}
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_description/urdf/ur10_robot.urdf.xacrotwo_arm_moveit/
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/
 mkdir two_arm_moveit_config
 roslaunch moveit_setup_assistant setup_assistant.launch
 ```
