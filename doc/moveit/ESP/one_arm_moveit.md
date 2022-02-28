@@ -154,7 +154,7 @@ Se va a escoger como modelo del robot el fichero URDF: [~/MultiCobot-UR10-Grippe
 
 <a name="fase3">
   <h2>
-Fase 3: Simulación de un <it>pick & place</it> en Gazebo
+Fase 3: Simulación de un <i>pick & place</i> en Gazebo
   </h2>
 </a>
 
