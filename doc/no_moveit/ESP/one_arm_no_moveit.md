@@ -45,24 +45,28 @@ Actualmente desde el directorio creado del proyecto no se puede lanzar Gazebo co
 Por imponer cierto orden en la estructura del proyecto a implementar, se van a separar el uso de las diferentes herramientas y sus ficheros siempre que se pueda. Esto permitirá una mejor compresión de cómo está estructurado y facilitará posteriormente su depuración.
 
 Por ello, se creará un paquete, en vez de un directorio que contendrá todo lo relacionado con gazebo:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit
 catkin_create_pkg one_arm_no_moveit_gazebo rospy
 ```
 
 En el directio creado para gazebo, se copiara del directorio de *ur_gazebo*, las carpetas *controller* y *launch*.
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/controller .
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo launch .
 ```
 Se compila:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 
 Con esto ya se puede lanzar Gazebo desde el directorio del proyecto.
+
 ```bash
 roslaunch one_arm_no_moveit_gazebo ur10.launch
 ```
@@ -71,6 +75,7 @@ roslaunch one_arm_no_moveit_gazebo ur10.launch
 Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá realizar simples tareas, este proyecto se enfoca en las tareas que pueda realizar el robot, por tanto no es necesario que el mundo sea muy detallado.
 
 Para ello lo primero es crear el directorio *world*, en donde se guardará los worlds que se creen:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
 mkdir world
@@ -85,12 +90,16 @@ cp -r multiple_arm_setup/multiple_ur_description/models/ .
 cp -r multiple_arm_setup/multiple_ur_description/world/ .
 sudo rm -r mutiple_arm_setup
 ```
+
 Para que añadir el world con el robot en gazebo, hay que modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) en el directorio launch:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo/launch
 nano ur10.launch
 ```
+
 Y incluidir el mundo en el launch, añadiendo el argumento *world* y reemplazando el valor de *default* en el argumento *world_name*:
+
 ```xml
  <arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
 
@@ -101,16 +110,21 @@ Y incluidir el mundo en el launch, añadiendo el argumento *world* y reemplazand
     <arg name="gui" value="$(arg gui)"/>
   </include>
 ```
+
 Se procede a lanzar gazebo con el nuevo mundo:
+
 ```bash
 roslaunch one_arm_no_moveit_gazebo ur10.launch
 ```
 
 Al lanzarlo, muestra dos errores:
+
 ```bash
 Error [parser.cc:581] Unable to find uri[model://dropbox]
 ```
+
 Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya que gazebo no lo provee o se ha eliminado. Por tanto en el fichero [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) se comenta el objeto dropbox:
+
 ```{xml}
 <!--include>
        <pose frame=''>0.5 0.0 0.3 0 0 0</pose> 
@@ -126,7 +140,9 @@ Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya q
 This setting assumes you have an old package with an old implementation of DefaultRobotHWSim, where the robotNamespace is disregarded and absolute paths are used instead.
 If you do not want to fix this issue in an old package just set <legacyModeNS> to true.
 ```
+
 Para eliminar este error, se procede a realizar el cambio desde el fichero de [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_descriptiom/urdf/common.gazebo.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_description/urdf/common.gazebo.xacro), hay que añadir *<legacyModeNS>* al fichero:
+
 ```xml
 <plugin name="ros_control" filename="libgazebo_ros_control.so">
       <!--robotNamespace>/</robotNamespace-->
@@ -137,13 +153,16 @@ Para eliminar este error, se procede a realizar el cambio desde el fichero de [~
 
 #### :computer: Instalación de Gazebo 9 [Opcional]
 Puede surgir un *warning*, que puede ser un problema el ignorarlo a la hora de simular el comportamiento de brazo en el futuro, por lo que se procede a resolverlo.
+
 ```bash
 [ WARN] [1639745803.729749460, 0.061000000]: The default_robot_hw_sim plugin is using the Joint::SetPosition method without preserving the link velocity.
 [ WARN] [1639745803.729772883, 0.061000000]: As a result, gravity will not be simulated correctly for your model.
 [ WARN] [1639745803.729786659, 0.061000000]: Please set gazebo_pid parameters, switch to the VelocityJointInterface or EffortJointInterface, or upgrade to Gazebo 9.
 
 ```
+
 Para ello, se ha decidido instalar Gazebo 9 en el entorno de ROS Kinetic Kame.
+
 ```bash
 sudo apt-get remove ros-kinetic-desktop-full
 sudo apt-get remove ros-kinetic-gazebo*
@@ -170,6 +189,7 @@ sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kin
 
 sudo apt-get install ros-kinetic-ros-control ros-kinetic-ros-controllers
 ```
+
 El resultado tras instalar Gazebo 9 es similar a la siguiente.
 ![setup stage](/doc/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
 
@@ -243,6 +263,7 @@ cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_joint_
 ```
 
 No se sabe la razón exacta de porqué no es posible simular correctamente el gripper, ya que gazebo provee el siguiente error:
+
 ```bash
 [ERROR] [1640030309.858708751, 1040.204000000]: This robot has a joint named "finger_joint" which is not in the gazebo model.
 [FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
@@ -281,6 +302,7 @@ Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen
 #### :computer: Agregación del controlador de la pinza (Gazebo, fase 1)
 
 Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
+
 ```bash
 miguel@Omen:~$ rostopic list
 /arm_controller/command
@@ -308,17 +330,20 @@ miguel@Omen:~$ rostopic list
 /tf
 /tf_static
 ```
+
 Se puede apreciar, que están cargados los controladores del robot UR10 (**/arm_controller**) pero no existe ningun topic para el control del gripper. Para ello hay que añadirlos y cargarlos en Gazebo correctamente de la siguiente manera. 
 
 Los ficheros que contienen la información para controlar el gripper se encuentran en los directorios [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller) y  [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch) que estarían relacionadas respectivamente con los directorios *controller* y *launch* del directorio [one_arm_no_moveit_gazebo](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo).
 
 Al final, se han realizado las siguientes modificaciones:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller
 cp ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller/gripper_controller_robotiq.yaml .
 ```
 
 Y se ha agregado al final del fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) el controlador del gripper:
+
 ```xml
 <!-- robotiq_85_gripper controller -->
   <rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
@@ -326,6 +351,7 @@ Y se ha agregado al final del fichero [~/MultiCobot-UR10-Gripper/src/multirobot/
 ```
 
 Se lanza Gazebo de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comado *rostopic list*, se aprecia que los controladores del gripper aparecen correctamente (**/gripper**):
+
 ```bash
 /arm_controller/command
 /arm_controller/follow_joint_trajectory/cancel
@@ -407,11 +433,11 @@ touch ur10_robot_pose.py
 chmod +x ur10_robot_pose.py
 ```
 
-- Ver el contenido del fichero [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py):
+- Ver el contenido del fichero [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py).
 
 Este nodo calcula la posición del `ee_link` respecto a la posición del `base_link` mediante la libreria *tf* y lo publica en el topic `\robot_pose`. Esto permitirá obtener rápidamente la posición actual de la pinza.
 
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
+- Automatización del lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch).
 
 ```xml
   <!-- get the robot position [Own Script]-->
@@ -432,7 +458,7 @@ chmod +x pub_gripper_cmd.py
 
 - Ver el contenido del fichero [pub_gripper_cmd.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py).
 
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
+- Automatización del lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch).
 
 ```xml
 <!-- send the gripper commands [Own Script]-->
@@ -452,10 +478,10 @@ touch pub_ik_trajectory.py
 chmod +x pub_ik_trajectory.py
 ```
 
-- Ver el contenido del fichero [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py):
+- Ver el contenido del fichero [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py).
 
 
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
+- Automatización del lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch).
 
 ```xml
   <!-- send the arms commands [Own Script]-->
@@ -475,9 +501,9 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_
 touch kinematics_utils.py
 chmod +x kinematics_utils.py
 ```
-- Ver el contenido de la librería [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py):
+- Ver el contenido de la librería [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py).
 
-Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas.
+Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas, en este caso el *pick & place*, en donde el cobot cogerá de un cubo de la mesa y lo dejará en una cesta, así hasta que no queden más cubos en la mesa.
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
@@ -501,137 +527,68 @@ Ejecución de las pruebas
   </h2>
 </a>
 
-### Pruebas de pick and place con lo implementado
-Durante el inicio de las pruebas se ha visto que en la smulación en Gazebo no es posible agarrar los objetos sobre la mesa.
-
-Esto es debido a que falta incluir el plugin de Gazebo *gazebo_grasp* que está en el paquete *gazebo-pkgs* instalado previamente como recurso.
-
-#### Gazbebo Grasp plugin
-Se va a proceder a realizar los pasos necesarios para cargar el plugin que permita al robot interaccionar con los objetos en simulación.
-
-Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podria guardarlo en el paquete de *universal robots* pero como es una modificación realizada para nuestro proyecto, se ha decidido en moverlo al directorio *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf*.
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf
-touch gzplugin_grasp_fix.urdf.xacro
-```
-
-Y el contenido del fichero:
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<root 
- xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
- xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
- xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
- xmlns:xacro="http://wiki.ros.org/xacro">
-
-
-<!-- MACRO FOR THE ROBOT ARM ON THE TABLE-->
-<xacro:macro name="gzplugin_grasp_fix" params="prefix">
-    <gazebo>
-        <plugin name="gazebo_grasp_fix" filename="libgazebo_grasp_fix.so">
-            <!--
-            NOTE: The finger tips are linked together with the links before, because they are connected with a
-            fixed joint. Gazebo makes one whole link out of this automatically. When listing the 9_*_tip links
-            here, they won't be found in the SDF.
-            -->
-            <arm>
-                <arm_name>${prefix}Arm</arm_name>
-
-                <!-- 0.01977<0.0198<0.01999 -->
-                <palm_link> ${prefix}robotiq_85_left_inner_knuckle_link </palm_link>
-                <gripper_link> ${prefix}robotiq_85_left_finger_tip_link </gripper_link>
-                <palm_link> ${prefix}robotiq_85_right_inner_knuckle_link </palm_link>
-                <gripper_link> ${prefix}robotiq_85_right_finger_tip_link </gripper_link>
-
-                <!-- 0.01976<0.01977<0.01978 -->
-<!--                 <palm_link>wrist_3_link</palm_link>
-                <gripper_link>gripper_finger1_inner_knuckle_link</gripper_link>
-                <gripper_link>gripper_finger1_finger_tip_link</gripper_link>
-                <gripper_link>gripper_finger1_knuckle_link</gripper_link>
-                <gripper_link>gripper_finger2_inner_knuckle_link</gripper_link>
-                <gripper_link>gripper_finger2_finger_tip_link</gripper_link>
-                <gripper_link>gripper_finger2_knuckle_link</gripper_link>
- -->                
-            </arm>
-            <forces_angle_tolerance>100</forces_angle_tolerance>
-            <update_rate>20</update_rate>
-            <grip_count_threshold>1</grip_count_threshold>
-            <max_grip_count>3</max_grip_count>
-            <release_tolerance>0.005</release_tolerance>
-            <!--release_tolerance>0.0198</release_tolerance--> <!-- 0.01977<0.0198<0.01999 -->
-            <disable_collisions_on_attach>false</disable_collisions_on_attach>
-            <contact_topic>__default_topic__</contact_topic>
-        </plugin>
-    </gazebo>
-</xacro:macro>
-
-</root>
-```
-Una vez que se tiene el plugin de Gazebo, hay que añadirlo al brazo robótico y se ha añadido al gripper código para aumentar su fricción ayudando al agarre de los objetos en la simulación.
-
-```bash
-nano ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro
-```
-Añadir al final el plugin:
-```xml
-  <xacro:include filename="$(find one_arm_no_moveit_description)/urdf/gzplugin_grasp_fix.urdf.xacro"/>
-
-  <xacro:gzplugin_grasp_fix prefix=""/>
-```
-
-De la misma manera, editamos el fichero del gripper ([~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro)):
-```bash
-nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro
-```
-
-Añadir al final el plugin:
-```xml
-	[...]
-        <!-- Improve grasping physics -->
-        <gazebo reference="${prefix}robotiq_85_left_finger_tip_link">
-          <!--kp>1000000.0</kp>
-          <mu1>1.0</mu1>
-          <mu2>1.0</mu2-->
-          <mu1>100000</mu1>
-          <mu2>100000</mu2>
-          <kp>100000000.0</kp>
-          <kd>1.0</kd>
-          <minDepth>0.001</minDepth>
-        </gazebo>
-
-        <gazebo reference="${prefix}robotiq_85_right_finger_tip_link">
-          <!--kp>1000000.0</kp>
-          <mu1>1.0</mu1>
-          <mu2>1.0</mu2-->
-          <mu1>100000</mu1>
-          <mu2>100000</mu2>
-          <kp>100000000.0</kp>
-          <kd>1.0</kd>
-          <minDepth>0.001</minDepth>
-        </gazebo>
-```
-Y esta es toda la configuraóicn necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada gripper, sino esos grippers no podrá agrrar objetos durante la simulación.
-
-
-#### Simple test en Gazebo
+### Realización de pruebas en Gazebo
 Se a creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
 
 El fichero con el código del manipulador para realizar la prueba: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py)
 
-
 Comandos para lanzar el test:
-* En un terminal:
+
+- Terminal 1:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/
 source devel/setup.bash
 roslaunch one_arm_no_moveit_gazebo ur10_joint_limited.launch
 ```
-* En otro terminal:
+- Terminal 2:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/
 source devel/setup.bash
 rosrun one_arm_no_moveit_manipulator robot_manipulator.py
 ```
 
-* Tener en cuenta que se ha modificado un poco el world de gazebo para estas pruebas. Todo esto se podrá encontrar en el repositorio del proyecto.
+### Problemas durante el las pruebas de pick and place
+Durante el inicio de las pruebas se ha visto que en la simulación en Gazebo no es posible agarrar los objetos sobre la mesa.
+
+Esto es debido a que falta incluir el plugin de Gazebo *gazebo_grasp* que está en el paquete *gazebo-pkgs* instalado previamente como recurso.
+
+#### Gazbebo Grasp plugin
+Se va a proceder a realizar los pasos necesarios para cargar el plugin que permita al robot interaccionar con los objetos en simulación.
+
+Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podria guardarlo en el paquete de *universal robots* pero como es una modificación realizada para este proyecto, se ha decidido en moverlo al directorio [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf).
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf
+touch gzplugin_grasp_fix.urdf.xacro
+```
+
+- Ver el contenido del fichero [gzplugin_grasp_fix.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro).
+
+Una vez que se tiene el plugin de Gazebo, hay que añadirlo al brazo robótico, también se ha añadido al gripper el código para aumentar su fricción, ayudando al agarre de los objetos en la simulación.
+
+```bash
+nano ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro
+```
+
+Añadir al final el plugin:
+
+```xml
+  <xacro:include filename="$(find one_arm_no_moveit_description)/urdf/gzplugin_grasp_fix.urdf.xacro"/>
+
+  <xacro:gzplugin_grasp_fix prefix=""/>
+```
+
+- Ver el contenido del fichero [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro).
+
+De la misma manera, editamos el fichero del gripper ([~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro)):
+
+```bash
+nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro
+```
+
+- Ver el contenido del fichero [robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro).
+
+
+Y esta es toda la configuración necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada gripper, sino esos grippers no podrá agrrar objetos durante la simulación.
