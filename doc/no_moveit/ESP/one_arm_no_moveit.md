@@ -3,214 +3,20 @@
 
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
-Las fases que se ven en el esquema son de orientación. Se pueden hacer en el orden que se prefiera. En este caso se comenzará por la fase 1, seguido de la fase 3 y finalmente se termina con la fase 2.
+Las fases que se ven en el esquema son de orientación. Se pueden hacer en el orden que se prefiera, se ha dividido el esquema en fases para mantener un orden y conocer sobre qué elemento del esquema se está trabajando. En este caso se comenzará por la fase 1, seguido de la fase 2 y finalmente se termina con la fase 3. Hay que tener en cuenta que puede existir configuraciones en una fase que pertenece realmente a otra fase, cuando esto suceda se señalará adecuadamente.
 
 ## Requisito previo
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
 
 ## Índice
-- [Fase 1: Configuración del URDF](#fase1)
-- [Fase 3: Configuración del simulador de Gazebo](#fase3)
-- [Fase 2: Implementación de un planificador propio que realiza un `pick & place`](#fase2)
+- [Fase 1: Configuración del simulador de Gazebo](#fase1)
+- [Fase 2: Configuración del URDF](#fase2)
+- [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#fase3)
 - [Ejecución de las pruebas](#pruebas)
 
 <a name="fase1">
   <h2>
-Fase 1: Configuración del URDF
-  </h2>
-</a>
-
-### :book: Descripción del fichero URDF
-El fichero URDF (United Robotics Description Format) modela el cobot utilizando el formato XML el cual será utilizado por las diferentes aplicaciones que ROS necesite, pero principalmente para realizar una simulación del robot modelado.
-
-El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son
-representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
-
-Además como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometrı́a, inercia, orientación etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo,
-que podrı́a ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
-
-Dicho esto, se realiza una representación de los componentes del robot:
- 
- ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
-
-En la imagen se representa el contenido del [fichero URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando world (color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
-
-### :computer: Creación del directorio para la solución
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot
-mkdir one_arm_no_moveit
-```
-
-### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot ur10 [No ha sido posible, problemas con gazebo]
-Para agregar correctamente el gripper hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
- 
- Tomando la siguiente imagen para entender el funcionamiento del controllador del gripper:
- ![esquema del gripper](/doc/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
-
-Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El *servidor* es que se encarga de enviar las ordenes al gripper y feedback al cliente y el *cliente* envía ordenes al servidor.
-
-Si comparamos la configuración del controlador con la del UR10, se aprecia que el concepto es diferente, ya que no existe un fichero *yaml* que cargue con la información necesaria para controlar el gripper. En vez de eso, es el servidor que crea los topics */command_robotiq_action* y */robotiq_controller/follow_joint_trajectory*, ambos son de tipo *action*.
-
-```bash
-miguel@Omen:~$ rostopic list
-/clicked_point
-/command_robotiq_action/cancel
-/command_robotiq_action/feedback
-/command_robotiq_action/goal
-/command_robotiq_action/result
-/command_robotiq_action/status
-/initialpose
-/joint_states
-/move_base_simple/goal
-/robotiq_controller/follow_joint_trajectory/cancel
-/robotiq_controller/follow_joint_trajectory/feedback
-/robotiq_controller/follow_joint_trajectory/goal
-/robotiq_controller/follow_joint_trajectory/result
-/robotiq_controller/follow_joint_trajectory/status
-/rosout
-/rosout_agg
-/tf
-/tf_static
-```
-
-Sabiendo esto, para controlar el gripper, hay un ejemplo en el fichero [robotiq_2f_action_client_example.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_2finger_grippers/robotiq_2f_gripper_control/scripts/robotiq_2f_action_client_example.py) y puede funcionar con un gripper simulado o el griper real. Teniendo esto en cuenta, a la hora de agregar el gripper al robot UR10, no es necesario el fichero *yaml* que cargaria el controlador del driver, pero hay que lanzar correctamente el nodo que hará de servidor y si se mira el código de servidor y del cliente, hay que tener especial cuidado con la configuración de los topics y namespaces.
-
-El fichero que carga el robot UR10 es [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_description/launch/ur10_upload.launch), por tanto se va a copiar lo necesario del paquete *ur_description* y modificarlo para añadir el gripper al robot y también modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_gazebo/launch/ur10.launch) que carga el URDF del paquete *ur_gazebo*:
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
-catkin_create_pkg one_arm_no_moveit_description rospy
-cd one_arm_no_moveit_description
-mkdir launch
-cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch launch/
-mkdir urdf
-cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_robot.urdf.xacro udrf/
-cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_joint_limited_robot.urdf.xacro udrf/
-```
-
-No se sabe la razón exacta de porqué no es posible simular correctamente el gripper, ya que gazebo provee el siguiente error:
-```bash
-[ERROR] [1640030309.858708751, 1040.204000000]: This robot has a joint named "finger_joint" which is not in the gazebo model.
-[FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
-```
-
-Para la simulación con Gazebo no funciona, pero sí en la herramienta de rosviz. Esto indica que el paquete de ROS para la pinza funciona correctamente, pero la configuración del robot simulado en Gazebo (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en Gazebo.
-
-![rviz-robotiq-2f-85-gripper](/doc/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
-
-Como en el robot real, la pinza es un elemento independiente del brazo robótico puede que sea necesario este repositorio, pero para realizar las simulaciones se va utilizar otro repositorio que sí es compatible con el simulador gazebo.
-
-
-### :computer: Agregación del robotiq_85_gripper al robot ur10
-Se a proceder a agregar el gripper al robot ur10, no hay una referencia clara de cómo hacerlo adecuadamente. Para ello se empezará mirando cómo está estructurado el paquete para tener una idea de cómo adaptarlo al proyecto en cuestión.
-
-```bash
-LICENSE             robotiq_85_description  robotiq_85_moveit_config  si_utils
-README.md           robotiq_85_driver       robotiq_85_msgs
-robotiq_85_bringup  robotiq_85_gripper      robotiq_85_simulation
-```
-
-A primera vista los paquetes que nos interesan son el *robotiq_85_description*, *robotiq_85_bringup* y *robotiq_85_simulation*, el resto son recursos para su uso con MoveIt! o scripts, que posteriormente se aplicarán para el control del gripper en simulación.
-
-Teniendo esto en encuenta se va a proceder a la incorporación del gripper en el robot UR10.
-
-Tomando como ejemplo el fichero [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro), se procede a añadir el gripper al robot, para ello hay que modificar los ficheros:
-
-- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro)
-- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro).
-
-Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen el gripper.
-![ ](/doc/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
-
----
-
-Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
-```bash
-miguel@Omen:~$ rostopic list
-/arm_controller/command
-/arm_controller/follow_joint_trajectory/cancel
-/arm_controller/follow_joint_trajectory/feedback
-/arm_controller/follow_joint_trajectory/goal
-/arm_controller/follow_joint_trajectory/result
-/arm_controller/follow_joint_trajectory/status
-/arm_controller/state
-/calibrated
-/clock
-/gazebo/link_states
-/gazebo/model_states
-/gazebo/parameter_descriptions
-/gazebo/parameter_updates
-/gazebo/performance_metrics
-/gazebo/set_link_state
-/gazebo/set_model_state
-/gazebo_gui/parameter_descriptions
-/gazebo_gui/parameter_updates
-/joint_group_position_controller/command
-/joint_states
-/rosout
-/rosout_agg
-/tf
-/tf_static
-```
-Se puede apreciar, que están cargados los controladores del robot UR10 (**/arm_controller**) pero no existe ningun topic para el control del gripper. Para ello hay que añadirlos y cargarlos en Gazebo correctamente de la siguiente manera. 
-
-Los ficheros que contienen la información para controlar el gripper se encuentran en los directorios [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller) y  [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch) que estarían relacionadas respectivamente con los directorios *controller* y *launch* del directorio [one_arm_no_moveit_gazebo](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo).
-
-Al final, se han realizado las siguientes modificaciones:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller
-cp ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller/gripper_controller_robotiq.yaml .
-```
-
-Y se ha agregado al final del fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) el controlador del gripper:
-```xml
-<!-- robotiq_85_gripper controller -->
-  <rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
-  <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
-```
-
-Se lanza Gazebo de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comado *rostopic list*, se aprecia que los controladores del gripper aparecen correctamente (**/gripper**):
-```bash
-/arm_controller/command
-/arm_controller/follow_joint_trajectory/cancel
-/arm_controller/follow_joint_trajectory/feedback
-/arm_controller/follow_joint_trajectory/goal
-/arm_controller/follow_joint_trajectory/result
-/arm_controller/follow_joint_trajectory/status
-/arm_controller/state
-/calibrated
-/clock
-/gazebo/link_states
-/gazebo/model_states
-/gazebo/parameter_descriptions
-/gazebo/parameter_updates
-/gazebo/performance_metrics
-/gazebo/set_link_state
-/gazebo/set_model_state
-/gazebo_gui/parameter_descriptions
-/gazebo_gui/parameter_updates
-/gripper/command
-/gripper/follow_joint_trajectory/cancel
-/gripper/follow_joint_trajectory/feedback
-/gripper/follow_joint_trajectory/goal
-/gripper/follow_joint_trajectory/result
-/gripper/follow_joint_trajectory/status
-/gripper/state
-/joint_group_position_controller/command
-/joint_states
-/rosout
-/rosout_agg
-/tf
-/tf_static
-```
-
-
-
-
-
-<a name="fase3">
-  <h2>
-Fase 3: Configuración del simulador de Gazebo
+Fase 1: Configuración del simulador de Gazebo
   </h2>
 </a>
 
@@ -466,18 +272,207 @@ Y esta es toda la configuraóicn necesaria para que el plugin funcione correctam
 
 
 
-
-
-
-
-
-
-
-
-
 <a name="fase2">
   <h2>
-Fase 2: Implementación de un planificador propio que realiza un <i>pick & place</i>
+Fase 2: Configuración del URDF
+  </h2>
+</a>
+
+### :book: Descripción del fichero URDF
+El fichero URDF (United Robotics Description Format) modela el cobot utilizando el formato XML el cual será utilizado por las diferentes aplicaciones que ROS necesite, pero principalmente para realizar una simulación del robot modelado.
+
+El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son
+representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
+
+Además como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometrı́a, inercia, orientación etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo,
+que podrı́a ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
+
+Dicho esto, se realiza una representación de los componentes del robot:
+ 
+ ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
+
+En la imagen se representa el contenido del [fichero URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando world (color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
+
+### :computer: Creación del directorio para la solución
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot
+mkdir one_arm_no_moveit
+```
+
+### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot ur10 [No ha sido posible, problemas con gazebo]
+Para agregar correctamente el gripper hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
+ 
+ Tomando la siguiente imagen para entender el funcionamiento del controllador del gripper:
+ ![esquema del gripper](/doc/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
+
+Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El *servidor* es que se encarga de enviar las ordenes al gripper y feedback al cliente y el *cliente* envía ordenes al servidor.
+
+Si comparamos la configuración del controlador con la del UR10, se aprecia que el concepto es diferente, ya que no existe un fichero *yaml* que cargue con la información necesaria para controlar el gripper. En vez de eso, es el servidor que crea los topics */command_robotiq_action* y */robotiq_controller/follow_joint_trajectory*, ambos son de tipo *action*.
+
+```bash
+miguel@Omen:~$ rostopic list
+/clicked_point
+/command_robotiq_action/cancel
+/command_robotiq_action/feedback
+/command_robotiq_action/goal
+/command_robotiq_action/result
+/command_robotiq_action/status
+/initialpose
+/joint_states
+/move_base_simple/goal
+/robotiq_controller/follow_joint_trajectory/cancel
+/robotiq_controller/follow_joint_trajectory/feedback
+/robotiq_controller/follow_joint_trajectory/goal
+/robotiq_controller/follow_joint_trajectory/result
+/robotiq_controller/follow_joint_trajectory/status
+/rosout
+/rosout_agg
+/tf
+/tf_static
+```
+
+Sabiendo esto, para controlar el gripper, hay un ejemplo en el fichero [robotiq_2f_action_client_example.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_2finger_grippers/robotiq_2f_gripper_control/scripts/robotiq_2f_action_client_example.py) y puede funcionar con un gripper simulado o el griper real. Teniendo esto en cuenta, a la hora de agregar el gripper al robot UR10, no es necesario el fichero *yaml* que cargaria el controlador del driver, pero hay que lanzar correctamente el nodo que hará de servidor y si se mira el código de servidor y del cliente, hay que tener especial cuidado con la configuración de los topics y namespaces.
+
+El fichero que carga el robot UR10 es [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_description/launch/ur10_upload.launch), por tanto se va a copiar lo necesario del paquete *ur_description* y modificarlo para añadir el gripper al robot y también modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_gazebo/launch/ur10.launch) que carga el URDF del paquete *ur_gazebo*:
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
+catkin_create_pkg one_arm_no_moveit_description rospy
+cd one_arm_no_moveit_description
+mkdir launch
+cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch launch/
+mkdir urdf
+cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_robot.urdf.xacro udrf/
+cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_joint_limited_robot.urdf.xacro udrf/
+```
+
+No se sabe la razón exacta de porqué no es posible simular correctamente el gripper, ya que gazebo provee el siguiente error:
+```bash
+[ERROR] [1640030309.858708751, 1040.204000000]: This robot has a joint named "finger_joint" which is not in the gazebo model.
+[FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
+```
+
+Para la simulación con Gazebo no funciona, pero sí en la herramienta de rosviz. Esto indica que el paquete de ROS para la pinza funciona correctamente, pero la configuración del robot simulado en Gazebo (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en Gazebo.
+
+![rviz-robotiq-2f-85-gripper](/doc/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
+
+Como en el robot real, la pinza es un elemento independiente del brazo robótico puede que sea necesario este repositorio, pero para realizar las simulaciones se va utilizar otro repositorio que sí es compatible con el simulador gazebo.
+
+
+### :computer: Agregación del robotiq_85_gripper al robot ur10
+Se a proceder a agregar el gripper al robot ur10, no hay una referencia clara de cómo hacerlo adecuadamente. Para ello se empezará mirando cómo está estructurado el paquete para tener una idea de cómo adaptarlo al proyecto en cuestión.
+
+```bash
+LICENSE             robotiq_85_description  robotiq_85_moveit_config  si_utils
+README.md           robotiq_85_driver       robotiq_85_msgs
+robotiq_85_bringup  robotiq_85_gripper      robotiq_85_simulation
+```
+
+A primera vista los paquetes que nos interesan son el *robotiq_85_description*, *robotiq_85_bringup* y *robotiq_85_simulation*, el resto son recursos para su uso con MoveIt! o scripts, que posteriormente se aplicarán para el control del gripper en simulación.
+
+Teniendo esto en encuenta se va a proceder a la incorporación del gripper en el robot UR10.
+
+Tomando como ejemplo el fichero [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro), se procede a añadir el gripper al robot, para ello hay que modificar los ficheros:
+
+- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro).
+
+Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen el gripper.
+![ ](/doc/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
+
+---
+
+Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
+```bash
+miguel@Omen:~$ rostopic list
+/arm_controller/command
+/arm_controller/follow_joint_trajectory/cancel
+/arm_controller/follow_joint_trajectory/feedback
+/arm_controller/follow_joint_trajectory/goal
+/arm_controller/follow_joint_trajectory/result
+/arm_controller/follow_joint_trajectory/status
+/arm_controller/state
+/calibrated
+/clock
+/gazebo/link_states
+/gazebo/model_states
+/gazebo/parameter_descriptions
+/gazebo/parameter_updates
+/gazebo/performance_metrics
+/gazebo/set_link_state
+/gazebo/set_model_state
+/gazebo_gui/parameter_descriptions
+/gazebo_gui/parameter_updates
+/joint_group_position_controller/command
+/joint_states
+/rosout
+/rosout_agg
+/tf
+/tf_static
+```
+Se puede apreciar, que están cargados los controladores del robot UR10 (**/arm_controller**) pero no existe ningun topic para el control del gripper. Para ello hay que añadirlos y cargarlos en Gazebo correctamente de la siguiente manera. 
+
+Los ficheros que contienen la información para controlar el gripper se encuentran en los directorios [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller) y  [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch) que estarían relacionadas respectivamente con los directorios *controller* y *launch* del directorio [one_arm_no_moveit_gazebo](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo).
+
+Al final, se han realizado las siguientes modificaciones:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller
+cp ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller/gripper_controller_robotiq.yaml .
+```
+
+Y se ha agregado al final del fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) el controlador del gripper:
+```xml
+<!-- robotiq_85_gripper controller -->
+  <rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
+  <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
+```
+
+Se lanza Gazebo de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comado *rostopic list*, se aprecia que los controladores del gripper aparecen correctamente (**/gripper**):
+```bash
+/arm_controller/command
+/arm_controller/follow_joint_trajectory/cancel
+/arm_controller/follow_joint_trajectory/feedback
+/arm_controller/follow_joint_trajectory/goal
+/arm_controller/follow_joint_trajectory/result
+/arm_controller/follow_joint_trajectory/status
+/arm_controller/state
+/calibrated
+/clock
+/gazebo/link_states
+/gazebo/model_states
+/gazebo/parameter_descriptions
+/gazebo/parameter_updates
+/gazebo/performance_metrics
+/gazebo/set_link_state
+/gazebo/set_model_state
+/gazebo_gui/parameter_descriptions
+/gazebo_gui/parameter_updates
+/gripper/command
+/gripper/follow_joint_trajectory/cancel
+/gripper/follow_joint_trajectory/feedback
+/gripper/follow_joint_trajectory/goal
+/gripper/follow_joint_trajectory/result
+/gripper/follow_joint_trajectory/status
+/gripper/state
+/joint_group_position_controller/command
+/joint_states
+/rosout
+/rosout_agg
+/tf
+/tf_static
+```
+
+
+
+
+
+
+
+
+
+<a name="fase3">
+  <h2>
+Fase 3: Implementación de un planificador propio que realiza un <i>pick & place</i>
   </h2>
 </a>
 
@@ -602,7 +597,11 @@ El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede 
 Para evitar eso, se puede definir un workspace en donde no sufra de estas singularidades.
 
 
-
+<a name="pruebas">
+  <h2>
+Ejecución de las pruebas
+  </h2>
+</a>
 
 
 #### Simple test en Gazebo
