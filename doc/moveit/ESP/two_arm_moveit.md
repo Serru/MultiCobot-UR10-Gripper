@@ -306,58 +306,57 @@ Si se quiere añadir más cobots al sistema, simplemente hay que copiar el conte
 
 Los cambios realizados para la configuración de MoveIt! son muy
 pequeñas, básicamente hay que agrupar el código de lo que se habı́a
-implementado para un único cobot bajo un namespace, adecuar el remap
-con el namespacing y posteriormente replicar el proceso tantas veces
-como cobots se esté simulando. El Código Fuente 6.21 si se compara
-con El Código Fuente 6.11 de la solución desarrollada para un único
-cobot, esencialmente se ha agrupado todo en un namespace y se ha
-añadido el nombre del namespace como prefijo en los nombres de los
-topics del remap para la correcta comunicación con los controladores.
+implementado para un *único cobot* bajo un *namespace*, adecuar el *remap* con el namespacing y posteriormente replicar el proceso tantas veces como cobots se esté simulando. El contenido del fichero [one_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch) implementado para un único cobot y el contenido del fichero [two_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_execution.launch), si se comparan, esencialmente se ha agrupado todo en un *namespace* y se ha añadido el nombre del namespace como prefijo en los nombres de los topics del remap para la correcta comunicación con los controladores.
 
+Contenido del fichero two_arm_moveit_execution.launch:
 ```xml
 <launch>
-<arg name="sim" default="false" />
-<arg name="debug" default="false" />
-<group ns="ur10_1">
-<rosparam command="load" file="$(find one_arm_moveit_manipulator)/config
-/joint_names.yaml"/>
-<include file="$(find one_arm_moveit_manipulator)/launch/
-planning_context_ur10_1.launch">
-<arg name="load_robot_description" value="true"/>
-</include>
-<include file="$(find one_arm_moveit_manipulator)/launch/move_group.launch">
-<arg name="debug" default="$(arg debug)" />
-<arg name="publish_monitored_planning_scene" value="true"/>
-<!--arg name="info" value="true"/-->
-</include>
-<!-- Remap follow_joint_trajectory -->
-<remap from="/ur10_1/follow_joint_trajectory"
-to="/ur10_1/arm_controller/follow_joint_trajectory"/>
-<include file="$(find one_arm_moveit_config)/launch/moveit_rviz.launch">
-<arg name="config" value="true"/>
-<arg name="debug" default="false"/>
-</include>
-</group>
-<group ns="ur10_2">
-<rosparam command="load" file="$(find one_arm_moveit_manipulator)/config/
-joint_names.yaml"/>
-<include file="$(find one_arm_moveit_manipulator)/launch/
-planning_context.launch">
-<arg name="load_robot_description" value="true"/>
-</include>
-<include file="$(find one_arm_moveit_manipulator)/launch/move_group.launch">
-<arg name="debug" default="$(arg debug)" />
-<arg name="publish_monitored_planning_scene" value="true"/>
-<!--arg name="info" value="true"/-->
-</include>
-<!-- Remap follow_joint_trajectory -->
-<remap from="/ur10_2/follow_joint_trajectory"
-to="/ur10_2/arm_controller/follow_joint_trajectory"/>
-<include file="$(find one_arm_moveit_config)/launch/moveit_rviz.launch">
-<arg name="config" value="true"/>
-<arg name="debug" default="false"/>
-</include>
-</group>
+    <arg name="sim" default="false" />
+    <arg name="debug" default="false" />
+    <!-- By default, we do not start a database (it can be large) -->
+    <arg name="demo" default="false" />
+
+    <group ns="ur10_1">
+      <rosparam command="load" file="$(find two_arm_moveit_manipulator)/config/joint_names.yaml"/>
+
+      <include file="$(find two_arm_moveit_manipulator)/launch/move_group.launch">
+        <arg name="debug" default="$(arg debug)" />
+        <arg name="publish_monitored_planning_scene" value="true"/>
+        <!--arg name="info" value="true"/-->
+      </include>
+
+      <!-- If database loading was enabled, start mongodb as well -->
+      <include file="$(find two_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"/>
+
+      <!-- Remap follow_joint_trajectory -->
+      <remap from="/ur10_1/follow_joint_trajectory" to="/ur10_1/arm_controller/follow_joint_trajectory"/>
+
+      <include file="$(find two_arm_moveit_config)/launch/moveit_rviz.launch">
+        <arg name="config" value="true"/>
+        <arg name="debug" default="false"/>
+      </include>
+    </group>
+
+    <group ns="ur10_2">
+      <rosparam command="load" file="$(find two_arm_moveit_manipulator)/config/joint_names.yaml"/>
+
+      <include file="$(find two_arm_moveit_manipulator)/launch/move_group.launch">
+        <arg name="debug" default="$(arg debug)" />
+        <arg name="publish_monitored_planning_scene" value="true"/>
+        <!--arg name="info" value="true"/-->
+      </include>
+
+      <!-- If database loading was enabled, start mongodb as well -->
+      <include file="$(find two_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"/>
+
+      <!-- Remap follow_joint_trajectory -->
+      <remap from="/ur10_2/follow_joint_trajectory" to="/ur10_2/arm_controller/follow_joint_trajectory"/>
+
+      <include file="$(find two_arm_moveit_config)/launch/moveit_rviz.launch">
+        <arg name="config" value="true"/>
+        <arg name="debug" default="false"/>
+      </include>
+    </group>
 </launch>
 ```
 
