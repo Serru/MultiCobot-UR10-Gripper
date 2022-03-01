@@ -34,7 +34,7 @@ En la imagen se representa el contenido del [fichero URDF](https://github.com/Se
 
 
 #### Creación del directorio para la solución
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir one_arm_moveit
 ```
@@ -42,14 +42,14 @@ mkdir one_arm_moveit
 ### Configuración del directorio descripción
 Se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_no_moveit* para su posterior modificación.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
 catkin_create_pkg one_arm_moveit_description rospy
 ```
 
 En el directorio creado para description, se copiara del directorio de *one_arm_no_moveit_description*, las carpetas *launch* y *urdf*.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/launch .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf .
@@ -64,7 +64,7 @@ cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_move
 * [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro)
 
 Se compila:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
@@ -79,7 +79,7 @@ Fase 2: Configuración de MoveIt!
 
 Antes de realizar la configuración con el `Setup Assitant` hay que tener el `URDF` bien definido previamente, con ese hecho se lanza el asistente de configuración con el siguiente comando en la terminal:
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/
 mkdir one_arm_moveit_config
 roslaunch moveit_setup_assistant setup_assistant.launch
@@ -192,12 +192,12 @@ simulación como con el robot real, forma parte del paquete de ROS
 #### Puesta en marcha de Gazebo
 
 Se va a crear el paquete para gazebo, y copiar el contenido de la solución partiendo del la solución *one_arm_no_moveit* para su posterior modificación:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
 catkin_create_pkg one_arm_moveit_gazebo rospy
 ```
 En el directorio creado para gazebo, se copiara del directorio de *one_arm_no_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, y *world*.
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch .
@@ -212,7 +212,7 @@ cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_move
 * [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10.launch)
 
 Se compila:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
@@ -271,7 +271,7 @@ El fichero de configuración de los controladores es el mismo tanto para Gazebo 
 Por tanto se puede añadir los controladores (ficheros .yaml) de Gazebo en el paquete de MoveIt! para conectar correctamente los controladores del robot (manipulator y gripper).
 
 Si se lanza gazebo y moveit! sin realizar ninguna modificación, se obtiene la siguiente gráfica de nodos y topics:
-```{bash}
+```bash
 # terminal 1
 roslaunch one_arm_moveit_config demo.launch
 
@@ -287,7 +287,7 @@ Por tanto hay que modificar los siguientes ficheros. Los ficheros modificados es
 
 Para ello se va a modificar los siguientes ficheros teniendo como base sus ficheros originales *demo.launch*, *move_group.launch*, *trajectory_execution.launch.xml*  y *ur10_moveit_controller_manager.launch.xml* y se añadirá los controladores creando dos ficheros *controllers.yaml* y *joint_names.yaml*:
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
 catkin_create_pkg one_arm_moveit_manipulator rospy
 mkdir config
@@ -323,7 +323,7 @@ Fichero: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit/one_arm_moveit
 
 
 #### Finalmente, se realiza una prueba:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 
@@ -347,7 +347,7 @@ Para realizar el script de *pick & place* en Python, se utiliza la interfaz de P
 
 Se procede a realizar unas pruebas muy sencillas. Para ello primero hay que crear los scripts necesarios para controlar el brazo del robot y el gripper correctamente y posterioremente, se realizará los movimientos para que el robot coja un cubo de la mesa y lo deje en la cesta.
 
-```{bash}
+```bash
 cd scripts
 touch one_arm_moveit.py
 ```
@@ -360,7 +360,7 @@ Ejecución de las pruebas
   </h2>
 </a>
 
-```{bash}
+```bash
 # Terminal 1
 roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch
 

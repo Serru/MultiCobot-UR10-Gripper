@@ -157,14 +157,14 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_
 cp ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller/gripper_controller_robotiq.yaml .
 ```
 
-Y se ha agregado al final del fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch* el controlador del gripper:
+Y se ha agregado al final del fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) el controlador del gripper:
 ```xml
 <!-- robotiq_85_gripper controller -->
   <rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
   <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
 ```
 
-Se lanza Gazebo denuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comado *rostopic list*, se aprecia que los controladores del gripper aparecen correctamente (**/gripper**):
+Se lanza Gazebo de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comado *rostopic list*, se aprecia que los controladores del gripper aparecen correctamente (**/gripper**):
 ```bash
 /arm_controller/command
 /arm_controller/follow_joint_trajectory/cancel
@@ -199,158 +199,15 @@ Se lanza Gazebo denuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con
 /tf_static
 ```
 
+<a name="fase2">
+  <h2>
+Fase 2: Implementación de un planificador propio
+  </h2>
+</a>
 
+### Fase 2: Implementación de un planificador propio
 
-
-
-
-
-
-
-
-### Puesta en marcha de Gazebo
-Actualmente desde el directorio creado del proyecto no se puede lanzar Gazebo con el robot, y es el primer paso lanzar gazebo con el robot UR10.
-
-Por imponer cierto orden en la estructura del proyecto a implementar, se van a separar el uso de las diferentes herramientas y sus ficheros siempre que se pueda. Esto permitirá una mejor compresión de cómo está estructurado y facilitará su debug en caso de fallo.
-
-Por ello, se creará un paquete, en vez de un directorio que contendrá todo lo relacionado con gazebo:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit
-catkin_create_pkg one_arm_no_moveit_gazebo rospy
-```
-
-En el directio creado para gazebo, se copiara del directorio de *ur_gazebo*, las carpetas *controller* y *launch*.
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
-cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/controller .
-cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo launch .
-```
-Se compila:
-```bash
-cd ~/MultiCobot-UR10-Gripper
-catkin_make
-```
-
-Con esto ya se puede lanzar Gazebo desde el directorio del proyecto.
-```bash
-roslaunch one_arm_no_moveit_gazebo ur10.launch
-```
-### Configuración del mundo de Gazebo
-Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá realizar simples tareas, este proyecto se enfoca en las tareas que pueda realizar el robot, por tanto no es necesario que el mundo sea muy detallado.
-
-Para ello primero se crear el directorio world, en donde se guardará los worlds que se creen:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
-mkdir world
-```
-
-Se utilizará el fichero world, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá el testeo posterior de tareas en el robot.
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
-git clone https://github.com/Infinity8sailor/multiple_arm_setup.git
-cp -r multiple_arm_setup/multiple_ur_description/models/ .
-cp -r multiple_arm_setup/multiple_ur_description/world/ .
-sudo rm -r mutiple_arm_setup
-```
-Para que añadir el world con el robot en gazebo, hay que modificar el fichero ur10.launch en el directorio launch:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo/launch
-nano ur10.launch
-```
-Y incluidir el mundo en el launch, añadiendo el argumento *world* y reemplazando el valor de *default* en el argumento *world_name*:
-```xml
- <arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
-
-  <!-- startup simulated world -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(arg world)"/>
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="gui" value="$(arg gui)"/>
-  </include>
-```
-Se procede a lanzar gazebo con el nuevo mundo:
-```bash
-roslaunch one_arm_no_moveit_gazebo ur10.launch
-```
-
-Al lanzarlo, muestra dos errores:
-```bash
-Error [parser.cc:581] Unable to find uri[model://dropbox]
-```
-Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya que gazebo no lo provee o se ha eliminado. Por tanto en el fichero *world/multiarm_bot.world* se comenta el objeto dropbox:
-```{xml}
-<!--include>
-       <pose frame=''>0.5 0.0 0.3 0 0 0</pose> 
-       <uri>model://dropbox</uri>
-       <name>DropBox</name>
-</include-->
-```
-
-
-```bash
-[ERROR] [1639740881.902412642, 0.057000000]: GazeboRosControlPlugin missing <legacyModeNS> while using DefaultRobotHWSim, defaults to true.
-This setting assumes you have an old package with an old implementation of DefaultRobotHWSim, where the robotNamespace is disregarded and absolute paths are used instead.
-If you do not want to fix this issue in an old package just set <legacyModeNS> to true.
-```
-Para eliminar este error, se procede a realizar el cambio desde el fichero de *~/MultiCobot-UR10-Gripper/src/universal_robot/ur_descriptiom/urdf/common.gazebo.xacro*, hay que añadir *<legacyModeNS>* al fichero:
-```xml
-<plugin name="ros_control" filename="libgazebo_ros_control.so">
-      <!--robotNamespace>/</robotNamespace-->
-      <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
-      <legacyModeNS>true</legacyModeNS>
-</plugin>
-```
-
-Y un warning, que puede ser un problema el ignorarlo a la hora de simular el comportamiento de brazo en el futuro, por lo que se procede a resolverlo.
-```bash
-[ WARN] [1639745803.729749460, 0.061000000]: The default_robot_hw_sim plugin is using the Joint::SetPosition method without preserving the link velocity.
-[ WARN] [1639745803.729772883, 0.061000000]: As a result, gravity will not be simulated correctly for your model.
-[ WARN] [1639745803.729786659, 0.061000000]: Please set gazebo_pid parameters, switch to the VelocityJointInterface or EffortJointInterface, or upgrade to Gazebo 9.
-
-```
-Para ello, se ha decidido instalar Gazebo 9 en el entorno de ROS Kinetic Kame.
-```bash
-sudo apt-get remove ros-kinetic-desktop-full
-sudo apt-get remove ros-kinetic-gazebo*
-sudo apt-get upgrade
-
-sudo apt-get install ros-kinetic-ros-base
-
-sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-cat /etc/apt/sources.list.d/gazebo-stable.list
-wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-sudo apt-get update
-
-sudo apt-get install ros-kinetic-gazebo9-ros-pkgs ros-kinetic-gazebo9-ros-control ros-kinetic-gazebo9*
-
-sudo apt-get install ros-kinetic-catkin
-
-sudo apt-get install rviz
-
-sudo apt-get install ros-kinetic-controller-manager ros-kinetic-joint-state-controller ros-kinetic-joint-trajectory-controller ros-kinetic-rqt ros-kinetic-rqt-controller-manager ros-kinetic-rqt-joint-trajectory-controller ros-kinetic-ros-control ros-kinetic-rqt-gui
-
-sudo apt-get install ros-kinetic-rqt-plot ros-kinetic-rqt-graph ros-kinetic-rqt-rviz ros-kinetic-rqt-tf-tree
-
-sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kinetic-kdl-parser ros-kinetic-forward-command-controller ros-kinetic-tf-conversions ros-kinetic-xacro ros-kinetic-joint-state-publisher ros-kinetic-robot-state-publisher
-
-sudo apt-get install ros-kinetic-ros-control ros-kinetic-ros-controllers
-```
-El resultado tras solventar  configurar Gazebo es similar a la siguiente.
-![setup stage](/doc/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
-* Se ha realizado modificaciones en el fichero de world y ur10.launch para obtener el escenario como en la imagen, estas modificaciones se pueden encontrar en los anexos.
-
-
-
-
-
-
-
-
-
-
-
-### Creación de los scripts para realizar la tarea pick and place [ejemplo]
+### :book: Creación del planificador y nodos auxiliares
 
 Se seguirá siempre que se pueda la política de ROS en separar las tareas en nodos, para facilitar su reutilización futura.
 
@@ -1211,6 +1068,157 @@ if __name__ == '__main__':
 #    cmd.send_gripper_cmd(0.0)
     #cmd.pick_place2()
 ```
+
+
+
+
+
+
+
+
+### Puesta en marcha de Gazebo
+Actualmente desde el directorio creado del proyecto no se puede lanzar Gazebo con el robot, y es el primer paso lanzar gazebo con el robot UR10.
+
+Por imponer cierto orden en la estructura del proyecto a implementar, se van a separar el uso de las diferentes herramientas y sus ficheros siempre que se pueda. Esto permitirá una mejor compresión de cómo está estructurado y facilitará su debug en caso de fallo.
+
+Por ello, se creará un paquete, en vez de un directorio que contendrá todo lo relacionado con gazebo:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit
+catkin_create_pkg one_arm_no_moveit_gazebo rospy
+```
+
+En el directio creado para gazebo, se copiara del directorio de *ur_gazebo*, las carpetas *controller* y *launch*.
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
+cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/controller .
+cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo launch .
+```
+Se compila:
+```bash
+cd ~/MultiCobot-UR10-Gripper
+catkin_make
+```
+
+Con esto ya se puede lanzar Gazebo desde el directorio del proyecto.
+```bash
+roslaunch one_arm_no_moveit_gazebo ur10.launch
+```
+### Configuración del mundo de Gazebo
+Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá realizar simples tareas, este proyecto se enfoca en las tareas que pueda realizar el robot, por tanto no es necesario que el mundo sea muy detallado.
+
+Para ello primero se crear el directorio world, en donde se guardará los worlds que se creen:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
+mkdir world
+```
+
+Se utilizará el fichero world, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá el testeo posterior de tareas en el robot.
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
+git clone https://github.com/Infinity8sailor/multiple_arm_setup.git
+cp -r multiple_arm_setup/multiple_ur_description/models/ .
+cp -r multiple_arm_setup/multiple_ur_description/world/ .
+sudo rm -r mutiple_arm_setup
+```
+Para que añadir el world con el robot en gazebo, hay que modificar el fichero ur10.launch en el directorio launch:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo/launch
+nano ur10.launch
+```
+Y incluidir el mundo en el launch, añadiendo el argumento *world* y reemplazando el valor de *default* en el argumento *world_name*:
+```xml
+ <arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(arg world)"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+```
+Se procede a lanzar gazebo con el nuevo mundo:
+```bash
+roslaunch one_arm_no_moveit_gazebo ur10.launch
+```
+
+Al lanzarlo, muestra dos errores:
+```bash
+Error [parser.cc:581] Unable to find uri[model://dropbox]
+```
+Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya que gazebo no lo provee o se ha eliminado. Por tanto en el fichero *world/multiarm_bot.world* se comenta el objeto dropbox:
+```{xml}
+<!--include>
+       <pose frame=''>0.5 0.0 0.3 0 0 0</pose> 
+       <uri>model://dropbox</uri>
+       <name>DropBox</name>
+</include-->
+```
+
+
+```bash
+[ERROR] [1639740881.902412642, 0.057000000]: GazeboRosControlPlugin missing <legacyModeNS> while using DefaultRobotHWSim, defaults to true.
+This setting assumes you have an old package with an old implementation of DefaultRobotHWSim, where the robotNamespace is disregarded and absolute paths are used instead.
+If you do not want to fix this issue in an old package just set <legacyModeNS> to true.
+```
+Para eliminar este error, se procede a realizar el cambio desde el fichero de *~/MultiCobot-UR10-Gripper/src/universal_robot/ur_descriptiom/urdf/common.gazebo.xacro*, hay que añadir *<legacyModeNS>* al fichero:
+```xml
+<plugin name="ros_control" filename="libgazebo_ros_control.so">
+      <!--robotNamespace>/</robotNamespace-->
+      <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
+      <legacyModeNS>true</legacyModeNS>
+</plugin>
+```
+
+Y un warning, que puede ser un problema el ignorarlo a la hora de simular el comportamiento de brazo en el futuro, por lo que se procede a resolverlo.
+```bash
+[ WARN] [1639745803.729749460, 0.061000000]: The default_robot_hw_sim plugin is using the Joint::SetPosition method without preserving the link velocity.
+[ WARN] [1639745803.729772883, 0.061000000]: As a result, gravity will not be simulated correctly for your model.
+[ WARN] [1639745803.729786659, 0.061000000]: Please set gazebo_pid parameters, switch to the VelocityJointInterface or EffortJointInterface, or upgrade to Gazebo 9.
+
+```
+Para ello, se ha decidido instalar Gazebo 9 en el entorno de ROS Kinetic Kame.
+```bash
+sudo apt-get remove ros-kinetic-desktop-full
+sudo apt-get remove ros-kinetic-gazebo*
+sudo apt-get upgrade
+
+sudo apt-get install ros-kinetic-ros-base
+
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+cat /etc/apt/sources.list.d/gazebo-stable.list
+wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+sudo apt-get update
+
+sudo apt-get install ros-kinetic-gazebo9-ros-pkgs ros-kinetic-gazebo9-ros-control ros-kinetic-gazebo9*
+
+sudo apt-get install ros-kinetic-catkin
+
+sudo apt-get install rviz
+
+sudo apt-get install ros-kinetic-controller-manager ros-kinetic-joint-state-controller ros-kinetic-joint-trajectory-controller ros-kinetic-rqt ros-kinetic-rqt-controller-manager ros-kinetic-rqt-joint-trajectory-controller ros-kinetic-ros-control ros-kinetic-rqt-gui
+
+sudo apt-get install ros-kinetic-rqt-plot ros-kinetic-rqt-graph ros-kinetic-rqt-rviz ros-kinetic-rqt-tf-tree
+
+sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kinetic-kdl-parser ros-kinetic-forward-command-controller ros-kinetic-tf-conversions ros-kinetic-xacro ros-kinetic-joint-state-publisher ros-kinetic-robot-state-publisher
+
+sudo apt-get install ros-kinetic-ros-control ros-kinetic-ros-controllers
+```
+El resultado tras solventar  configurar Gazebo es similar a la siguiente.
+![setup stage](/doc/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
+* Se ha realizado modificaciones en el fichero de world y ur10.launch para obtener el escenario como en la imagen, estas modificaciones se pueden encontrar en los anexos.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Pruebas de pick and place con lo implementado
 Durante el inicio de las pruebas se ha visto que en la smulación en Gazebo no es posible agarrar los objetos sobre la mesa.
