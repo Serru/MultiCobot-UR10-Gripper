@@ -1,10 +1,51 @@
 <!--- Para un robot  opción A--->
 ## Instalación y configuración para un único robot UR10 sin MoveIt!
-### Creacón del directorio para la solución
-```{bash}
+
+## Requisito previo
+- Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
+
+## Índice
+- [Fase 1: Configuración del URDF](#fase1)
+- [Fase 2: Implementación de un planificador propio](#fase2)
+- [Fase 3: Simulación de un `pick & place` en Gazebo](#fase3)
+- [Ejecución de las pruebas](#pruebas)
+
+<a name="fase1">
+  <h2>
+Fase 1: Configuración del URDF
+  </h2>
+</a>
+
+### Descripción del fichero URDF
+El fichero URDF (United Robotics Description Format) modela el cobot utilizando el formato XML el cual será utilizado por las diferentes aplicaciones que ROS necesite, pero principalmente para realizar una simulación del robot modelado.
+
+El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son
+representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
+
+Además como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometrı́a, inercia, orientación etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo,
+que podrı́a ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
+
+Dicho esto, se realiza una representación de los componentes del robot:
+ 
+ ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
+
+En la imagen se representa el contenido del [fichero URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando world (color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
+
+### Creación del directorio para la solución
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir one_arm_no_moveit
 ```
+
+
+
+
+
+
+
+
+
+
 
 ### Puesta en marcha de Gazebo
 Actualmente desde el directorio creado del proyecto no se puede lanzar Gazebo con el robot, y es el primer paso lanzar gazebo con el robot UR10.
@@ -12,39 +53,39 @@ Actualmente desde el directorio creado del proyecto no se puede lanzar Gazebo co
 Por imponer cierto orden en la estructura del proyecto a implementar, se van a separar el uso de las diferentes herramientas y sus ficheros siempre que se pueda. Esto permitirá una mejor compresión de cómo está estructurado y facilitará su debug en caso de fallo.
 
 Por ello, se creará un paquete, en vez de un directorio que contendrá todo lo relacionado con gazebo:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit
 catkin_create_pkg one_arm_no_moveit_gazebo rospy
 ```
 
 En el directio creado para gazebo, se copiara del directorio de *ur_gazebo*, las carpetas *controller* y *launch*.
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/controller .
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo launch .
 ```
 Se compila:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 
 Con esto ya se puede lanzar Gazebo desde el directorio del proyecto.
-```{bash}
+```bash
 roslaunch one_arm_no_moveit_gazebo ur10.launch
 ```
 ### Configuración del mundo de Gazebo
 Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá realizar simples tareas, este proyecto se enfoca en las tareas que pueda realizar el robot, por tanto no es necesario que el mundo sea muy detallado.
 
 Para ello primero se crear el directorio world, en donde se guardará los worlds que se creen:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
 mkdir world
 ```
 
 Se utilizará el fichero world, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá el testeo posterior de tareas en el robot.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
 git clone https://github.com/Infinity8sailor/multiple_arm_setup.git
 cp -r multiple_arm_setup/multiple_ur_description/models/ .
@@ -52,12 +93,12 @@ cp -r multiple_arm_setup/multiple_ur_description/world/ .
 sudo rm -r mutiple_arm_setup
 ```
 Para que añadir el world con el robot en gazebo, hay que modificar el fichero ur10.launch en el directorio launch:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo/launch
 nano ur10.launch
 ```
 Y incluidir el mundo en el launch, añadiendo el argumento *world* y reemplazando el valor de *default* en el argumento *world_name*:
-```{xml}
+```xml
  <arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
 
   <!-- startup simulated world -->
@@ -68,12 +109,12 @@ Y incluidir el mundo en el launch, añadiendo el argumento *world* y reemplazand
   </include>
 ```
 Se procede a lanzar gazebo con el nuevo mundo:
-```{bash}
+```bash
 roslaunch one_arm_no_moveit_gazebo ur10.launch
 ```
 
 Al lanzarlo, muestra dos errores:
-```{bash}
+```bash
 Error [parser.cc:581] Unable to find uri[model://dropbox]
 ```
 Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya que gazebo no lo provee o se ha eliminado. Por tanto en el fichero *world/multiarm_bot.world* se comenta el objeto dropbox:
@@ -86,13 +127,13 @@ Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya q
 ```
 
 
-```{bash}
+```bash
 [ERROR] [1639740881.902412642, 0.057000000]: GazeboRosControlPlugin missing <legacyModeNS> while using DefaultRobotHWSim, defaults to true.
 This setting assumes you have an old package with an old implementation of DefaultRobotHWSim, where the robotNamespace is disregarded and absolute paths are used instead.
 If you do not want to fix this issue in an old package just set <legacyModeNS> to true.
 ```
 Para eliminar este error, se procede a realizar el cambio desde el fichero de *~/MultiCobot-UR10-Gripper/src/universal_robot/ur_descriptiom/urdf/common.gazebo.xacro*, hay que añadir *<legacyModeNS>* al fichero:
-```{xml}
+```xml
 <plugin name="ros_control" filename="libgazebo_ros_control.so">
       <!--robotNamespace>/</robotNamespace-->
       <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
@@ -101,14 +142,14 @@ Para eliminar este error, se procede a realizar el cambio desde el fichero de *~
 ```
 
 Y un warning, que puede ser un problema el ignorarlo a la hora de simular el comportamiento de brazo en el futuro, por lo que se procede a resolverlo.
-```{bash}
+```bash
 [ WARN] [1639745803.729749460, 0.061000000]: The default_robot_hw_sim plugin is using the Joint::SetPosition method without preserving the link velocity.
 [ WARN] [1639745803.729772883, 0.061000000]: As a result, gravity will not be simulated correctly for your model.
 [ WARN] [1639745803.729786659, 0.061000000]: Please set gazebo_pid parameters, switch to the VelocityJointInterface or EffortJointInterface, or upgrade to Gazebo 9.
 
 ```
 Para ello, se ha decidido instalar Gazebo 9 en el entorno de ROS Kinetic Kame.
-```{bash}
+```bash
 sudo apt-get remove ros-kinetic-desktop-full
 sudo apt-get remove ros-kinetic-gazebo*
 sudo apt-get upgrade
@@ -148,7 +189,7 @@ Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El servidor e
 
 Si comparamos la configuración del controlador con la del UR10, se aprecia que el concepto es diferente, ya que no existe un fichero *yaml* que cargue con la información necesaria para controlar el gripper. En vez de eso, es el servidor que crea los topics */command_robotiq_action* y */robotiq_controller/follow_joint_trajectory*, ambos son de tipo *action*.
 
-```{bash}
+```bash
 miguel@Omen:~$ rostopic list
 /clicked_point
 /command_robotiq_action/cancel
@@ -173,7 +214,7 @@ miguel@Omen:~$ rostopic list
 Sabiendo esto, para controlar el gripper, hay un ejemplo en el fichero *robotiq_2f_action_client_example.py* y puede funcionar con un gripper simulado o el griper real. Teniendo esto en cuenta, a la hora de agregar el gripper al robot UR10, no es necesario el fichero *yaml* que cargaria el controlador del driver, pero hay que lanzar correctamente el nodo que hará de servidor y si se mira el código de servidor y del cliente, hay que tener especial cuidado con la configuración de los topics y namespaces.
 
 El fichero que carga el robot UR10 es *~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch*, por tanto se va a copiar lo necesario del paquete *ur_description* y modificarlo para añadir el gripper al robot y también modificar el fichero *ur10.launch* que carga el URDF del paquete *ur_description*:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
 catkin_create_pkg one_arm_no_moveit_description rospy
 cd one_arm_no_moveit_description
@@ -187,7 +228,7 @@ cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_joint_
 ```
 
 No se sabe la razón exacta de porqué no es posible simular correctamente el gripper, ya que gazebo provee el siguiente error:
-```{bash}
+```bash
 [ERROR] [1640030309.858708751, 1040.204000000]: This robot has a joint named "finger_joint" which is not in the gazebo model.
 [FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
 ```
@@ -200,7 +241,7 @@ Por ello durante las pruebas en el robot real puede que sea necesario este repos
 
 ### Agregación del robotiq_85_gripper al robot ur10
 Se a proceder a agregar el gripper al robot ur10, no hay una referencia clara de cómo hacerlo adecuadamente. Para ello se empezará mirando cómo está estructurado el paquete para tener una idea de cómo adaptarlo al proyecto en cuestión.
-```{bash}
+```bash
 LICENSE             robotiq_85_description  robotiq_85_moveit_config  si_utils
 README.md           robotiq_85_driver       robotiq_85_msgs
 robotiq_85_bringup  robotiq_85_gripper      robotiq_85_simulation
@@ -246,7 +287,7 @@ Tomando como ejemplo el fichero *~/MultiCobot-UR10-Gripper/src/robotiq_85_grippe
 
 </robot>
 ```
-De la misma manera para le UR10 con sus movimientos limitados:
+De la misma manera para el UR10 con sus movimientos limitados:
 ```{xml}
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro"
@@ -293,7 +334,7 @@ Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen
 ![ ](/doc/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
 
 Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
-```{bash}
+```bash
 miguel@Omen:~$ rostopic list
 /arm_controller/command
 /arm_controller/follow_joint_trajectory/cancel
@@ -325,20 +366,20 @@ Se puede apreciar, que están cargados los controladores del robot UR10 (**/arm_
 Los ficheros que se necesitan contrastar están en los directorios *~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller* y  *~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch* respectivamente con los directorios *controller* y *launch* del directorio *one_arm_no_moveit_gazebo*.
 
 Al final, se han realizado las siguientes modificaciones:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller
 cp ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller/ gripper_controller_robotiq.yaml .
 ```
 
 Y se ha agregado al final del fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch* el controlador del gripper:
-```{xml}
+```xml
 <!-- robotiq_85_gripper controller -->
   <rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
   <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
 ```
 
 Se lanza Gazebo denuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comado *rostopic list*, se aprecia que los controladores del gripper aparecen correctamente (**/gripper**):
-```{bash}
+```bash
 /arm_controller/command
 /arm_controller/follow_joint_trajectory/cancel
 /arm_controller/follow_joint_trajectory/feedback
@@ -381,14 +422,14 @@ Se va a implementar un nodo que publique la posición del end effector *wrist_3_
 
 Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo.
 
-```{Python}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
 touch ur10_robot_pose.py
 chmod +x ur10_robot_pose.py
 ```
 
 Y finalmente, el contenido del fichero será el siguiente:
-```{C}
+```python
 #!/usr/bin/env python  
 import roslib
 roslib.load_manifest('one_arm_no_moveit_gazebo')
@@ -466,7 +507,7 @@ Este nodo calcula la posición del *wrist_3_link* respecto a la posición del *b
 
 Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch*
 
-```{xml}
+```xml
   <!-- get the robot position [Own Script]-->
   <node name="ur10_robot_pose" pkg="one_arm_no_moveit_gazebo" type="ur10_robot_pose.py" respawn="true" />
 ```
@@ -476,14 +517,15 @@ Se va a implementar un nodo que reciba comandos por el topic */pub_ik_trajectory
 
 Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo, igual que en el apartado anterior.
 
-```{Python}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
 touch pub_ik_trajectory.py
 chmod +x pub_ik_trajectory.py
 ```
 
 Y finalmente, el contenido del fichero será el siguiente:
-```{C}
+
+```python
 #!/usr/bin/env python
 import rospy
 from trajectory_msgs.msg import JointTrajectory
@@ -556,7 +598,7 @@ if __name__ == "__main__":
 
 Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch*
 
-```{xml}
+```xml
   <!-- send the arms commands [Own Script]-->
   <node name="cmd_ik_trajectory_pub" pkg="one_arm_no_moveit_gazebo" type="pub_ik_trajectory.py" respawn="true" />
 ```
@@ -567,13 +609,13 @@ Se va a implementar un nodo que obtendrá la información obtenida del *robot_po
 Para obtener los valores de las articulaciones dado la posición cartesiana que al que se quiere ir, es necesario la implementación la función *Inverse Kinematics* y *Forward Kinematics*. Estas funciones fueron obtenidas y adaptadas de [The Construct](https://www.theconstructsim.com/).
 
 Para ello:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
 touch kinematics_utils.py
 chmod +x kinematics_utils.py
 ```
 Con el siguiente contenido, que se usará como librería:
-```{C}
+```python
 #!/usr/bin/env python
 
 import sys
@@ -854,7 +896,7 @@ def inv_kin(p, q_d, i_unit='r', o_unit='r'):
 ```
 Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
 touch robot_manipulator.py
 chmod +x robot_manipulator.py
@@ -862,7 +904,7 @@ chmod +x robot_manipulator.py
 
 QUe contendrá una serie de funciones para enviar correctamente las trayectorias finales así como la obtención de los valores de los joints en la posición del robot.
 
-```{C}
+```python
 #!/usr/bin/env python
 
 import sys
@@ -991,14 +1033,14 @@ Para evitar eso, hay que definir un workspace en donde no sufra de estas singula
 Finalmente, queda añadir un script que permita el control del gripper, para ello se creará un node que escuche de un topic (*/pub_gripper_control*) delque obtendrá el valor que enviará al controlador mediante el topic */gripper/command*
 
 Este nodo es un nodo de apoyo, por ello estará junto a los scripts de Gazebo, cerca de los ficheros de los controladores:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
 touch pub_gripper_cmd.py
 chmod +x pub_gripper_cmd.py
 ```
 
 Y su contenido es el siguiente:
-```{C}
+```python
 #!/usr/bin/env python
 import rospy
 from trajectory_msgs.msg import JointTrajectory
@@ -1077,12 +1119,12 @@ Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al ficher
 #### gripper_manipulator script
 Para controlar el gripper, unicamente hay que modificar el fichero *robot_manipulator.py*
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
 nano robot_manipulator.py
 ```
 Con el siguiente contenido:
-```{C}
+```python
 #!/usr/bin/env python
 
 import sys
@@ -1242,13 +1284,13 @@ Se va a proceder a realizar los pasos necesarios para cargar el plugin que permi
 
 Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podria guardarlo en el paquete de *universal robots* pero como es una modificación realizada para nuestro proyecto, se ha decidido en moverlo al directorio *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf*.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf
 touch gzplugin_grasp_fix.urdf.xacro
 ```
 
 Y el contenido del fichero:
-```{xml}
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <root 
  xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
@@ -1300,23 +1342,25 @@ Y el contenido del fichero:
 </root>
 ```
 Una vez que se tiene el plugin de Gazebo, hay que añadirlo al brazo robótico y se ha añadido al gripper código para aumentar su fricción ayudando al agarre de los objetos en la simulación.
-```{bash}
+
+```bash
 nano ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro
 ```
 Añadir al final el plugin:
-```{xml}
+```xml
   <xacro:include filename="$(find one_arm_no_moveit_description)/urdf/gzplugin_grasp_fix.urdf.xacro"/>
 
   <xacro:gzplugin_grasp_fix prefix=""/>
 ```
 
-De la misma manera, editamos el fichero del gripper:
-```{bash}
+De la misma manera, editamos el fichero del gripper ([~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro)):
+```bash
 nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro
 ```
 
 Añadir al final el plugin:
-```{xml}
+```xml
+	[...]
         <!-- Improve grasping physics -->
         <gazebo reference="${prefix}robotiq_85_left_finger_tip_link">
           <!--kp>1000000.0</kp>
@@ -1345,215 +1389,18 @@ Y esta es toda la configuraóicn necesaria para que el plugin funcione correctam
 #### Simple test en Gazebo
 Se a creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
 
-El código del manipulador (~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator) para realizar la prueba es el siguiente:
-```{C}
-#!/usr/bin/env python
+El fichero con el código del manipulador para realizar la prueba: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py)
 
-import sys
-import copy
-import rospy
-from std_msgs.msg import Header
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-
-import tf.transformations as tf
-from geometry_msgs.msg import Pose, Quaternion
-from kinematics_utils import *
-
-class CmdTrajectory():
-    def __init__(self):
-        self.send_trajectory_pub = rospy.Publisher('/pub_ik_trajectory', JointTrajectory, queue_size=10)
-        self.send_gripper_cmd_pub = rospy.Publisher('/pub_gripper_control', JointTrajectory, queue_size=10)
-        self.current_robot_pose = Pose()
-        self.robot_pose_sub = rospy.Subscriber('/robot_pose', Pose, self.update_current_pose)
-        self.robot_pose_updated = False
-
-    def send_gripper_cmd(self, gripper_distance):
-        gripper = JointTrajectory()
-        gripper.header.stamp=rospy.Time.now()
-        gripper.header.frame_id = "/ee_link"    
-        gripper.joint_names = ['robotiq_85_left_knuckle_joint']
-        
-        points = JointTrajectoryPoint()
-        points.positions = [gripper_distance]
-        points.time_from_start = rospy.Duration.from_sec(0.4)
-        gripper.points.append(points)
-        self.send_gripper_cmd_pub.publish(gripper)
-        print('\033[93m[' + str(gripper_distance) + ']\033[0m')
-
-    def pick_place(self):
-        # Obtener el primer cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-    
-        # Primer cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-    
-        # Obtener el segundo cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.9, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(4)
-        self.send_trajectory(0.9, 0.632, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.9, 0.5, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.9, 0.5, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-    
-        # Segundo cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-    
-        # Obtener el tercer cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.675, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(4)
-        self.send_trajectory(0.675, 0.632, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.675, 0.88, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.675, 0.88, 0.1, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.675, 0.88, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-    
-        # Tercer cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-
-        # Posicion inicial del brazo
-        cmd.send_gripper_cmd(0.0)
-        cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(7)
-
-    def update_current_pose(self, pose):
-        self.current_robot_pose = pose
-        self.robot_pose_updated = True
-
-    def send_trajectory(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, rot_w):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/base_link"    
-        position.joint_names = ['shoulder_pan_joint','shoulder_lift_joint','elbow_joint',
-                          'wrist_1_joint','wrist_2_joint','wrist_3_joint']
-        
-        rate = rospy.Rate(10)
-        while not self.robot_pose_updated:
-            rate.sleep()
-
-        #print self.current_robot_pose
-
-        (roll, pitch, yaw) = tf.euler_from_quaternion([
-                                            self.current_robot_pose.orientation.x,
-                                            self.current_robot_pose.orientation.y,
-                                            self.current_robot_pose.orientation.z,
-                                            self.current_robot_pose.orientation.w])
-
-        rcs = [ self.current_robot_pose.position.x,
-                self.current_robot_pose.position.y,
-                self.current_robot_pose.position.z,
-                roll, pitch, yaw]
-
-        #print rcs
-        #array_pos = fwd_kin(self.current_robot_pose, 'r', 'n')
-        #print(cartesian_pos)
-
-        ps = Pose()
-        ps.position.x = pos_x
-        ps.position.y = pos_y
-        ps.position.z = pos_z
-        ps.orientation.x = rot_x
-        ps.orientation.y = rot_y
-        ps.orientation.z = rot_z
-        ps.orientation.w = rot_w
-    
-        #state = []
-    
-        #sol = inv_kin(ps, array_pos)
-        #print(sol)
-
-        
-        points = JointTrajectoryPoint()
-        try:
-            points.positions = inv_kin(ps, rcs)
-        except Exception:
-            print('\033[91m[ Singularidad, valores:' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-        duration = max([abs(points.positions[0])-abs(rcs[0]), abs(points.positions[1])-abs(rcs[1]), abs(points.positions[2])-abs(rcs[2])])
-        print duration
-
-        points.time_from_start = rospy.Duration.from_sec(duration)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-        #state = sol
-        #rospy.sleep(0.1)
-        self.robot_pose_updated = False
-        print points.positions
-        print('\033[93m[' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-if __name__ == '__main__':
-    rospy.init_node('robot_manipulator', anonymous=True)
-    cmd = CmdTrajectory()
-    rpy = tf.quaternion_from_euler(-3.12, 0.0, 1.62)
-    print rpy
-    #[-0.68945825 -0.72424496  0.00781949  0.00744391]
-    #cmd.send_trajectory(-0.6, -0.16, 0.62, rpy[0], rpy[1], rpy[2], rpy[3])
-    
-    # Posicion inicial del brazo
-    cmd.send_gripper_cmd(0.0)
-    cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(7)
-    
-    cmd.pick_place()
-```
 
 Comandos para lanzar el test:
 * En un terminal:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/
 source devel/setup.bash
 roslaunch one_arm_no_moveit_gazebo ur10_joint_limited.launch
 ```
 * En otro terminal:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/
 source devel/setup.bash
 rosrun one_arm_no_moveit_manipulator robot_manipulator.py

@@ -158,11 +158,15 @@ Para poder controlador dos o más cobots simultáneamente y con diferentes contr
 Si se quiere realizar una replicación correcta hay que aplicar el concepto
 de *namespace*, se puede ver como fuese un *directorio* que contiene nodos, topics o incluso otros directorios (namespaces) lo que permite también una organización jerarquizada y ROS permite ejecutar instancias del mismo nodo, siempre y cuando estén dentro de diferentes namespaces. Partiendo de lo realizado hasta la Fase 2, se realizará cambios en los paquetes de `two_arm_moveit_gazebo` y `two_arm_moveit_manipulator` que contendrán las modificaciones realizadas sobre el paquete de MoveIt! (`two_arm_moveit_config)`, el cual fue previamente configurado por el setup assistant. 
 
-Se va a dividir el proceso de la configuración en dos, configuración realizada en Gazebo y en MoveIt!.
+Se va a dividir el proceso de la configuración en cuatro, Conexión entre Gazebo y MoveIt!, configuración realizada en Gazebo para dos cobots y en MoveIt! para dos cobots y Pick and place.
 
 ---
 
-### Configuración realizada en Gazebo
+### Conexión entre Gazebo y MoveIt!
+
+---
+
+### Configuración realizada en Gazebo para dos cobots
 
 Lo primero que hay que hacer en esta fase es configurar Gazebo y los
 controladores para que pueda simular adecuadamente los movimientos de los cobots. Se crea el paquete *two_arm_moveit_gazebo*, que contendrá toda la configuración relacionada con Gazebo, entre ellos los controladores. Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio *controller*, aunque todos los controladores pueden estar definidos en un único fichero por claridad se ha distribuido en tres ficheros.
@@ -242,7 +246,7 @@ catkin_make
 
 ---
 
-### Replicación de Cobots en Gazebo
+#### Replicación de Cobots en Gazebo
 
 Una vez configurado los ficheros del paquete de Gazebo `two_arm_moveit_gazebo`, se procede a instanciar varios cobots en este, para ello se crea dentro del paquete `two_arm_moveit_manipulator` (puede ser cualquier otro paquete) un fichero *launch* llamado `two_arm_moveit_gazebo.launch` que contiene lo siguiente:
 
@@ -301,7 +305,7 @@ Si se quiere añadir más cobots al sistema, simplemente hay que copiar el conte
 
 
 
-### Configuración realizada en MoveIt!
+### Configuración realizada en MoveIt! para dos cobots
 
 
 Los cambios realizados para la configuración de MoveIt! son muy
@@ -360,25 +364,12 @@ Contenido del fichero two_arm_moveit_execution.launch:
 </launch>
 ```
 
-Se procede a comprobar si la comunicación entre Gazebo y las réplicas de MoveIt! se comunican correctamente. Se puede ver dos grandes agrupaciones, en donde cada cobot se está comunicando con su move group asignado, la comunicación con los controladores y el camino de las transformadas y valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
-
-El camino parte del nodo de gazebo es el único que publica a los topics
-/joint states de ambos namespaces, el nodo move group está suscrito
-a este topic también, después llega al nodo robot state publisher que
-realiza las transformadas y se las envı́a por el topic /tf el cual el nodo
-move group también está suscrito, esto es importante porque move group utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
-
-Las imágenes obtenidas de la herramienta rqt graph tienen ya muchos
-nodos y las lı́neas de comunicación no se aprecian bien, en la
-Subsección C.2.3 del Anexo C están las imágenes, pero se recomienda
-reproducirlo (ver Anexo F) y obtener la gráfica con la herramienta para
-verlo en detalle.
 
 ---
 
 
 
-### Conexión entre Gazebo y MoveIt!
+#### Conexión entre Gazebo y MoveIt!
 
 Se va a modificar los siguientes ficheros teniendo como base sus ficheros originales *demo.launch*, *move_group.launch*, *trajectory_execution.launch.xml*  y *ur10_moveit_controller_manager.launch.xml* y se añadirá los controladores creando dos ficheros *controllers.yaml* y *joint_names.yaml*:
 
@@ -560,3 +551,19 @@ Se puede aplicar alguna o varias soluciones como trabajo futuro:
 Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede apreciar cómo ahorá el nodo *move_group* tiene comunicación con los controladores. En la imagen no se aprecia, pero hay dos nodos *move_group*s con el mismo contenido pero diferente namespaces, se recomienda generar el proyecto y obtener le gráfica mediante la herramienta *rqt_graph*.
 
 ![ ](/doc/imgs_md/two_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
+
+
+
+Se procede a comprobar si la comunicación entre Gazebo y las réplicas de MoveIt! se comunican correctamente. Se puede ver dos grandes agrupaciones, en donde cada cobot se está comunicando con su move group asignado, la comunicación con los controladores y el camino de las transformadas y valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
+
+El camino parte del nodo de gazebo es el único que publica a los topics
+/joint states de ambos namespaces, el nodo move group está suscrito
+a este topic también, después llega al nodo robot state publisher que
+realiza las transformadas y se las envı́a por el topic /tf el cual el nodo
+move group también está suscrito, esto es importante porque move group utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
+
+Las imágenes obtenidas de la herramienta rqt graph tienen ya muchos
+nodos y las lı́neas de comunicación no se aprecian bien, en la
+Subsección C.2.3 del Anexo C están las imágenes, pero se recomienda
+reproducirlo (ver Anexo F) y obtener la gráfica con la herramienta para
+verlo en detalle.
