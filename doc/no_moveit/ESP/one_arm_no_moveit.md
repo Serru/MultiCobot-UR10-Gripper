@@ -78,8 +78,7 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
 catkin_create_pkg one_arm_no_moveit_description rospy
 cd one_arm_no_moveit_description
 mkdir launch
-cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/laun
-ch/ur10_upload.launch launch/
+cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch launch/
 mkdir urdf
 cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_robot.urdf.xacro udrf/
 cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_joint_limited_robot.urdf.xacro udrf/
@@ -328,6 +327,11 @@ Para evitar eso, se puede definir un workspace en donde no sufra de estas singul
 
 
 
+<a name="fase3">
+  <h2>
+Fase 3: Simulación de un <i>pick & place</i> en Gazebo
+  </h2>
+</a>
 
 
 
