@@ -14,13 +14,14 @@
 
 En el diseño del esquema, el componente principal que realiza las funciones de planificador es el paquete MoveIt!, se basa en la adición de robots en el fichero URDF y el planificador de MoveIt! lo reconocerı́a como un único robot, el cual obtendrı́a los valores articulares con el planificador de movimiento de sus `end effectors` y se enviarı́a esos valores obtenidos como una única trayectoria a los controladores para que ejecute el movimiento deseado.
 
-Las ventajas de esta propuesta son:
+**Las ventajas de esta propuesta son:**
 
 - La potencia de las funciones que ofrece MoveIt! para cada robot como en su conjunto.
 - Una sencilla configuración, la mayorı́a se crea de forma automática con su MoveIt Setup Assistant.
 - Flexibilidad a la hora de adaptarse o la incorporación de futuros elementos que puedan necesitar las funcionalidades de MoveIt!, como pueden ser dispositivos que se utilicen para desarrollo de trabajo de visión por computador, deep learning, navegación, etc.
 
-Las desventajas son:
+**Las desventajas son:**
+
 - Coste en tiempo a la hora de obtener la planificación de las trayectorias, ya que previamente debe obtener las trayectorias de cada `end effector` para después combinarlas como si fuese el movimiento de un único robot.
 - El único grupo que gestionarı́a los movimientos de los cobots habrı́a que reconfigurarlo cada vez que se añadiese un robot al sistema, lo que afecta a la escalabilidad del sistema.
 - No permite el control de diferentes modelos y marcas de cobots simultáneamente, ya que podrı́an necesitar diferentes controladores. 
@@ -53,7 +54,7 @@ en la replicación de los componentes que el planificador necesita para su funci
 
 En la descripción del robot, es únicamente necesario la descripción de un cobot y el número de robots que puede controlar simultáneamente está directamente relacionado con el número de replicaciones del planificador con diferentes `namespaces`. Los números en la imagen enumera el orden de las fases durante su desarrollo.
 
-Las ventajas de esta propuesta son:
+**Las ventajas de esta propuesta son:**
 
 - La escalabilidad del sistema y del número de cobots.
 - La potencia de las funciones que ofrece MoveIt! para cada robot
@@ -64,7 +65,7 @@ individualmente.
 - Hay una comunidad detrás del paquete de MoveIt! muy activa que da soporte a sus usuarios.
 
 
-Las desventajas son:
+**Las desventajas son:**
 
 - Poca documentación con respecto a la correcta configuración para el control de varios robots simultáneamente.
 - Limitación de las funcionalidades del paquete MoveIt! a cada robot
@@ -73,7 +74,7 @@ planificar trayectorias evitando colisiones entre los robots no funcionarı́a a
 - Pérdida de eficiencia conforme se escala: al escalar el sistema y aumentar el número de cobots que controla, se replica también las funcionalidades que en ese momento ocupan un recurso, pero no hacen ningún trabajo.
 - Complicado realizar cambios en el código fuente de las funcionalidades del paquete de MoveIt!.
 
-### Desarrollo e implementación de la solución y sus pruebas paso a paso
+### Desarrollo e implementación de la solución y sus pruebas paso a paso (fases 1, 2 y 3)
 - [Un UR10 con pinza mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md)
 - [Dos UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md)
 - [Cuatro UR10s con pinzas mediante el paquete MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/four_arm_moveit.md)
