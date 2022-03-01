@@ -1,13 +1,17 @@
 <!--- Para un robot  opción A--->
 ## Instalación y configuración para un único robot UR10 sin MoveIt!
 
+![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
+
+Las fases que se ven en el esquema son de orientación. Se pueden hacer en el orden que se prefiera. En este caso se comenzará por la fase 1, seguido de la fase 3 y finalmente se termina con la fase 2.
+
 ## Requisito previo
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
 
 ## Índice
 - [Fase 1: Configuración del URDF](#fase1)
-- [Fase 2: Implementación de un planificador propio](#fase2)
-- [Fase 3: Simulación de un `pick & place` en Gazebo](#fase3)
+- [Fase 3: Configuración del simulador de Gazebo](#fase3)
+- [Fase 2: Implementación de un planificador propio que realiza un `pick & place`](#fase2)
 - [Ejecución de las pruebas](#pruebas)
 
 <a name="fase1">
@@ -118,6 +122,8 @@ Tomando como ejemplo el fichero [~/MultiCobot-UR10-Gripper/src/robotiq_85_grippe
 Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen el gripper.
 ![ ](/doc/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
 
+---
+
 Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
 ```bash
 miguel@Omen:~$ rostopic list
@@ -198,145 +204,17 @@ Se lanza Gazebo de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y co
 /tf_static
 ```
 
-<a name="fase2">
-  <h2>
-Fase 2: Implementación de un planificador propio
-  </h2>
-</a>
-
-### :book: Creación del planificador y nodos auxiliares
-
-Se seguirá siempre que se pueda la política de ROS en separar las tareas en nodos, para facilitar su reutilización futura.
-
-![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2.png "Esquema del diseño del planificador propio")
-
-En la imagen, está el esquema del diseño de la arquitectura del planificador que se ha implementado. Se puede apreciar dos divisiones Gazebo (son los nodos de color rojo y los topics de color naranja) y el planificador (son los nodos de color azul y topics de color verde), se ha dividido ası́ para facilitar la explicación.
-
-El grupo de nodos y topics del grupo de Gazebo, no se han tenido que
-tocar y se ha tomado ventaja de su existencia para obtener la información necesaria que el planificador necesita para realizar su tarea. Este grupo se comunica con el grupo del planificador mediante tres topics `/tf` que contiene información de las transformadas del robot y los topics `/gripper/command` y `/arm_controller/command` que reciben la información necesaria para realizar movimientos en el robot.
-
-Teniendo conocimiento de esos nodos y topics del grupo de Gazebo, la solución diseñada para el planificador es comunicarse con ellos para obtener la información que necesita. El nodo `ur10_robot_pose` obtiene la información de las transformadas y le envı́a la posición del end-effector al nodo `robot_manipulator`, que realiza dos funciones principales, la primera es el control de la pinza y la segunda es planificar la trayectoria del brazo. Los nodos `cmd_gripper_value_pub` y `cmd_ik_trajectory_pub` obtienen las órdenes del nodo `robot_manipulator` y se lo envı́a a los topic de los controladores de Gazebo directamente (`/gripper/command` y `/arm_controller/command`).
-
-Una vez explicado el funcionamiento general de la solución se va a explicar lo que hace cada nodo con más detalle:
-
-- [ur10_robot_pose](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py): Este script crea un nodo que únicamente publica la posición del *end-effector* con cierta frecuencia (10 Hz) mediante la librerı́a tf de ROS, es decir, obtiene la posición del end-effector de la información del topic `/tf` que es publicada en el topic `/robot_pose`. La posición del *end-effector* es obtenida con la diferencia entre las posiciones del `/base_link` y `/ee_link` (es el link que conecta con la pinza). Realmente no es necesario este nodo, el nodo `robot_manipulator` podrı́a gestionarlo de propio, aunque sea redundante, pero muy útil durante la depuración y el entendimiento de cómo funciona el planificador.
-- [pub_gripper_cmd](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py): El script crea un nodo que únicamente recibe y transmite las órdenes recibidas por el topic `/pub_gripper_control` al topic del controlador de la pinza `/gripper/command`. Aunque la funcionalidad es sencilla, este nodo permite cambios del valor que se le envı́a al controlador en cualquier momento, porque no realiza ninguna comprobación de que se haya realizado el movimiento correctamente, esto es un comportamiento deseado. Y si no recibe ninguna orden sigue publicando la orden anterior manteniendo el valor de la pinza y si recibe una nueva orden, desecha inmediatamente el valor anterior permitiendo realizar cambios durante la ejecución del un movimiento.
-- [pub_ik_trajectory](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py): Funciona de la misma manera que lo descrito para el nodo `cmd_gripper_value_pub`, este script instancia el nodo `cmd_ik_trajectory_pub`. Recibe las órdenes del topic `/pub_ik_trajectory` al cual está suscrito y los transmite al topic del controlador del brazo `/arm_controller/command`. También permite realizar cambios durante la ejecución de una trayectoria, lo que permite cambios bruscos de dirección sin tener que esperar a que termine de llegar a la posición previamente designada.
-- [robot_manipulator](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py): Este script instancia el nodo `robot_manipulator` que obtiene la posición actual del *end-effector* del topic `/robot_pose`, esta información es necesaria para poder obtener los valores de cada uno de las articulaciones necesarias para llegar a la posición en cartesiano que se desea. Una vez obtenido el valor que deben tener las articulaciones se publican por el topic `/pub_ik_trajectory`. Se ha tenido que implementar un [script que hace la función de librerı́a](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py), esta librerı́a está compuesta de varias funciones para realizar los cálculos necesarios en la obtención de la cinemática directa (forward kinematic) y la cinemática inversa (inverse kinematic). Para el caso del gripper, como solamente hay que controlar el valor de una articulación, no es necesario ningún cálculo, simplemente se le pasa el valor deseado. Durante la implementación hay que tener en cuenta el tipo de los mensajes que deben recibir los controladores para construirlos adecuadamente o no realizarán ningún movimiento o realizará movimientos no deseados. Esta solución pueda dar problemas debido a la aparición de singularidades, esto es debido a que pueden existir divisiones por cero durante el cálculo de las ecuaciones, principalmente debido cuando dos articulaciones están alineadas, para evitarlo, en este caso, simplemente se ha limitado el entorno de trabajo del robot.
-
----
-
-#### :computer: robot_pose_publisher script
-Se va a implementar un nodo que publique la posición del end effector `ee_link` en todo momento, mediante la librería *tf*.
-
-Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo.
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
-touch ur10_robot_pose.py
-chmod +x ur10_robot_pose.py
-```
-
-- Ver el contenido del fichero [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py):
-
-Este nodo calcula la posición del `ee_link` respecto a la posición del `base_link` mediante la libreria *tf* y lo publica en el topic `\robot_pose`. Esto permitirá obtener rápidamente la posición actual de la pinza.
-
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
-
-```xml
-  <!-- get the robot position [Own Script]-->
-  <node name="ur10_robot_pose" pkg="one_arm_no_moveit_gazebo" type="ur10_robot_pose.py" respawn="true" />
-```
-
----
-
-#### :computer: pub_gripper_cmd script
-Permite el control del gripper, para ello se creará un nodo que escuche de un topic (`/pub_gripper_control`) del que obtendrá el valor que enviará al controlador mediante el topic `/gripper/command`.
-
-Este nodo es un nodo de apoyo, por ello estará junto a los scripts de Gazebo, cerca de los ficheros de los controladores:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
-touch pub_gripper_cmd.py
-chmod +x pub_gripper_cmd.py
-```
-
-- Ver el contenido del fichero [pub_gripper_cmd.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py).
-
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
-
-```xml
-<!-- send the gripper commands [Own Script]-->
-  <node name="cmd_gripper_value_pub" pkg="one_arm_no_moveit_gazebo" type="pub_gripper_cmd.py" respawn="true" />
-```
-
----
-
-#### :computer: pub_ik_trajectory script
-Se va a implementar un nodo que reciba comandos por el topic `/pub_ik_trajectory` y se los irá mandando repetidamente a los controladores del robot, la posición a la que debe ir se irá modificando al recibir nuevas ordenes.
-
-Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo, igual que en el apartado anterior.
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
-touch pub_ik_trajectory.py
-chmod +x pub_ik_trajectory.py
-```
-
-- Ver el contenido del fichero [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py):
-
-
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
-
-```xml
-  <!-- send the arms commands [Own Script]-->
-  <node name="cmd_ik_trajectory_pub" pkg="one_arm_no_moveit_gazebo" type="pub_ik_trajectory.py" respawn="true" />
-```
-
----
-
-#### :computer: robot_manipulator script
-Se va a implementar un nodo que obtendrá la información obtenida del nodo `robot_pose_publisher` y enviará las trayectorías al nodo `pub_ik_trajectory`.
-
-Para obtener los valores de las articulaciones dado la posición cartesiana que al que se quiere ir, es necesario la implementación la función *Inverse Kinematics* y *Forward Kinematics*. Estas funciones fueron obtenidas y adaptadas de [The Construct](https://www.theconstructsim.com/).
-
-Para ello:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
-touch kinematics_utils.py
-chmod +x kinematics_utils.py
-```
-- Ver el contenido de la librería [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py):
-
-Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas.
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
-touch robot_manipulator.py
-chmod +x robot_manipulator.py
-```
-
-Contiene una serie de funciones para enviar correctamente las trayectorias finales así como la obtención de los valores de los joints en la posición del robot.
-
-- Ver el contenido de la librería [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py).
-
-
-El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
-
-Para evitar eso, se puede definir un workspace en donde no sufra de estas singularidades.
 
 
 
 
 <a name="fase3">
   <h2>
-Fase 3: Simulación de un <i>pick & place</i> en Gazebo
+Fase 3: Configuración del simulador de Gazebo
   </h2>
 </a>
 
-
-
-
-
+### :book: Configuración de Gazebo y controladores
 
 ### Puesta en marcha de Gazebo
 Actualmente desde el directorio creado del proyecto no se puede lanzar Gazebo con el robot, y es el primer paso lanzar gazebo con el robot UR10.
@@ -471,17 +349,6 @@ El resultado tras solventar  configurar Gazebo es similar a la siguiente.
 * Se ha realizado modificaciones en el fichero de world y ur10.launch para obtener el escenario como en la imagen, estas modificaciones se pueden encontrar en los anexos.
 
 
-
-
-
-
-
-
-
-
-
-
-
 ### Pruebas de pick and place con lo implementado
 Durante el inicio de las pruebas se ha visto que en la smulación en Gazebo no es posible agarrar los objetos sobre la mesa.
 
@@ -593,6 +460,150 @@ Añadir al final el plugin:
         </gazebo>
 ```
 Y esta es toda la configuraóicn necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada gripper, sino esos grippers no podrá agrrar objetos durante la simulación.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a name="fase2">
+  <h2>
+Fase 2: Implementación de un planificador propio que realiza un <i>pick & place</i>
+  </h2>
+</a>
+
+### :book: Creación del planificador y nodos auxiliares
+
+Se seguirá siempre que se pueda la política de ROS en separar las tareas en nodos, para facilitar su reutilización futura.
+
+![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2.png "Esquema del diseño del planificador propio")
+
+En la imagen, está el esquema del diseño de la arquitectura del planificador que se ha implementado. Se puede apreciar dos divisiones Gazebo (son los nodos de color rojo y los topics de color naranja) y el planificador (son los nodos de color azul y topics de color verde), se ha dividido ası́ para facilitar la explicación.
+
+El grupo de nodos y topics del grupo de Gazebo, no se han tenido que
+tocar y se ha tomado ventaja de su existencia para obtener la información necesaria que el planificador necesita para realizar su tarea. Este grupo se comunica con el grupo del planificador mediante tres topics `/tf` que contiene información de las transformadas del robot y los topics `/gripper/command` y `/arm_controller/command` que reciben la información necesaria para realizar movimientos en el robot.
+
+Teniendo conocimiento de esos nodos y topics del grupo de Gazebo, la solución diseñada para el planificador es comunicarse con ellos para obtener la información que necesita. El nodo `ur10_robot_pose` obtiene la información de las transformadas y le envı́a la posición del end-effector al nodo `robot_manipulator`, que realiza dos funciones principales, la primera es el control de la pinza y la segunda es planificar la trayectoria del brazo. Los nodos `cmd_gripper_value_pub` y `cmd_ik_trajectory_pub` obtienen las órdenes del nodo `robot_manipulator` y se lo envı́a a los topic de los controladores de Gazebo directamente (`/gripper/command` y `/arm_controller/command`).
+
+Una vez explicado el funcionamiento general de la solución se va a explicar lo que hace cada nodo con más detalle:
+
+- [ur10_robot_pose](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py): Este script crea un nodo que únicamente publica la posición del *end-effector* con cierta frecuencia (10 Hz) mediante la librerı́a tf de ROS, es decir, obtiene la posición del end-effector de la información del topic `/tf` que es publicada en el topic `/robot_pose`. La posición del *end-effector* es obtenida con la diferencia entre las posiciones del `/base_link` y `/ee_link` (es el link que conecta con la pinza). Realmente no es necesario este nodo, el nodo `robot_manipulator` podrı́a gestionarlo de propio, aunque sea redundante, pero muy útil durante la depuración y el entendimiento de cómo funciona el planificador.
+- [pub_gripper_cmd](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py): El script crea un nodo que únicamente recibe y transmite las órdenes recibidas por el topic `/pub_gripper_control` al topic del controlador de la pinza `/gripper/command`. Aunque la funcionalidad es sencilla, este nodo permite cambios del valor que se le envı́a al controlador en cualquier momento, porque no realiza ninguna comprobación de que se haya realizado el movimiento correctamente, esto es un comportamiento deseado. Y si no recibe ninguna orden sigue publicando la orden anterior manteniendo el valor de la pinza y si recibe una nueva orden, desecha inmediatamente el valor anterior permitiendo realizar cambios durante la ejecución del un movimiento.
+- [pub_ik_trajectory](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py): Funciona de la misma manera que lo descrito para el nodo `cmd_gripper_value_pub`, este script instancia el nodo `cmd_ik_trajectory_pub`. Recibe las órdenes del topic `/pub_ik_trajectory` al cual está suscrito y los transmite al topic del controlador del brazo `/arm_controller/command`. También permite realizar cambios durante la ejecución de una trayectoria, lo que permite cambios bruscos de dirección sin tener que esperar a que termine de llegar a la posición previamente designada.
+- [robot_manipulator](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py): Este script instancia el nodo `robot_manipulator` que obtiene la posición actual del *end-effector* del topic `/robot_pose`, esta información es necesaria para poder obtener los valores de cada uno de las articulaciones necesarias para llegar a la posición en cartesiano que se desea. Una vez obtenido el valor que deben tener las articulaciones se publican por el topic `/pub_ik_trajectory`. Se ha tenido que implementar un [script que hace la función de librerı́a](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py), esta librerı́a está compuesta de varias funciones para realizar los cálculos necesarios en la obtención de la cinemática directa (forward kinematic) y la cinemática inversa (inverse kinematic). Para el caso del gripper, como solamente hay que controlar el valor de una articulación, no es necesario ningún cálculo, simplemente se le pasa el valor deseado. Durante la implementación hay que tener en cuenta el tipo de los mensajes que deben recibir los controladores para construirlos adecuadamente o no realizarán ningún movimiento o realizará movimientos no deseados. Esta solución pueda dar problemas debido a la aparición de singularidades, esto es debido a que pueden existir divisiones por cero durante el cálculo de las ecuaciones, principalmente debido cuando dos articulaciones están alineadas, para evitarlo, en este caso, simplemente se ha limitado el entorno de trabajo del robot.
+
+---
+
+#### :computer: robot_pose_publisher script
+Se va a implementar un nodo que publique la posición del end effector `ee_link` en todo momento, mediante la librería *tf*.
+
+Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo.
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
+touch ur10_robot_pose.py
+chmod +x ur10_robot_pose.py
+```
+
+- Ver el contenido del fichero [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py):
+
+Este nodo calcula la posición del `ee_link` respecto a la posición del `base_link` mediante la libreria *tf* y lo publica en el topic `\robot_pose`. Esto permitirá obtener rápidamente la posición actual de la pinza.
+
+Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
+
+```xml
+  <!-- get the robot position [Own Script]-->
+  <node name="ur10_robot_pose" pkg="one_arm_no_moveit_gazebo" type="ur10_robot_pose.py" respawn="true" />
+```
+
+---
+
+#### :computer: pub_gripper_cmd script
+Permite el control del gripper, para ello se creará un nodo que escuche de un topic (`/pub_gripper_control`) del que obtendrá el valor que enviará al controlador mediante el topic `/gripper/command`.
+
+Este nodo es un nodo de apoyo, por ello estará junto a los scripts de Gazebo, cerca de los ficheros de los controladores:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
+touch pub_gripper_cmd.py
+chmod +x pub_gripper_cmd.py
+```
+
+- Ver el contenido del fichero [pub_gripper_cmd.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py).
+
+Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
+
+```xml
+<!-- send the gripper commands [Own Script]-->
+  <node name="cmd_gripper_value_pub" pkg="one_arm_no_moveit_gazebo" type="pub_gripper_cmd.py" respawn="true" />
+```
+
+---
+
+#### :computer: pub_ik_trajectory script
+Se va a implementar un nodo que reciba comandos por el topic `/pub_ik_trajectory` y se los irá mandando repetidamente a los controladores del robot, la posición a la que debe ir se irá modificando al recibir nuevas ordenes.
+
+Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo, igual que en el apartado anterior.
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
+touch pub_ik_trajectory.py
+chmod +x pub_ik_trajectory.py
+```
+
+- Ver el contenido del fichero [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py):
+
+
+Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
+
+```xml
+  <!-- send the arms commands [Own Script]-->
+  <node name="cmd_ik_trajectory_pub" pkg="one_arm_no_moveit_gazebo" type="pub_ik_trajectory.py" respawn="true" />
+```
+
+---
+
+#### :computer: robot_manipulator script
+Se va a implementar un nodo que obtendrá la información obtenida del nodo `robot_pose_publisher` y enviará las trayectorías al nodo `pub_ik_trajectory`.
+
+Para obtener los valores de las articulaciones dado la posición cartesiana que al que se quiere ir, es necesario la implementación la función *Inverse Kinematics* y *Forward Kinematics*. Estas funciones fueron obtenidas y adaptadas de [The Construct](https://www.theconstructsim.com/).
+
+Para ello:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
+touch kinematics_utils.py
+chmod +x kinematics_utils.py
+```
+- Ver el contenido de la librería [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py):
+
+Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas.
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
+touch robot_manipulator.py
+chmod +x robot_manipulator.py
+```
+
+Contiene una serie de funciones para enviar correctamente las trayectorias finales así como la obtención de los valores de los joints en la posición del robot.
+
+- Ver el contenido de la librería [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py).
+
+
+El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
+
+Para evitar eso, se puede definir un workspace en donde no sufra de estas singularidades.
+
+
+
+
 
 #### Simple test en Gazebo
 Se a creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
