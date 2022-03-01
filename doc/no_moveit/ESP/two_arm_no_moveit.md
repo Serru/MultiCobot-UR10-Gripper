@@ -14,6 +14,7 @@ Las fases que se ven en el esquema son de orientación. Se pueden hacer en el or
 - [Fase 1: Configuración del simulador de Gazebo](#fase1)
 - [Fase 2: Configuración del URDF](#fase2)
 - [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#fase3)
+- [Modificaciones: Sistema multirobot compuesto de dos robots](#modificaciones)
 - [Ejecución de las pruebas](#pruebas)
 
 <a name="fase1">

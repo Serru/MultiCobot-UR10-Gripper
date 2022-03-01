@@ -47,16 +47,16 @@ Por imponer cierto orden en la estructura del proyecto a implementar, se van a s
 Por ello, se creará un paquete, en vez de un directorio que contendrá todo lo relacionado con gazebo:
 
 ```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
 catkin_create_pkg one_arm_no_moveit_gazebo rospy
 ```
 
 En el directio creado para gazebo, se copiara del directorio de *ur_gazebo*, las carpetas *controller* y *launch*.
 
 ```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/controller .
-cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo launch .
+cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/launch .
 ```
 Se compila:
 
@@ -77,14 +77,14 @@ Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá 
 Para ello lo primero es crear el directorio *world*, en donde se guardará los worlds que se creen:
 
 ```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo
 mkdir world
 ```
 
 Se utilizará el fichero world, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá el testeo posterior de tareas en el robot.
 
 ```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo
 git clone https://github.com/Infinity8sailor/multiple_arm_setup.git
 cp -r multiple_arm_setup/multiple_ur_description/models/ .
 cp -r multiple_arm_setup/multiple_ur_description/world/ .
@@ -94,7 +94,7 @@ sudo rm -r mutiple_arm_setup
 Para que añadir el world con el robot en gazebo, hay que modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) en el directorio launch:
 
 ```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/on_arm_no_moveit/one_arm_no_moveit_gazebo/launch
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch
 nano ur10.launch
 ```
 
