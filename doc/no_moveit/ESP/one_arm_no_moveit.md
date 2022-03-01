@@ -205,15 +205,28 @@ Fase 2: Implementación de un planificador propio
   </h2>
 </a>
 
-### Fase 2: Implementación de un planificador propio
-
 ### :book: Creación del planificador y nodos auxiliares
 
 Se seguirá siempre que se pueda la política de ROS en separar las tareas en nodos, para facilitar su reutilización futura.
 
-#### robot_pose_publisher script
-Se va a implementar un nodo que publique la posición del end effector *wrist_3_link* en todo momento, mediante la librería *tf*.
+![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2.png "Esquema del diseño del planificador propio")
 
+En la imagen, está el esquema del diseño de la arquitectura del planificador que se ha implementado. Se puede apreciar dos divisiones Gazebo (son los nodos de color rojo y los topics de color naranja) y el planificador (son los nodos de color azul y topics de color verde), se ha dividido ası́ para facilitar la explicación.
+
+El grupo de nodos y topics del grupo de Gazebo, no se han tenido que
+tocar y se ha tomado ventaja de su existencia para obtener la información necesaria que el planificador necesita para realizar su tarea. Este grupo se comunica con el grupo del planificador mediante tres topics `/tf` que contiene información de las transformadas del robot y los topics `/gripper/command` y `/arm_controller/command` que reciben la información necesaria para realizar movimientos en el robot.
+
+Teniendo conocimiento de esos nodos y topics del grupo de Gazebo, la solución diseñada para el planificador es comunicarse con ellos para obtener la información que necesita. El nodo `ur10_robot_pose` obtiene la información de las transformadas y le envı́a la posición del end-effector al nodo `robot_manipulator`, que realiza dos funciones principales, la primera es el control de la pinza y la segunda es planificar la trayectoria del brazo. Los nodos `cmd_gripper_value_pub` y `cmd_ik_trajectory_pub` obtienen las órdenes del nodo `robot_manipulator` y se lo envı́a a los topic de los controladores de Gazebo directamente (`/gripper/command` y `/arm_controller/command`).
+
+Una vez explicado el funcionamiento general de la solución se va a explicar lo que hace cada nodo con más detalle:
+
+- [ur10_robot_pose](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py): Este script crea un nodo que únicamente publica la posición del *end-effector* con cierta frecuencia (10 Hz) mediante la librerı́a tf de ROS, es decir, obtiene la posición del end-effector de la información del topic `/tf` que es publicada en el topic `/robot_pose`. La posición del *end-effector* es obtenida con la diferencia entre las posiciones del `/base_link` y `/ee_link` (es el link que conecta con la pinza). Realmente no es necesario este nodo, el nodo `robot_manipulator` podrı́a gestionarlo de propio, aunque sea redundante, pero muy útil durante la depuración y el entendimiento de cómo funciona el planificador.
+- [pub_gripper_cmd](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py): El script crea un nodo que únicamente recibe y transmite las órdenes recibidas por el topic `/pub_gripper_control` al topic del controlador de la pinza `/gripper/command`. Aunque la funcionalidad es sencilla, este nodo permite cambios del valor que se le envı́a al controlador en cualquier momento, porque no realiza ninguna comprobación de que se haya realizado el movimiento correctamente, esto es un comportamiento deseado. Y si no recibe ninguna orden sigue publicando la orden anterior manteniendo el valor de la pinza y si recibe una nueva orden, desecha inmediatamente el valor anterior permitiendo realizar cambios durante la ejecución del un movimiento.
+- [pub_ik_trajectory](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py): Funciona de la misma manera que lo descrito para el nodo `cmd_gripper_value_pub`, este script instancia el nodo `cmd_ik_trajectory_pub`. Recibe las órdenes del topic `/pub_ik_trajectory` al cual está suscrito y los transmite al topic del controlador del brazo `/arm_controller/command`. También permite realizar cambios durante la ejecución de una trayectoria, lo que permite cambios bruscos de dirección sin tener que esperar a que termine de llegar a la posición previamente designada.
+- [robot_manipulator](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py): Este script instancia el nodo `robot_manipulator` que obtiene la posición actual del *end-effector* del topic `/robot_pose`, esta información es necesaria para poder obtener los valores de cada uno de las articulaciones necesarias para llegar a la posición en cartesiano que se desea. Una vez obtenido el valor que deben tener las articulaciones se publican por el topic `/pub_ik_trajectory`. Se ha tenido que implementar un [script que hace la función de librerı́a](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py), esta librerı́a está compuesta de varias funciones para realizar los cálculos necesarios en la obtención de la cinemática directa (forward kinematic) y la cinemática inversa (inverse kinematic). Para el caso del gripper, como solamente hay que controlar el valor de una articulación, no es necesario ningún cálculo, simplemente se le pasa el valor deseado. Durante la implementación hay que tener en cuenta el tipo de los mensajes que deben recibir los controladores para construirlos adecuadamente o no realizarán ningún movimiento o realizará movimientos no deseados. Esta solución pueda dar problemas debido a la aparición de singularidades, esto es debido a que pueden existir divisiones por cero durante el cálculo de las ecuaciones, principalmente debido cuando dos articulaciones están alineadas, para evitarlo, en este caso, simplemente se ha limitado el entorno de trabajo del robot.
+
+#### :computer: robot_pose_publisher script
+Se va a implementar un nodo que publique la posición del end effector `ee_link` en todo momento, mediante la librería *tf*.
 
 Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo.
 
@@ -223,92 +236,33 @@ touch ur10_robot_pose.py
 chmod +x ur10_robot_pose.py
 ```
 
-Y finalmente, el contenido del fichero será el siguiente:
-```python
-#!/usr/bin/env python  
-import roslib
-roslib.load_manifest('one_arm_no_moveit_gazebo')
-import rospy, sys
-import math
-import tf
-from geometry_msgs.msg import Point, Pose, Quaternion
+- Ver el contenido del fichero [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py):
 
-def usage():
-    print('''Commands:
-    -namenode <namenode> - Set the name of the node,can't exists two nodes with the same name. Default value: ur10_robot_pose
-    -namespace <namespace> - Let it empty to no add any namespacing.
-    ''')
-    sys.exit(1)
+Este nodo calcula la posición del `ee_link` respecto a la posición del `base_link` mediante la libreria *tf* y lo publica en el topic `\robot_pose`. Esto permitirá obtener rápidamente la posición actual de la pinza.
 
-class RobotPose():
-    def __init__(self):
-        self.namespace               = ""
-        self.namenode               = "ur10_robot_pose"
-        self.robot_pose_pub = rospy.Publisher(self.namespace + '/robot_pose', Pose, queue_size=10)
-
-    def parseUserInputs(self):
-        # get goal from commandline
-        for i in range(0,len(sys.argv)):
-          if sys.argv[i] == '-namespace':
-            if len(sys.argv) > i+1:
-              self.namespace = sys.argv[i+1]
-              self.robot_pose_pub = rospy.Publisher(self.namespace + '/robot_pose', Pose, queue_size=10)
-          if sys.argv[i] == '-namenode':
-            if len(sys.argv) > i+1:
-              self.namenode = sys.argv[i+1]
-
-
-    def callRobotPoseService(self):
-
-        # wait for model to exist
-        print self.namespace
-        print self.namenode
-        rospy.init_node(self.namenode)
-        listener = tf.TransformListener()
-    
-        rate = rospy.Rate(10.0)
-        while not rospy.is_shutdown():
-            try:
-                (trans,rot) = listener.lookupTransform(self.namespace + '/base_link', self.namespace + '/wrist_3_link', rospy.Time(0))
-            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                continue
-
-            #print trans
-            #print rot
-            rate.sleep()
-
-            # setting initial pose
-            robot_pose = Pose()
-            robot_pose.position.x = trans[0]
-            robot_pose.position.y = trans[1]
-            robot_pose.position.z = trans[2]
-            # convert rpy to quaternion for Pose message
-            q = Quaternion(rot[0],rot[1],rot[2],rot[3])
-            robot_pose.orientation = q
-            self.robot_pose_pub.publish(robot_pose)
-            print robot_pose         
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(usage())
-    else:
-        print("RobotPose script started") # make this a print incase roscore has not been started
-        sm = RobotPose()
-        sm.parseUserInputs()
-        sm.callRobotPoseService()
-```
-
-Este nodo calcula la posición del *wrist_3_link* respecto a la posición del *base_link* mediante la libreria *tf* y lo publica en el topic. Esto permitirá obtener rápidamente la posición actual de la pinza.
-
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch*
+Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
 
 ```xml
   <!-- get the robot position [Own Script]-->
   <node name="ur10_robot_pose" pkg="one_arm_no_moveit_gazebo" type="ur10_robot_pose.py" respawn="true" />
 ```
 
-#### pub_ik_trajectory script
-Se va a implementar un nodo que reciba comandos por el topic */pub_ik_trajectory* y se los irá mandando repetidamente a los controladores del robot, la posición a la que debe ir se irá modificando al recibir nuevas ordenes.
+#### pub_gripper_cmd script
+Permite el control del gripper, para ello se creará un nodo que escuche de un topic (`/pub_gripper_control`) del que obtendrá el valor que enviará al controlador mediante el topic `/gripper/command`.
+
+Este nodo es un nodo de apoyo, por ello estará junto a los scripts de Gazebo, cerca de los ficheros de los controladores:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
+touch pub_gripper_cmd.py
+chmod +x pub_gripper_cmd.py
+```
+
+- Ver el contenido del fichero [pub_gripper_cmd.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py):
+
+
+
+#### :computer: pub_ik_trajectory script
+Se va a implementar un nodo que reciba comandos por el topic `/pub_ik_trajectory` y se los irá mandando repetidamente a los controladores del robot, la posición a la que debe ir se irá modificando al recibir nuevas ordenes.
 
 Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de gazebo, igual que en el apartado anterior.
 
@@ -318,88 +272,18 @@ touch pub_ik_trajectory.py
 chmod +x pub_ik_trajectory.py
 ```
 
-Y finalmente, el contenido del fichero será el siguiente:
-
-```python
-#!/usr/bin/env python
-import rospy
-from trajectory_msgs.msg import JointTrajectory
-import roslib
-roslib.load_manifest('one_arm_no_moveit_gazebo')
-import sys
-
-def usage():
-    print('''Commands:
-    -namenode <namenode> - Set the name of the node,can't exists two nodes with the same name. Default value: ur10_robot_pose
-    -namespace <namespace> - Let it empty to no add any namespacing.
-    ''')
-    sys.exit(1)
-
-class PubIkTrajectory():
-    def __init__(self):
-        self.ik_trajectory = JointTrajectory()
-        self.namespace               = ""
-        self.namenode               = "pub_ik_trajectory"
-        self.cmd_pose_pub = rospy.Publisher(self.namespace + '/arm_controller/command', JointTrajectory, queue_size=10)
-        self.trajectory_sub =         rospy.Subscriber(self.namespace + '/pub_ik_trajectory', JointTrajectory, self.update_trajectory)
-
-    def parseUserInputs(self):
-        # get goal from commandline
-        for i in range(0,len(sys.argv)):
-          if sys.argv[i] == '-namespace':
-            if len(sys.argv) > i+1:
-              self.namespace = sys.argv[i+1]
-              self.cmd_pose_pub = rospy.Publisher(self.namespace + '/arm_controller/command', JointTrajectory, queue_size=10)
-          if sys.argv[i] == '-namenode':
-            if len(sys.argv) > i+1:
-              self.namenode = sys.argv[i+1]
-
-    # Se puede optimizar dejando esta tarea a unos wokers y solo se procesaria el resultado final.
-    # Deben estar ordenados y desechar resultados viejos con respecto a un resultado mas reciente.
-    def update_trajectory(self, data):
-        #global ik_trajectory
-        self.ik_trajectory = data
-        #print("update")
-        #print(data)
+- Ver el contenido del fichero [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py):
 
 
-    def publisher_trajectory(self):
-        rate = rospy.Rate(10) # 10hz  
-        while not rospy.is_shutdown():
-            #print("publishing")
-            self.ik_trajectory.header.stamp = rospy.Time.now()
-            self.cmd_pose_pub.publish(self.ik_trajectory)
-            #print(ik_trajectory)
-            rate.sleep()
-
-
-    def callIkTrajectoryService(self):
-        rospy.init_node(self.namenode, anonymous=True)
-        try:
-            self.publisher_trajectory()
-        except rospy.ROSInterruptException:
-            pass
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(usage())
-    else:
-        print("PubIkTrajectory script started") # make this a print incase roscore has not been started
-        sm = PubIkTrajectory()
-        sm.parseUserInputs()
-        sm.callIkTrajectoryService()
-
-```
-
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch*
+Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)
 
 ```xml
   <!-- send the arms commands [Own Script]-->
   <node name="cmd_ik_trajectory_pub" pkg="one_arm_no_moveit_gazebo" type="pub_ik_trajectory.py" respawn="true" />
 ```
 
-#### robot_manipulator script
-Se va a implementar un nodo que obtendrá la información obtenida del *robot_pose_publisher* y enviará las trayectorías al nodo *pub_ik_trajectory*.
+#### :computer: robot_manipulator script
+Se va a implementar un nodo que obtendrá la información obtenida del nodo `robot_pose_publisher` y enviará las trayectorías al nodo `pub_ik_trajectory`.
 
 Para obtener los valores de las articulaciones dado la posición cartesiana que al que se quiere ir, es necesario la implementación la función *Inverse Kinematics* y *Forward Kinematics*. Estas funciones fueron obtenidas y adaptadas de [The Construct](https://www.theconstructsim.com/).
 
@@ -409,286 +293,8 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_
 touch kinematics_utils.py
 chmod +x kinematics_utils.py
 ```
-Con el siguiente contenido, que se usará como librería:
-```python
-#!/usr/bin/env python
+- Ver el contenido de la librería [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py):
 
-import sys
-import copy
-import rospy
-
-import numpy as np
-import tf.transformations as tf
-from math import *
-import cmath
-from geometry_msgs.msg import Pose, Quaternion
-
-# DH Parameters from ur10.urdf.xacro file
-#<xacro:property name="d1" value="0.1273" />
-#<xacro:property name="a2" value="-0.612" />
-#<xacro:property name="a3" value="-0.5723" />
-#<xacro:property name="d4" value="0.163941" />
-#<xacro:property name="d5" value="0.1157" />
-#<xacro:property name="d6" value="0.0922" />
-
-# d (unit: mm)
-d1 = 0.1273
-d2 = d3 = 0
-d4 = 0.163941
-d5 = 0.1157
-d6 = 0.0922
-
-# a (unit: mm)
-a1 = a4 = a5 = a6 = 0
-a2 = -0.612
-a3 = -0.5723
-
-
-# List type of D-H parameter
-d = np.array([d1, d2, d3, d4, d5, d6]) # unit: mm
-a = np.array([a1, a2, a3, a4, a5, a6]) # unit: mm
-alpha = np.array([pi/2, 0, 0, pi/2, -pi/2, 0]) # unit: radian
-
-
-# Auxiliary Functions
-
-def ur2ros(ur_pose):
-    """Transform pose from UR format to ROS Pose format.
-    Args:
-        ur_pose: A pose in UR format [px, py, pz, rx, ry, rz] 
-        (type: list)
-    Returns:
-        An HTM (type: Pose).
-    """
-
-    # ROS pose
-    ros_pose = Pose()
-
-    # ROS position
-    ros_pose.position.x = ur_pose[0]
-    ros_pose.position.y = ur_pose[1]
-    ros_pose.position.z = ur_pose[2]
-
-    # Ros orientation
-    angle = sqrt(ur_pose[3] ** 2 + ur_pose[4] ** 2 + ur_pose[5] ** 2)
-    direction = [i / angle for i in ur_pose[3:6]]
-    np_T = tf.rotation_matrix(angle, direction)
-    np_q = tf.quaternion_from_matrix(np_T)
-    ros_pose.orientation.x = np_q[0]
-    ros_pose.orientation.y = np_q[1]
-    ros_pose.orientation.z = np_q[2]
-    ros_pose.orientation.w = np_q[3]
-    
-    return ros_pose
-
-
-def ros2np(ros_pose):
-    """Transform pose from ROS Pose format to np.array format.
-    Args:
-        ros_pose: A pose in ROS Pose format (type: Pose)
-    Returns:
-        An HTM (type: np.array).
-    """
-
-    # orientation
-    np_pose = tf.quaternion_matrix([ros_pose.orientation.x, ros_pose.orientation.y, \
-                                    ros_pose.orientation.z, ros_pose.orientation.w])
-    
-    # position
-    np_pose[0][3] = ros_pose.position.x
-    np_pose[1][3] = ros_pose.position.y
-    np_pose[2][3] = ros_pose.position.z
-
-    return np_pose
-
-
-def np2ros(np_pose):
-    """Transform pose from np.array format to ROS Pose format.
-    Args:
-        np_pose: A pose in np.array format (type: np.array)
-    Returns:
-        An HTM (type: Pose).
-    """
-
-    # ROS pose
-    ros_pose = Pose()
-
-    # ROS position
-    ros_pose.position.x = np_pose[0, 3]
-    ros_pose.position.y = np_pose[1, 3]
-    ros_pose.position.z = np_pose[2, 3]
-
-    # ROS orientation 
-    np_q = tf.quaternion_from_matrix(np_pose)
-    ros_pose.orientation.x = np_q[0]
-    ros_pose.orientation.y = np_q[1]
-    ros_pose.orientation.z = np_q[2]
-    ros_pose.orientation.w = np_q[3]
-
-    return ros_pose
-
-
-def select(q_sols, q_d, w=[1]*6):
-    """Select the optimal solutions among a set of feasible joint value 
-       solutions.
-    Args:
-        q_sols: A set of feasible joint value solutions (unit: radian)
-        q_d: A list of desired joint value solution (unit: radian)
-        w: A list of weight corresponding to robot joints
-    Returns:
-        A list of optimal joint value solution.
-    """
-
-    error = []
-    for q in q_sols:
-        error.append(sum([w[i] * (q[i] - q_d[i]) ** 2 for i in range(6)]))
-    
-    return q_sols[error.index(min(error))]
-
-
-def HTM(i, theta):
-    """Calculate the HTM between two links.
-    Args:
-        i: A target index of joint value. 
-        theta: A list of joint value solution. (unit: radian)
-    Returns:
-        An HTM of Link l w.r.t. Link l-1, where l = i + 1.
-    """
-
-    Rot_z = np.matrix(np.identity(4))
-    Rot_z[0, 0] = Rot_z[1, 1] = cos(theta[i])
-    Rot_z[0, 1] = -sin(theta[i])
-    Rot_z[1, 0] = sin(theta[i])
-
-    Trans_z = np.matrix(np.identity(4))
-    Trans_z[2, 3] = d[i]
-
-    Trans_x = np.matrix(np.identity(4))
-    Trans_x[0, 3] = a[i]
-
-    Rot_x = np.matrix(np.identity(4))
-    Rot_x[1, 1] = Rot_x[2, 2] = cos(alpha[i])
-    Rot_x[1, 2] = -sin(alpha[i])
-    Rot_x[2, 1] = sin(alpha[i])
-
-    A_i = Rot_z * Trans_z * Trans_x * Rot_x
-        
-    return A_i
-
-
-# Forward Kinematics
-
-def fwd_kin(theta, i_unit='r', o_unit='n'):
-    """Solve the HTM based on a list of joint values.
-    Args:
-        theta: A list of joint values. (unit: radian)
-        i_unit: Output format. 'r' for radian; 'd' for degree.
-        o_unit: Output format. 'n' for np.array; 'p' for ROS Pose.
-    Returns:
-        The HTM of end-effector joint w.r.t. base joint
-    """
-
-    T_06 = np.matrix(np.identity(4))
-
-    if i_unit == 'd':
-        theta = [radians(i) for i in theta]
-    
-    for i in range(6):
-        T_06 *= HTM(i, theta)
-
-    if o_unit == 'n':
-        return T_06
-    elif o_unit == 'p':
-        return np2ros(T_06)
-
-
-# Inverse Kinematics
-
-def inv_kin(p, q_d, i_unit='r', o_unit='r'):
-    """Solve the joint values based on an HTM.
-    Args:
-        p: A pose.
-        q_d: A list of desired joint value solution 
-             (unit: radian).
-        i_unit: Output format. 'r' for radian; 'd' for degree.
-        o_unit: Output format. 'r' for radian; 'd' for degree.
-    Returns:
-        A list of optimal joint value solution.
-    """
-
-    # Preprocessing
-    if type(p) == Pose: # ROS Pose format
-        T_06 = ros2np(p)
-    elif type(p) == list: # UR format
-        T_06 = ros2np(ur2ros(p))
-
-    if i_unit == 'd':
-        q_d = [radians(i) for i in q_d]
-
-    # Initialization of a set of feasible solutions
-    theta = np.zeros((8, 6))
- 
-    # theta1
-    P_05 = T_06[0:3, 3] - d6 * T_06[0:3, 2]
-    phi1 = atan2(P_05[1], P_05[0])
-    phi2 = acos(d4 / sqrt(P_05[0] ** 2 + P_05[1] ** 2))
-    theta1 = [pi / 2 + phi1 + phi2, pi / 2 + phi1 - phi2]
-    theta[0:4, 0] = theta1[0]
-    theta[4:8, 0] = theta1[1]
-  
-    # theta5
-    P_06 = T_06[0:3, 3]
-    theta5 = []
-    for i in range(2):
-        theta5.append(acos((P_06[0] * sin(theta1[i]) - P_06[1] * cos(theta1[i]) - d4) / d6))
-    for i in range(2):
-        theta[2*i, 4] = theta5[0]
-        theta[2*i+1, 4] = -theta5[0]
-        theta[2*i+4, 4] = theta5[1]
-        theta[2*i+5, 4] = -theta5[1]
-  
-    # theta6
-    T_60 = np.linalg.inv(T_06)
-    theta6 = []
-    for i in range(2):
-        for j in range(2):
-            s1 = sin(theta1[i])
-            c1 = cos(theta1[i])
-            s5 = sin(theta5[j])
-            theta6.append(atan2((-T_60[1, 0] * s1 + T_60[1, 1] * c1) / s5, (T_60[0, 0] * s1 - T_60[0, 1] * c1) / s5))
-    for i in range(2):
-        theta[i, 5] = theta6[0]
-        theta[i+2, 5] = theta6[1]
-        theta[i+4, 5] = theta6[2]
-        theta[i+6, 5] = theta6[3]
-
-    # theta3, theta2, theta4
-    for i in range(8):  
-        # theta3
-        T_46 = HTM(4, theta[i]) * HTM(5, theta[i])
-        T_14 = np.linalg.inv(HTM(0, theta[i])) * T_06 * np.linalg.inv(T_46)
-        P_13 = T_14 * np.array([[0, -d4, 0, 1]]).T - np.array([[0, 0, 0, 1]]).T
-        if i in [0, 2, 4, 6]:
-            theta[i, 2] = -cmath.acos((np.linalg.norm(P_13) ** 2 - a2 ** 2 - a3 ** 2) / (2 * a2 * a3)).real
-            theta[i+1, 2] = -theta[i, 2]
-        # theta2
-        theta[i, 1] = -atan2(P_13[1], -P_13[0]) + asin(a3 * sin(theta[i, 2]) / np.linalg.norm(P_13))
-        # theta4
-        T_13 = HTM(1, theta[i]) * HTM(2, theta[i])
-        T_34 = np.linalg.inv(T_13) * T_14
-        theta[i, 3] = atan2(T_34[1, 0], T_34[0, 0])       
-
-    theta = theta.tolist()
-
-    # Select the most close solution
-    q_sol = select(theta, q_d)
-
-    # Output format
-    if o_unit == 'r': # (unit: radian)
-        return q_sol
-    elif o_unit == 'd': # (unit: degree)
-        return [degrees(i) for i in q_sol]
-```
 Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas.
 
 ```bash
@@ -697,377 +303,16 @@ touch robot_manipulator.py
 chmod +x robot_manipulator.py
 ```
 
-QUe contendrá una serie de funciones para enviar correctamente las trayectorias finales así como la obtención de los valores de los joints en la posición del robot.
+Contiene una serie de funciones para enviar correctamente las trayectorias finales así como la obtención de los valores de los joints en la posición del robot.
 
-```python
-#!/usr/bin/env python
-
-import sys
-import copy
-import rospy
-from std_msgs.msg import Header
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-
-import tf.transformations as tf
-from geometry_msgs.msg import Pose, Quaternion
-from kinematics_utils import *
-
-class CmdTrajectory():
-    def __init__(self):
-        self.send_trajectory_pub = rospy.Publisher('/pub_ik_trajectory', JointTrajectory, queue_size=10)
-        self.current_robot_pose = Pose()
-        self.robot_pose_sub = rospy.Subscriber('/robot_pose', Pose, self.update_current_pose)
-        self.robot_pose_updated = False
-
-    def pick_place(self):
-        # -0.24, -0.632, 0.62
-        self.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-#        y = 2000
-#        z = 5900
-        y = 7000
-        z = 2000
-        #for x in range(-2000, -5900, -100):
-        for x in range(7000, 2000, -100):
-            #print x
-            #print x*0.0001
-            if x > 0:
-                y -= 100
-                z += 100
-            if x < 0:
-                y += 100
-                z -= 100
-            print x*0.0001
-            print y*0.0001
-            print z*0.0001
-            try:
-                self.send_trajectory(x*0.0001, y*0.0001, z*0.0001, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-            except Exception:
-                print('\033[91m[ Singularidad, valores:' + str(x*0.0001) + ', ' + str(y*0.0001) + ', ' + str(z*0.0001) + ']\033[0m')
-
-#        self.send_trajectory(-0.56, 0.21, 0.51, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-#        self.send_trajectory(-0.56, 0.22, 0.50, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-#        self.send_trajectory(-0.56, 0.23, 0.49, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-#        self.send_trajectory(-0.56, 0.24, 0.48, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-
-    def update_current_pose(self, pose):
-        self.current_robot_pose = pose
-        self.robot_pose_updated = True
-
-    def send_trajectory(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, rot_w):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/base_link"    
-        position.joint_names = ['shoulder_pan_joint','shoulder_lift_joint','elbow_joint',
-                          'wrist_1_joint','wrist_2_joint','wrist_3_joint']
-        
-        rate = rospy.Rate(10)
-        while not self.robot_pose_updated:
-            rate.sleep()
-
-        #print self.current_robot_pose
-
-        (roll, pitch, yaw) = tf.euler_from_quaternion([
-                                            self.current_robot_pose.orientation.x,
-                                            self.current_robot_pose.orientation.y,
-                                            self.current_robot_pose.orientation.z,
-                                            self.current_robot_pose.orientation.w])
-
-        rcs = [ self.current_robot_pose.position.x,
-                self.current_robot_pose.position.y,
-                self.current_robot_pose.position.z,
-                roll, pitch, yaw]
-
-        #print rcs
-        #array_pos = fwd_kin(self.current_robot_pose, 'r', 'n')
-        #print(cartesian_pos)
-
-        ps = Pose()
-        ps.position.x = pos_x
-        ps.position.y = pos_y
-        ps.position.z = pos_z
-        ps.orientation.x = rot_x
-        ps.orientation.y = rot_y
-        ps.orientation.z = rot_z
-        ps.orientation.w = rot_w
-    
-        #state = []
-    
-        #sol = inv_kin(ps, array_pos)
-        #print(sol)
-
-        points = JointTrajectoryPoint()
-        points.positions = inv_kin(ps, rcs)
-        points.time_from_start = rospy.Duration.from_sec(0.1)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-        #state = sol
-        #rospy.sleep(0.1)
-        self.robot_pose_updated = False
-#        print points.positions
-        print('\033[93m[' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-if __name__ == '__main__':
-    rospy.init_node('demo', anonymous=True)
-    cmd = CmdTrajectory()
-    rpy = tf.quaternion_from_euler(-3.12, 0.0, 1.62)
-    print rpy
-    #[-0.68945825 -0.72424496  0.00781949  0.00744391]
-    #cmd.send_trajectory(-0.6, -0.16, 0.62, rpy[0], rpy[1], rpy[2], rpy[3])
-    # Posicion inicial del brazo
-    cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(2)
-    cmd.pick_place()
-```
-
-El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea porque limitaciones que tiene el dominio matemático (ej: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
-
-Para evitar eso, hay que definir un workspace en donde no sufra de estas singularidades.
-
-#### pub_gripper_cmd script
-Finalmente, queda añadir un script que permita el control del gripper, para ello se creará un node que escuche de un topic (*/pub_gripper_control*) delque obtendrá el valor que enviará al controlador mediante el topic */gripper/command*
-
-Este nodo es un nodo de apoyo, por ello estará junto a los scripts de Gazebo, cerca de los ficheros de los controladores:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
-touch pub_gripper_cmd.py
-chmod +x pub_gripper_cmd.py
-```
-
-Y su contenido es el siguiente:
-```python
-#!/usr/bin/env python
-import rospy
-from trajectory_msgs.msg import JointTrajectory
-import roslib
-roslib.load_manifest('one_arm_no_moveit_gazebo')
-import sys
-
-def usage():
-    print('''Commands:
-    -namenode <namenode> - Set the name of the node,can't exists two nodes with the same name. Default value: ur10_robot_pose
-    -namespace <namespace> - Let it empty to no add any namespacing.
-    ''')
-    sys.exit(1)
-
-class PubGripperCmd():
-    def __init__(self):
-        self.trajectory_gripper_cmd = JointTrajectory()
-        self.namespace               = ""
-        self.namenode               = "pub_gripper_control"
-        self.cmd_gripper_pub = rospy.Publisher(self.namespace + '/gripper/command', JointTrajectory, queue_size=10)
-        self.gripper_control_sub =         rospy.Subscriber(self.namespace + '/pub_gripper_control', JointTrajectory, self.update_cmd)
-
-    def parseUserInputs(self):
-        # get goal from commandline
-        for i in range(0,len(sys.argv)):
-          if sys.argv[i] == '-namespace':
-            if len(sys.argv) > i+1:
-              self.namespace = sys.argv[i+1]
-              self.cmd_gripper_pub = rospy.Publisher(self.namespace + '/gripper/command', JointTrajectory, queue_size=10)
-          if sys.argv[i] == '-namenode':
-            if len(sys.argv) > i+1:
-              self.namenode = sys.argv[i+1]
-
-    # Se puede optimizar dejando esta tarea a unos wokers y solo se procesaria el resultado final.
-    # Deben estar ordenados y desechar resultados viejos con respecto a un resultado mas reciente.
-    def update_cmd(self, data):
-        #global trajectory_gripper_cmd
-        self.trajectory_gripper_cmd = data
-        #print("update")
-        #print(data)
+- Ver el contenido de la librería [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py).
 
 
-    def publisher_gripper_cmd(self):
-        rate = rospy.Rate(10) # 10hz  
-        while not rospy.is_shutdown():
-            #print("publishing")
-            self.trajectory_gripper_cmd.header.stamp = rospy.Time.now()
-            self.cmd_gripper_pub.publish(self.trajectory_gripper_cmd)
-            #print(trajectory_gripper_cmd)
-            rate.sleep()
+El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
+
+Para evitar eso, se puede definir un workspace en donde no sufra de estas singularidades.
 
 
-    def callGripperCmdService(self):
-        rospy.init_node(self.namenode, anonymous=True)
-        try:
-            self.publisher_gripper_cmd()
-        except rospy.ROSInterruptException:
-            pass
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(usage())
-    else:
-        print("PubGripperCmd script started") # make this a print incase roscore has not been started
-        sm = PubGripperCmd()
-        sm.parseUserInputs()
-        sm.callGripperCmdService()
-```
-
-Para automatizar el lanzamiento del nodo, hay que añadir lo siguiente al fichero *~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch*
-
-```{xml}
-<!-- send the gripper commands [Own Script]-->
-  <node name="cmd_gripper_value_pub" pkg="one_arm_no_moveit_gazebo" type="pub_gripper_cmd.py" respawn="true" />
-```
-#### gripper_manipulator script
-Para controlar el gripper, unicamente hay que modificar el fichero *robot_manipulator.py*
-
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
-nano robot_manipulator.py
-```
-Con el siguiente contenido:
-```python
-#!/usr/bin/env python
-
-import sys
-import copy
-import rospy
-from std_msgs.msg import Header
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-
-import tf.transformations as tf
-from geometry_msgs.msg import Pose, Quaternion
-from kinematics_utils import *
-
-class CmdTrajectory():
-    def __init__(self):
-        self.send_trajectory_pub = rospy.Publisher('/pub_ik_trajectory', JointTrajectory, queue_size=10)
-        self.send_gripper_cmd_pub = rospy.Publisher('/pub_gripper_control', JointTrajectory, queue_size=10)
-        self.current_robot_pose = Pose()
-        self.robot_pose_sub = rospy.Subscriber('/robot_pose', Pose, self.update_current_pose)
-        self.robot_pose_updated = False
-
-    def send_gripper_cmd(self, gripper_distance):
-        gripper = JointTrajectory()
-        gripper.header.stamp=rospy.Time.now()
-        gripper.header.frame_id = "/ee_link"    
-        gripper.joint_names = ['robotiq_85_left_knuckle_joint']
-        
-        points = JointTrajectoryPoint()
-        points.positions = [gripper_distance]
-        points.time_from_start = rospy.Duration.from_sec(1)
-        gripper.points.append(points)
-        self.send_gripper_cmd_pub.publish(gripper)
-        print('\033[93m[' + str(gripper_distance) + ']\033[0m')
-
-    def pick_place(self):
-        # -0.24, -0.632, 0.62
-        self.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-#        y = 2000
-#        z = 5900
-        y = 7000
-        z = 2000
-        #for x in range(-2000, -5900, -100):
-        for x in range(7000, 2000, -100):
-            #print x
-            #print x*0.0001
-            if x > 0:
-                y -= 100
-                z += 100
-            if x < 0:
-                y += 100
-                z -= 100
-            print x*0.0001
-            print y*0.0001
-            print z*0.0001
-            try:
-                self.send_trajectory(x*0.0001, y*0.0001, z*0.0001, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-            except Exception:
-                print('\033[91m[ Singularidad, valores:' + str(x*0.0001) + ', ' + str(y*0.0001) + ', ' + str(z*0.0001) + ']\033[0m')
-
-#        self.send_trajectory(-0.56, 0.21, 0.51, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-#        self.send_trajectory(-0.56, 0.22, 0.50, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-#        self.send_trajectory(-0.56, 0.23, 0.49, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-#        self.send_trajectory(-0.56, 0.24, 0.48, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-
-    def pick_place2(self):
-        # -0.24, -0.632, 0.62
-        self.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-        for y in range(7000, -7000, -100):
-            try:
-                self.send_trajectory(-0.64, y*0.0001, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-            except Exception:
-                print('\033[91m[ Singularidad, valores:' + str(x*0.0001) + ', ' + str(y*0.0001) + ', ' + str(z*0.0001) + ']\033[0m')
-
-
-    def update_current_pose(self, pose):
-        self.current_robot_pose = pose
-        self.robot_pose_updated = True
-
-    def send_trajectory(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, rot_w):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/base_link"    
-        position.joint_names = ['shoulder_pan_joint','shoulder_lift_joint','elbow_joint',
-                          'wrist_1_joint','wrist_2_joint','wrist_3_joint']
-        
-        rate = rospy.Rate(10)
-        while not self.robot_pose_updated:
-            rate.sleep()
-
-        #print self.current_robot_pose
-
-        (roll, pitch, yaw) = tf.euler_from_quaternion([
-                                            self.current_robot_pose.orientation.x,
-                                            self.current_robot_pose.orientation.y,
-                                            self.current_robot_pose.orientation.z,
-                                            self.current_robot_pose.orientation.w])
-
-        rcs = [ self.current_robot_pose.position.x,
-                self.current_robot_pose.position.y,
-                self.current_robot_pose.position.z,
-                roll, pitch, yaw]
-
-        #print rcs
-        #array_pos = fwd_kin(self.current_robot_pose, 'r', 'n')
-        #print(cartesian_pos)
-
-        ps = Pose()
-        ps.position.x = pos_x
-        ps.position.y = pos_y
-        ps.position.z = pos_z
-        ps.orientation.x = rot_x
-        ps.orientation.y = rot_y
-        ps.orientation.z = rot_z
-        ps.orientation.w = rot_w
-    
-        #state = []
-    
-        #sol = inv_kin(ps, array_pos)
-        #print(sol)
-
-        points = JointTrajectoryPoint()
-        points.positions = inv_kin(ps, rcs)
-        points.time_from_start = rospy.Duration.from_sec(0.1)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-        #state = sol
-        #rospy.sleep(0.1)
-        self.robot_pose_updated = False
-#        print points.positions
-        print('\033[93m[' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-if __name__ == '__main__':
-    rospy.init_node('demo', anonymous=True)
-    cmd = CmdTrajectory()
-    rpy = tf.quaternion_from_euler(-3.12, 0.0, 1.62)
-    print rpy
-    #[-0.68945825 -0.72424496  0.00781949  0.00744391]
-    #cmd.send_trajectory(-0.6, -0.16, 0.62, rpy[0], rpy[1], rpy[2], rpy[3])
-    # Posicion inicial del brazo
-    cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(2)
-    cmd.send_gripper_cmd(0.0)
-    cmd.send_gripper_cmd(0.8)
-    cmd.send_gripper_cmd(0.5)
-#    cmd.send_gripper_cmd(0.0)
-    #cmd.pick_place2()
-```
 
 
 
