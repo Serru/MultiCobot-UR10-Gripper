@@ -119,6 +119,7 @@ Este error, no se puede solucionar, a no ser que se cree el modelo de cero, ya q
 </include-->
 ```
 
+---
 
 ```bash
 [ERROR] [1639740881.902412642, 0.057000000]: GazeboRosControlPlugin missing <legacyModeNS> while using DefaultRobotHWSim, defaults to true.
@@ -169,7 +170,7 @@ sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kin
 
 sudo apt-get install ros-kinetic-ros-control ros-kinetic-ros-controllers
 ```
-El resultado tras solventar  configurar Gazebo es similar a la siguiente.
+El resultado tras instalar Gazebo 9 es similar a la siguiente.
 ![setup stage](/doc/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
 
 <a name="fase2">
@@ -194,7 +195,7 @@ Dicho esto, se realiza una representación de los componentes del robot:
 En la imagen se representa el contenido del [fichero URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando world (color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
 
 
-### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot ur10 [No ha sido posible, problemas con gazebo]
+#### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot ur10 [No ha sido posible, problemas con gazebo]
 Para agregar correctamente el gripper hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
  
  Tomando la siguiente imagen para entender el funcionamiento del controllador del gripper:
@@ -254,7 +255,7 @@ Para la simulación con Gazebo no funciona, pero sí en la herramienta de rosviz
 Como en el robot real, la pinza es un elemento independiente del brazo robótico puede que sea necesario este repositorio, pero para realizar las simulaciones se va utilizar otro repositorio que sí es compatible con el simulador gazebo.
 
 
-### :computer: Agregación del robotiq_85_gripper al robot ur10
+#### :computer: Agregación del robotiq_85_gripper al robot ur10
 Se a proceder a agregar el gripper al robot ur10, no hay una referencia clara de cómo hacerlo adecuadamente. Para ello se empezará mirando cómo está estructurado el paquete para tener una idea de cómo adaptarlo al proyecto en cuestión.
 
 ```bash
@@ -276,6 +277,8 @@ Y con esto, se tiene el gripper en el robot UR10, se puede apreciar en la imagen
 ![ ](/doc/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
 
 ---
+
+#### :computer: Agregación del controlador de la pinza (Gazebo, fase 1)
 
 Ahora, faltan los controladores para mandarle ordenes al gripper, eso se puede comprobar obteniendo la lista de topics activos y se comprobará que no hay ningun controlador para el griper:
 ```bash
