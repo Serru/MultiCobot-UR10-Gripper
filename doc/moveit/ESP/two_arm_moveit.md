@@ -516,17 +516,23 @@ Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_
 Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py)
 
 Para ejecutar la prueba:
+- Terminal 1
 ```bash
-# Terminal 1
 roslaunch two_arm_moveit_manipulator two_arm_moveit_gazebo.launch
+```
 
-# Terminal 2
+- Terminal 2
+```bash
 roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
+```
 
-# Terminal 3
+- Terminal 3
+```bash
 rosrun two_arm_moveit_manipulator two_arm_moveit_1.py 
+```
 
-# Terminal 4
+- Terminal 4
+```bash
 rosrun two_arm_moveit_manipulator two_arm_moveit_2.py
 ```
 
