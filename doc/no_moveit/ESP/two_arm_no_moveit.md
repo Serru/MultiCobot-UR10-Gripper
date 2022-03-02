@@ -118,7 +118,7 @@ cp -r multiple_arm_setup/multiple_ur_description/world/ .
 sudo rm -r mutiple_arm_setup
 ```
 
-Para que añadir el world con el robot en gazebo, hay que modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch/ur10.launch) en el directorio launch:
+Para que añadir el world con el robot en gazebo, hay que modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) en el directorio launch:
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/launch
@@ -645,7 +645,7 @@ Fase 1: Configuración del simulador de Gazebo
 #### :book: Configuración de Gazebo
 Sobre esta configuración, hay que redefinir los ficheros que configuran los controladores de Gazebo, básicamente es duplicarlos y añadirles el prefijo `ur10_1` y `ur10_2` al nombre de las articulaciones, tanto para la pinza como para el brazo de UR10.
 
-De manera similar hay que añadir los nodos duplicados y adaptados para su comunicación con los controladores del cobot en Gazebo y del nodo que obtiene la posición actual de cada cobot del topic `/tf` deben ser también añadidos al fichero `controller_utils.launch`.
+De manera similar hay que añadir los nodos duplicados y adaptados para su comunicación con los controladores de los cobots en Gazebo y de los nodos que obtienen las posiciones actuales de cada cobot del topic `/tf` deben ser también añadidos al fichero `controller_utils.launch`.
 
 ##### :computer: Modificaciones a realizar para simular dos robots en gazebo
 Primero, hay que decidir en el *namespace* para cada robot, es decir el nombre de grupo sobre el que agruparemos las configuraciones para cada uno de los robots.
@@ -792,8 +792,6 @@ Hay que modificar los ficheros *.urdf*, *ur10_joint_limited_robot.urdf.xacro* y 
   <xacro:robotiq_85_gripper prefix="ur10_2_" parent="ur10_2_ee_link" >
       <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:robotiq_85_gripper>
-
-</robot>
  ```
  
  
@@ -835,9 +833,6 @@ Hay que modificar los ficheros *.urdf*, *ur10_joint_limited_robot.urdf.xacro* y 
   <xacro:robotiq_85_gripper prefix="ur10_2_" parent="ur10_2_ee_link" >
       <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:robotiq_85_gripper>
-
-</robot>
-
  ```
 
 <a name="modificaciones3">
