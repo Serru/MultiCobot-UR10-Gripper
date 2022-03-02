@@ -11,9 +11,10 @@ Las fases que se ven en el esquema son de orientación. Se pueden hacer en el or
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
 
 ## Índice
-- [Fase 1: Configuración del simulador de Gazebo](#fase1)
-- [Fase 2: Configuración del URDF](#fase2)
-- [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#fase3)
+- [Congiguración Inicial: Configuración para un robot](#setup-inicial)
+	- [Fase 1: Configuración del simulador de Gazebo](#fase1)
+	- [Fase 2: Configuración del URDF](#fase2)
+	- [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#fase3)
 - [Modificaciones: Sistema multirobot compuesto de dos robots](#modificaciones)
 	- [Fase 1: Configuración del simulador de Gazebo](#modificaciones1)
 	- [Fase 2: Configuración del URDF](#modificaciones2)
