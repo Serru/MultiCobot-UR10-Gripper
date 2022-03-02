@@ -527,7 +527,7 @@ Ejecución de las pruebas
   </h2>
 </a>
 
-### Realización de pruebas en Gazebo
+### :computer: Realización de pruebas en Gazebo
 Se a creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
 
 El fichero con el código del manipulador para realizar la prueba: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py)
@@ -549,12 +549,12 @@ source devel/setup.bash
 rosrun one_arm_no_moveit_manipulator robot_manipulator.py
 ```
 
-### Problemas durante el las pruebas de pick and place
+### :book: Problemas durante el las pruebas de pick and place
 Durante el inicio de las pruebas se ha visto que en la simulación en Gazebo no es posible agarrar los objetos sobre la mesa.
 
 Esto es debido a que falta incluir el plugin de Gazebo *gazebo_grasp* que está en el paquete *gazebo-pkgs* instalado previamente como recurso.
 
-#### Gazbebo Grasp plugin
+#### :computer: Gazbebo Grasp plugin
 Se va a proceder a realizar los pasos necesarios para cargar el plugin que permita al robot interaccionar con los objetos en simulación.
 
 Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podria guardarlo en el paquete de *universal robots* pero como es una modificación realizada para este proyecto, se ha decidido en moverlo al directorio [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf).
