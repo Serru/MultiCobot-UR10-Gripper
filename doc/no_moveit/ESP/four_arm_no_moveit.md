@@ -627,7 +627,7 @@ Modificaciones: Sistema multirobot compuesto de cuatro robots
 
 ![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2-dos.png "Esquema del diseño del planificador propio")
 
-Antes de comezar realizado las modificaciones para añadir cuatro robots al sistema, en la imagen se aprecia cómo estará estructurada los nodos y la comunicación entre Gazebo, los controladores y el planificador para dos robots. Para cuatro robots seguirá el mismo formato replicando los nodos y controladores, es decir, habrña 16 nodos azules y 8 controladores (4 para los brazos UR10 y 4 para las pinzas de robotiq).
+Antes de comezar realizado las modificaciones para añadir cuatro robots al sistema, en la imagen se aprecia cómo estará estructurada los nodos y la comunicación entre Gazebo, los controladores y el planificador para dos robots. Para cuatro robots seguirá el mismo formato replicando los nodos y controladores, es decir, habría 16 nodos azules (4 planificadores) y 8 controladores (4 para los brazos UR10 y 4 para las pinzas de robotiq).
 
 Es una replicación de lo desarrollado previamente en la [Fase 3](#fase3) para un único robot. Por ello hay que notar que se realizarán cambios para los controladores de Gazebo y sus scripts que permiten la comunicación entre este y el planificador, cambios en el modelado del robot (URDF) y cambios en el script que realizará la tarea de *pick & place*.
 
@@ -774,7 +774,7 @@ Fase 2: Configuración del URDF
 #### :book: Descripción del fichero URDF
  ![image](/doc/imgs_md/solo-dos-urdf-robot.png  "Representación del fichero URDF para dos robots")
 
-Es parecido a lo realizado en la [Fase 1](#fase1) de la *Configuración inicial*, pero con la diferencia de que esta vez son cuatro cobots UR10 y no uno. En la imagen aparecen solamente se representan dos cobots, pero la addición de cobots al modelo es muy sencilla.
+Es parecido a lo realizado en la [Fase 1](#fase1) de la *Configuración inicial*, pero con la diferencia de que esta vez son cuatro cobots UR10 y no uno. En la imagen solamente se representan dos cobots, pero la addición de cobots al modelo es muy sencilla.
 
 En el fichero [URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro), se puede ver el cómo se conectan los componentes de los brazos `ur10_robot` con el link `world`, como se puede apreciar en la imagen. No se va a explicar para cuatro robots, porque lo explicado para modelar dos robots es aplicable para modelar N robots.
 
@@ -971,7 +971,7 @@ Ejecución de las pruebas
   </h3>
 </a>
 
-#### :computer: Lanzar las las perubas de simulaócin
+#### :computer: Lanzar las las pruebas de simulación
 Es necesario 5 terminales:
 - Terminal 1:
  ```bash
