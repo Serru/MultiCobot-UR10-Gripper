@@ -15,6 +15,10 @@ Las fases que se ven en el esquema son de orientación. Se pueden hacer en el or
 - [Fase 2: Configuración del URDF](#fase2)
 - [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#fase3)
 - [Modificaciones: Sistema multirobot compuesto de dos robots](#modificaciones)
+	- [Fase 1: Configuración del simulador de Gazebo](#modificaciones1)
+	- [Fase 2: Configuración del URDF](#modificaciones2)
+	- [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#modificaciones3)
+
 - [Ejecución de las pruebas](#pruebas)
 
 <a name="fase1">
@@ -31,9 +35,9 @@ Una vez creada el paquete, hay que configurar los controladores que están almac
 
 A continuación se presenta el contenido de los ficheros de configuración de los controladores, todos estos controladores, en general, siguen la estructura mencionada. La definición de los controladores pueden ser contenidas en un único fichero, lo importante es que en Gazebo los cargue correctamente, se procede a explicar brevemente estos controladores:
 
-- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquı́ se define el nombre del controlador `arm_controller`, el tipo de controlador position `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con éste. Después está el campo `joints`, que es donde se indica qué joints del cobot forma parte del controlador, todos estos joints son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
+- Fichero [arm_controller_ur10.yaml](): En este fichero se define el controlador para el cobot UR10, aquı́ se define el nombre del controlador `arm_controller`, el tipo de controlador position `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con éste. Después está el campo `joints`, que es donde se indica qué joints del cobot forma parte del controlador, todos estos joints son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
 
-- Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los joints que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después publicarlo. Es fundamental para el correcto funcionamiento, tanto en simulación como con el robot real, forma parte del paquete de ROS *ros_control*.
+- Fichero [joint_state_controller.yaml](): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los joints que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después publicarlo. Es fundamental para el correcto funcionamiento, tanto en simulación como con el robot real, forma parte del paquete de ROS *ros_control*.
 
 
 ### :computer: Creación del directorio
