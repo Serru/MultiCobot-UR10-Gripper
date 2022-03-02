@@ -3,6 +3,7 @@
 
 ## Requisito previo
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
+- Implementar la [solución para un robot sin el planificador de MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md).
 
 ## Índice
 - [Fase 1: Configuración del URDF](#fase1)
@@ -528,21 +529,6 @@ rosrun two_arm_moveit_manipulator two_arm_moveit_1.py
 # Terminal 4
 rosrun two_arm_moveit_manipulator two_arm_moveit_2.py
 ```
-
-En la terminal al lanzar rosrun puede salir el siguiente mensaje:
-![ ](/doc/imgs_md/two_arm_moveit_manipulator_info.png  "")
-No ha solución para este mensaje, ya que no es un error de funcionamiento. 
-
-Puede indicar varias razones, porque ha realizado el planining pero los controladores no son capaces de llevarlo acabo, pero si se reintenta llega un momento que lo realiza correctamente, por tanto no es un problema con los controladores.
-
-Y no es un problema del planning porque da una solución.
-
-Afecta en gran medida al rendimiento a la hora de realizar una tarea, ya que tiene que realizar las operaciones varias veces hasta que obtiene la solución correcta.
-
-Se puede aplicar alguna o varias soluciones como trabajo futuro:
-- Utilizar un diccionario para almacenar las posiciones con sus correspondientes valores articulares
-- Utilizar la utilidad de MoveIt! para implementar *constraints* a las soluciones del planificador
-- Utilizar Interligencia artificial para decidir que soluciones propuestas son las más adecuadas
 
 ---
 

@@ -3,6 +3,7 @@
 
 ## Requisito previo
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
+- Implementar la [solución para un robot sin el planificador de MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md).
 
 ## Índice
 - [Fase 1: Configuración del URDF](#fase1)
