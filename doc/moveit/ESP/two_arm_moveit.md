@@ -501,7 +501,7 @@ Los cambios realizados para la configuración de MoveIt! son muy
 pequeñas, básicamente hay que agrupar el código de lo que se habı́a
 implementado para un *único cobot* bajo un *namespace*, adecuar el *remap* con el namespacing y posteriormente replicar el proceso tantas veces como cobots se esté simulando. El contenido del fichero [one_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch) implementado para un único cobot y el contenido del fichero [two_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_execution.launch), si se comparan, esencialmente se ha agrupado todo en un *namespace* y se ha añadido el nombre del namespace como prefijo en los nombres de los topics del remap para la correcta comunicación con los controladores.
 
-Contenido del fichero two_arm_moveit_execution.launch:
+Contenido del fichero `two_arm_moveit_execution.launch`:
 ```xml
 <launch>
     <arg name="sim" default="false" />
@@ -660,9 +660,9 @@ touch two_arm_moveit_1.py
 touch two_arm_moveit_2.py
 ```
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py)
+- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py)
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py)
+- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py)
 
 
 <a name="pruebas2">
