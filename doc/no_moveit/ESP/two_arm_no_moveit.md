@@ -1,6 +1,8 @@
 <!--- Para dos robots opción A--->
 # Instalación y configuración para dos robots UR10 sin MoveIt!
 
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/two_arm_no_moveit.md)
+
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
 Se va a realizar la solución para dos robots esta vez, de la misma manera que se ha realizado para uno, pero modificando el contenido de los ficheros adaptándolo para su similación con dos robots.
@@ -857,8 +859,6 @@ Falta arreglar el plugin de gazebo para que pueda agarrar objetos con ambos grip
 
  Y finalmente, adecuar el fichero world para que realice las simulaciones en un entorno adecuado:
  - Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo/world/multiarm_bot.world).
- 
-
 
 <a name="pruebas2">
   <h3>
@@ -867,18 +867,28 @@ Ejecución de las pruebas
 </a>
 
 #### :computer: Lanzar las las perubas de simulaócin
- Es necesario 3 terminales:
- - Terminal 1:
- ```bash
+
+Es necesario 3 terminales:
+
+- Terminal 1:
+```bash
  roslaunch two_arm_no_moveit_gazebo ur10_joint_limited.launch
- ```
- 
- - Terminal 2:
- ```bash
+``` 
+
+- Terminal 2:
+```bash
  rosrun two_arm_no_moveit_manipulator ur10_1_robot_manipulator.py
- ```
- 
- - Terminal 3:
- ```bash
+```
+
+- Terminal 3:
+```bash
  rosrun two_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
- ```
+```
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md">Anterior</a>
+    </button>
+  </p>
+</div>

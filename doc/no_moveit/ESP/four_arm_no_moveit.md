@@ -1,5 +1,8 @@
 <!--- Para dos robots opción A--->
 # Instalación y configuración para cuatro robots UR10 sin MoveIt!
+
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/four_arm_no_moveit.md)
+
 ![image](/doc/imgs_md/Diseno-no-moveit-general-cuatro-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
 Se va a realizar la solución para cuatro robots esta vez, de la misma manera que se ha realizado para dos, pero modificando el contenido de los ficheros adaptándolo para su simulación con cuatro robots.
@@ -972,28 +975,38 @@ Ejecución de las pruebas
 </a>
 
 #### :computer: Lanzar las las pruebas de simulación
+
 Es necesario 5 terminales:
+
 - Terminal 1:
- ```bash
+```bash
  roslaunch four_arm_no_moveit_gazebo ur10_joint_limited.launch
- ```
+```
  
 - Terminal 2:
- ```bash
+```bash
  rosrun four_arm_no_moveit_manipulator ur10_1_robot_manipulator.py
- ```
+```
  
 - Terminal 3:
- ```bash
+```bash
  rosrun four_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
- ```
+```
  
 - Terminal 4:
- ```bash
+```bash
  rosrun four_arm_no_moveit_manipulator ur10_3_robot_manipulator.py
- ```
+```
  
 - Terminal 5:
- ```bash
+```bash
  rosrun four_arm_no_moveit_manipulator ur10_4_robot_manipulator.py
- ```
+```
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md">Anterior</a>
+    </button>
+  </p>
+</div>

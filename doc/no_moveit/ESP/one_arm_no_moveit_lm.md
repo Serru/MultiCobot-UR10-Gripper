@@ -1,4 +1,6 @@
-##Instalación y configuración para un único robot UR10 sin MoveIt! y Leap Motion
+# Instalación y configuración para un único robot UR10 sin MoveIt! y Leap Motion
+
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit_lm.md)
 
 Esta sección la continuación del apartado anterior, pero en vez de tener un script que envié las trayectorias deseadas, será mediante Leap Motion el cual es controlado por una persona.
 
@@ -1009,3 +1011,11 @@ Terminal 4 (en caso de fallo en leap motion):
 ```{bash}
 sudo service leapd restart
 ```
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md">Anterior</a>
+    </button>
+  </p>
+</div>

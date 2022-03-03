@@ -1,6 +1,8 @@
 <!--- Para un robot  opción B--->
 # Instalación y configuración para un único robot UR10 con MoveIt!
 
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_moveit.md)
+
 ## Requisito previo
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
 - Implementar la [solución para un robot sin el planificador de MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md).
@@ -385,3 +387,11 @@ roslaunch one_arm_moveit_manipulator one_arm_moveit_execution.launch
 ```bash
 rosrun one_arm_moveit_manipulator one_arm_moveit.py 
 ```
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md">Anterior</a>
+    </button>
+  </p>
+</div>

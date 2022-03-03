@@ -1,6 +1,8 @@
 <!--- Para un robot  opción A--->
 # Instalación y configuración para un único robot UR10 sin MoveIt!
 
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md)
+
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
 Las fases que se ven en el esquema son de orientación. Se pueden hacer en el orden que se prefiera, se ha dividido el esquema en fases para mantener un orden y conocer sobre qué elemento del esquema se está trabajando. En este caso se comenzará por la fase 1, seguido de la fase 2 y finalmente se termina con la fase 3. Hay que tener en cuenta que puede existir configuraciones en una fase que pertenece realmente a otra fase, cuando esto suceda se señalará adecuadamente.
@@ -592,3 +594,11 @@ nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urd
 
 
 Y esta es toda la configuración necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada gripper, sino esos grippers no podrá agrrar objetos durante la simulación.
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md">Anterior</a>
+    </button>
+  </p>
+</div>

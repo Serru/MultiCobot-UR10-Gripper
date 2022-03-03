@@ -1,5 +1,8 @@
 <!--- Para cuatro robots opción B--->
 # Instalación y configuración para cuatro robot UR10 replicando MoveIt!
+
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/four_arm_moveit.md)
+
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
 Se va a realizar la solución para cuatro robots esta vez, de la misma manera que se ha realizado para uno, pero modificando el contenido de los ficheros adaptándolo para su similación con cuatro robots.
@@ -813,3 +816,11 @@ En la terminal de Gazebo, al lanzar todos los comandos para realizar las pruebas
 ![ ](/doc/imgs_md/four_arm_move_it_gazebo_warning.png  "Warning por flta de recursos")
 
 Esto es debido a que el sistema avisa de que los recursos son insuficientes para realizar la simulacóin fluidamente, lo que puede acarrear problemas en su velocidad de simulción que puede afectar al resultado de este.
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md">Anterior</a>
+    </button>
+  </p>
+</div>
