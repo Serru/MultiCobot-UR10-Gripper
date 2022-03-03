@@ -2,7 +2,7 @@
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md)
 
-Tras realizar numerosas pruebas en el entorno de ROS para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero URDF que define el modelo del robot y los paquetes de ROS que en el esquema está representado por el paquete de `MoveIt!` que su función principal es la de planificador.
+Tras realizar numerosas pruebas en el entorno de *ROS* para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero *URDF* que define el modelo del robot y los paquetes de *ROS* que en el esquema está representado por el paquete de `MoveIt!` que su función principal es la de planificador.
 
 ![image](/doc/imgs_md/Diseno-General-focus.png  "Herramientas y Drivers de ROS en el diseño")
 

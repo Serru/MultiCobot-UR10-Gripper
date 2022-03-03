@@ -31,7 +31,7 @@ Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https:/
 ## Sobre este proyecto
 Este Trabajo Fin de Grado se enfoca en el desarrollo de un sistema multirobot que pueda realizar tareas de forma cooperativa como es el transporte de objetos. No hay mucha documentación en cómo desarrollar un sistema en donde se controle varios robots simultáneamente de forma correcta en el entorno de ROS, el cual es ampliamente utilizado en la investigación y prototipado para realizar pruebas antes de su puesta en producción.
 
-Se han diseñado, desarrollado, implementado y evaluado experimentalmente dos soluciones: la primera es mediante el paquete de ROS MoveIt!, en donde el trabajo se centra sobre todo en su configuración para permitir el control simultáneo de varios
+Se han diseñado, desarrollado, implementado y evaluado experimentalmente dos soluciones: la primera es mediante el paquete de *ROS* `MoveIt!`, en donde el trabajo se centra sobre todo en su configuración para permitir el control simultáneo de varios
 cobots; y la segunda es la creación o utilización de un planificador de terceros que envía las órdenes directamente a los controladores encargados de realizar los movimientos de los cobots y cada uno de ellos tienen incorporado una pinza que les permiten realizar
 diferentes tareas. 
 
@@ -57,7 +57,7 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 ## Documentación
 - [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
 
-### Configuración en el simulador de Gazebo
+### Configuración en el simulador de `Gazebo`
 - [Diseño y desarrollo para uno, dos y cuatro robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)
 - [Diseño e integración del dispositivo Leap Motion en el sistema para el control de uno y dos robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
 
@@ -65,7 +65,7 @@ También está incorporado al sistema el dispositivo Leap Motion que es capaz de
 - [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
 ## Video con los resultados 
-Aquí se deja un video con los resultados obtenidos de las simulaciones efectuadas en Gazebo. El vídeo contiene dos y cuatro robots haciendo un *pick & place* sin intervención humana, después mediante el dispositivo Leap Motion se muestra el control de dos cobots por una persona y finalmente el resultado desarrollado se ha probado en el robot físico Campero.
+Aquí se deja un video con los resultados obtenidos de las simulaciones efectuadas en `Gazebo`. El vídeo contiene dos y cuatro robots haciendo un *pick & place* sin intervención humana, después mediante el dispositivo Leap Motion se muestra el control de dos cobots por una persona y finalmente el resultado desarrollado se ha probado en el robot físico Campero.
 
 <p>
 <a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">

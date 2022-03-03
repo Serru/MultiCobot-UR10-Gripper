@@ -1,6 +1,9 @@
 # Realización de pruebas sobre la instalación realizada
+
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/pruebas.md)
+
 ## Si hay *warnings* durante la compilación
+
 ### Warnings ignorados:
 ```bash
 WARNING: Package 'ur_modern_driver' is deprecated (This package has been deprecated. Users of CB3 and e-Series controllers should migrate to ur_robot_driver.)
@@ -1955,7 +1958,7 @@ src/
   ```
 </details>
 
-Estos repositorios o paquetes de ROS, serán la base para la implementación que se quiere desarrollar, es decir, actuarán como recursos del sistema.
+Estos repositorios o paquetes de *ROS*, serán la base para la implementación que se quiere desarrollar, es decir, actuarán como recursos del sistema.
 
 
 ## Preparación para la implementación del sistema multirobot
@@ -1971,6 +1974,8 @@ mkdir multirobot
 Este directorio será el directorio raíz de las implementaciones y con esto, la preparación para la reproducción de las diferentes soluciones está terminada.
 
 Añadir, que las modificaciones que sean comunes a todas las soluciones se modificarán sobre los recursos compartidos.
+
+---
 
 <div>
 <p align="left">

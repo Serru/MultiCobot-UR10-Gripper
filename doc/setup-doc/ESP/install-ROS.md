@@ -1,6 +1,8 @@
-# Instalación de ROS Kinetic y dependencias
+# Instalación de *ROS Kinetic y dependencias*
+
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/install-ROS.md)
-## Instalación de ROS Kinetic Kame
+
+## Instalación de *ROS Kinetic Kame*
 ```bash
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 
@@ -23,7 +25,7 @@ source ~/.bashrc
 source /opt/ros/kinetic/setup.bash
 ```
 
-## Instalación de dependencias de ROS
+## Instalación de dependencias de *ROS*
 
 ```bash
 sudo apt-get install ros-kinetic-$(dependencia_name)
@@ -51,7 +53,9 @@ sudo apt-get install ros-kinetic-moveit-ros-planning
 - industrial_msgs
 
 
-*Las dependencias pueden ser distintas a lo que se propone en esta guía, durante la instalación de las herramientas y paquetes de ROS irán apareciendo las distintas dependencias que necesita ROS.*
+*Las dependencias pueden ser distintas a lo que se propone en esta guía, durante la instalación de las herramientas y paquetes de *ROS* irán apareciendo las distintas dependencias que necesita ROS.*
+
+---
 
 <div>
 <p align="left">
