@@ -628,9 +628,9 @@ Modificaciones: Sistema multirobot compuesto de cuatro robots
   </h2>
 </a>
 
-![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2-dos.png "Esquema del diseño del planificador propio")
+![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2-cuatro.png "Esquema del diseño del planificador propio")
 
-Antes de comezar realizado las modificaciones para añadir cuatro robots al sistema, en la imagen se aprecia cómo estará estructurada los nodos y la comunicación entre Gazebo, los controladores y el planificador para dos robots. Para cuatro robots seguirá el mismo formato replicando los nodos y controladores, es decir, habría 16 nodos azules (4 planificadores) y 8 controladores (4 para los brazos UR10 y 4 para las pinzas de robotiq).
+Antes de comezar realizado las modificaciones para añadir cuatro robots al sistema, en la imagen se aprecia cómo estará estructurada los nodos y la comunicación entre Gazebo, los controladores y el planificador para cuatro robots, hay 16 nodos azules (4 planificadores) y 8 controladores (4 para los brazos UR10 y 4 para las pinzas de robotiq).
 
 Es una replicación de lo desarrollado previamente en la [Fase 3](#fase3) para un único robot. Por ello hay que notar que se realizarán cambios para los controladores de Gazebo y sus scripts que permiten la comunicación entre este y el planificador, cambios en el modelado del robot (URDF) y cambios en el script que realizará la tarea de *pick & place*.
 
@@ -775,7 +775,7 @@ Fase 2: Configuración del URDF
 </a>
 
 #### :book: Descripción del fichero URDF
- ![image](/doc/imgs_md/solo-dos-urdf-robot.png  "Representación del fichero URDF para dos robots")
+ ![image](/doc/imgs_md/solo-cuatro-urdf-robot.png  "Representación del fichero URDF para dos robots")
 
 Es parecido a lo realizado en la [Fase 1](#fase1) de la *Configuración inicial*, pero con la diferencia de que esta vez son cuatro cobots UR10 y no uno. En la imagen solamente se representan dos cobots, pero la addición de cobots al modelo es muy sencilla.
 
@@ -1003,6 +1003,19 @@ Es necesario 5 terminales:
  rosrun four_arm_no_moveit_manipulator ur10_4_robot_manipulator.py
 ```
 
+#### :book: Información del resultado final
+
+- Resultado visual en Gazebo
+![image](/doc/imgs_md/four-arm-no-moveit-gazebo.png  "Resultado en Gazebo")
+
+- Esquema de los nodos y topics del sistema
+![image](/doc/imgs_md/four-arm-no-moveit-graph.png  "Nodos y topics del sistema")
+
+- Árbol de las tranformadas del modelo del robot
+![image](/doc/imgs_md/four-arm-no-moveit-tree.pdf  "Árbol de tranformadas")
+
+
+
 <div>
   <p align="left">
     <button name="button">
@@ -1010,3 +1023,4 @@ Es necesario 5 terminales:
     </button>
   </p>
 </div>
+

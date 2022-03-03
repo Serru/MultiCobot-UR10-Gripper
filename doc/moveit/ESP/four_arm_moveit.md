@@ -817,6 +817,23 @@ En la terminal de Gazebo, al lanzar todos los comandos para realizar las pruebas
 
 Esto es debido a que el sistema avisa de que los recursos son insuficientes para realizar la simulacóin fluidamente, lo que puede acarrear problemas en su velocidad de simulción que puede afectar al resultado de este.
 
+#### :book: Información del resultado final
+
+- Resultado visual en Gazebo
+![image](/doc/imgs_md/four-arm-moveit-gazebo.png  "Resultado en Gazebo")
+
+- Esquema de los nodos y topics del sistema
+![image](/doc/imgs_md/four-arm-moveit-graph.png  "Nodos y topics del sistema")
+
+Se procede a comprobar si la comunicación entre Gazebo y las réplicas de MoveIt! se comunican correctamente. Se puede ver cuatro grandes agrupaciones, en donde cada cobot se está comunicando con su `move_group` asignado, la comunicación con los controladores y el camino de las transformadas y valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
+
+El camino parte del nodo de gazebo es el único que publica a los topics
+`/joint_states` de ambos *namespaces*, el nodo `move_group` está suscrito a este topic también, después llega al nodo `robot_state_publisher` que realiza las transformadas y se las envı́a por el topic `/tf` el cual el nodo `move_group` también está suscrito, esto es importante porque `move_group` utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
+
+- Árbol de las tranformadas del modelo del robot
+![image](/doc/imgs_md/four-arm-moveit-tree.pdf  "Árbol de tranformadas")
+
+
 <div>
   <p align="left">
     <button name="button">

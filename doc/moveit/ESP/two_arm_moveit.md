@@ -697,29 +697,23 @@ rosrun two_arm_moveit_manipulator two_arm_moveit_1.py
 rosrun two_arm_moveit_manipulator two_arm_moveit_2.py
 ```
 
----
+#### :book: Información del resultado final
 
-![ ](/doc/imgs_md/two_arm_moveit_gazebo.png  "Example gazebo+rviz+moveit!")
+- Resultado visual en Gazebo
+![image](/doc/imgs_md/two-arm-moveit-gazebo.png  "Resultado en Gazebo")
 
-Y la gráfica de los nodos y los topis, despues de las modificaciones, se puede apreciar cómo ahorá el nodo *move_group* tiene comunicación con los controladores. En la imagen no se aprecia, pero hay dos nodos *move_group*s con el mismo contenido pero diferente namespaces, se recomienda generar el proyecto y obtener le gráfica mediante la herramienta *rqt_graph*.
+- Esquema de los nodos y topics del sistema
+![image](/doc/imgs_md/two-arm-moveit-graph.png  "Nodos y topics del sistema")
 
-![ ](/doc/imgs_md/two_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
-
-
-
-Se procede a comprobar si la comunicación entre Gazebo y las réplicas de MoveIt! se comunican correctamente. Se puede ver dos grandes agrupaciones, en donde cada cobot se está comunicando con su move group asignado, la comunicación con los controladores y el camino de las transformadas y valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
+Se procede a comprobar si la comunicación entre Gazebo y las réplicas de MoveIt! se comunican correctamente. Se puede ver dos grandes agrupaciones, en donde cada cobot se está comunicando con su `move_group` asignado, la comunicación con los controladores y el camino de las transformadas y valores de los joints tiene un único origen que es el nodo de Gazebo, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
 
 El camino parte del nodo de gazebo es el único que publica a los topics
-/joint states de ambos namespaces, el nodo move group está suscrito
-a este topic también, después llega al nodo robot state publisher que
-realiza las transformadas y se las envı́a por el topic /tf el cual el nodo
-move group también está suscrito, esto es importante porque move group utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
+`/joint_states` de ambos *namespaces*, el nodo `move_group` está suscrito a este topic también, después llega al nodo `robot_state_publisher` que realiza las transformadas y se las envı́a por el topic `/tf` el cual el nodo `move_group` también está suscrito, esto es importante porque `move_group` utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
 
-Las imágenes obtenidas de la herramienta rqt graph tienen ya muchos
-nodos y las lı́neas de comunicación no se aprecian bien, en la
-Subsección C.2.3 del Anexo C están las imágenes, pero se recomienda
-reproducirlo (ver Anexo F) y obtener la gráfica con la herramienta para
-verlo en detalle.
+- Árbol de las tranformadas del modelo del robot
+![image](/doc/imgs_md/two-arm-moveit-tree.pdf  "Árbol de tranformadas")
+
+
 
 <div>
   <p align="left">

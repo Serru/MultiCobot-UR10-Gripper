@@ -595,6 +595,18 @@ nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urd
 
 Y esta es toda la configuración necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada gripper, sino esos grippers no podrá agrrar objetos durante la simulación.
 
+### :book: Información del resultado final
+
+- Resultado visual en Gazebo
+![image](/doc/imgs_md/one-arm-no-moveit-gazebo.png  "Resultado en Gazebo")
+
+- Esquema de los nodos y topics del sistema
+![image](/doc/imgs_md/one-arm-no-moveit-graph.png  "Nodos y topics del sistema")
+
+- Árbol de las tranformadas del modelo del robot
+![image](/doc/imgs_md/one-arm-no-moveit-tree.pdf  "Árbol de tranformadas")
+
+
 <div>
   <p align="left">
     <button name="button">

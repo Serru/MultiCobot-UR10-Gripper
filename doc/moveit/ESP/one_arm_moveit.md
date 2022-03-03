@@ -390,6 +390,17 @@ roslaunch one_arm_moveit_manipulator one_arm_moveit_execution.launch
 rosrun one_arm_moveit_manipulator one_arm_moveit.py 
 ```
 
+#### :book: Información del resultado final
+
+- Resultado visual en Gazebo
+![image](/doc/imgs_md/one-arm-moveit-gazebo.png  "Resultado en Gazebo")
+
+- Esquema de los nodos y topics del sistema
+![image](/doc/imgs_md/one-arm-moveit-graph.png  "Nodos y topics del sistema")
+
+- Árbol de las tranformadas del modelo del robot
+![image](/doc/imgs_md/one-arm-moveit-tree.pdf  "Árbol de tranformadas")
+
 <div>
   <p align="left">
     <button name="button">

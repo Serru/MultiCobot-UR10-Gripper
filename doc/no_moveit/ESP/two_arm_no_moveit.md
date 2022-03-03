@@ -885,6 +885,18 @@ Es necesario 3 terminales:
  rosrun two_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
 ```
 
+#### :book: Información del resultado final
+
+- Resultado visual en Gazebo
+![image](/doc/imgs_md/two-arm-no-moveit-gazebo.png  "Resultado en Gazebo")
+
+- Esquema de los nodos y topics del sistema
+![image](/doc/imgs_md/two-arm-no-moveit-graph.png  "Nodos y topics del sistema")
+
+- Árbol de las tranformadas del modelo del robot
+![image](/doc/imgs_md/two-arm-no-moveit-tree.pdf  "Árbol de tranformadas")
+
+
 <div>
   <p align="left">
     <button name="button">
