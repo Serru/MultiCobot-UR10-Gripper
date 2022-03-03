@@ -34,3 +34,4 @@ Se instalan las dependencias y los paquetes que harán la función de `recursos 
             	</button>
     </span>
 </p>
+</div>
