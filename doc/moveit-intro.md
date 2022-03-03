@@ -1,4 +1,4 @@
-# Soluciones propuestas utilizando el paquete `MoveIt!`
+# Soluciones propuestas utilizando el paquete [`MoveIt!`](https://github.com/ros-planning/moveit)
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro-eng.md)
 
@@ -45,7 +45,7 @@ Esta propuesta está ya implementada por [*TEAM O2AC para la World Robot Summit 
 
 <a name="replicacion">
   <h2>
-  Replicando el nodo de `MoveIt!`
+  Replicando el nodo de [`MoveIt!`](https://github.com/ros-planning/moveit)
   </h2>
 </a>
 
