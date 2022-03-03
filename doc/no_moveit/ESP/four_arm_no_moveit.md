@@ -946,6 +946,7 @@ Hay que modificar los ficheros *.urdf*, *ur10_joint_limited_robot.urdf.xacro* y 
 Fase 3: Implementación de un planificador propio que realiza un <i>pick & place</i>
   </h3>
 </a>
+
 #### :book: Creación del planificador y nodos auxiliares
 El planificador ya esta desarrollado previamente en la [Fase 1](#modificaciones1) de esta sección de modificaciones para un sistema multirobot de cuatro robots, en donde se ha implementado los nodos que forman parte del planificador.
 
