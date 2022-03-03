@@ -1,6 +1,6 @@
 # Soluciones propuestas utilizando el paquete `MoveIt!`
 
-[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md) | **English**
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md) | **English**
 
 ## Índice
 - [Modelando varios robots en el fichero URDF](#modelado)
