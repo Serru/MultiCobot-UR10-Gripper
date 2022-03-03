@@ -1,7 +1,7 @@
 <!--- Para cuatro robots opción B--->
 # Instalación y configuración para cuatro robot UR10 replicando MoveIt!
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/four_arm_moveit.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md)
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 

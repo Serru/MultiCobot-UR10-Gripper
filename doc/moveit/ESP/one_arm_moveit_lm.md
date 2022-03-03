@@ -1,7 +1,7 @@
 <!--- Para un robot  opción B--->
 # Instalación y configuración para un único robot UR10 con MoveIt! y Leap Motion
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_moveit_lm.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit_lm.md)
 
 Esta sección la continuación del apartado anterior, pero en vez de tener un script que envié las trayectorias deseadas, será mediante Leap Motion el cual es controlado por una persona.
 
