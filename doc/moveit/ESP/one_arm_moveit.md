@@ -3,6 +3,8 @@
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md)
 
+![image](/doc/imgs_md/Diseno-moveit-general-un-cobot-leap-motion.png  "Cargado el modelo URDF del robot UR10")
+
 ## Requisito previo
 - Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
 - Implementar la [solución para un robot sin el planificador de MoveIt!](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md).
