@@ -45,7 +45,7 @@ Esta propuesta está ya implementada por [*TEAM O2AC para la World Robot Summit 
 
 <a name="replicacion">
   <h2>
-  Replicando el nodo de [`MoveIt!`](https://github.com/ros-planning/moveit)
+  Replicando el nodo de <a href="https://github.com/ros-planning/moveit"><i>MoveIt!</i></a>
   </h2>
 </a>
 
