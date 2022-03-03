@@ -399,7 +399,7 @@ rosrun one_arm_moveit_manipulator one_arm_moveit.py
 ![image](/doc/imgs_md/one-arm-moveit-graph.png  "Nodos y topics del sistema")
 
 - Árbol de las tranformadas del modelo del robot
-![image](/doc/imgs_md/one-arm-moveit-tree.pdf  "Árbol de tranformadas")
+![image](/doc/imgs_md/one-arm-moveit-tree.png  "Árbol de tranformadas")
 
 <div>
   <p align="left">

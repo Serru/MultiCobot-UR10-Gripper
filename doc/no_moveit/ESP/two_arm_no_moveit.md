@@ -894,7 +894,7 @@ Es necesario 3 terminales:
 ![image](/doc/imgs_md/two-arm-no-moveit-graph.png  "Nodos y topics del sistema")
 
 - Árbol de las tranformadas del modelo del robot
-![image](/doc/imgs_md/two-arm-no-moveit-tree.pdf  "Árbol de tranformadas")
+![image](/doc/imgs_md/two-arm-no-moveit-tree.png  "Árbol de tranformadas")
 
 
 <div>

@@ -711,7 +711,7 @@ El camino parte del nodo de gazebo es el único que publica a los topics
 `/joint_states` de ambos *namespaces*, el nodo `move_group` está suscrito a este topic también, después llega al nodo `robot_state_publisher` que realiza las transformadas y se las envı́a por el topic `/tf` el cual el nodo `move_group` también está suscrito, esto es importante porque `move_group` utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
 
 - Árbol de las tranformadas del modelo del robot
-![image](/doc/imgs_md/two-arm-moveit-tree.pdf  "Árbol de tranformadas")
+![image](/doc/imgs_md/two-arm-moveit-tree.png  "Árbol de tranformadas")
 
 
 

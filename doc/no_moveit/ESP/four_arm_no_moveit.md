@@ -1013,13 +1013,7 @@ Es necesario 5 terminales:
 ![image](/doc/imgs_md/four-arm-no-moveit-graph.png  "Nodos y topics del sistema")
 
 - Árbol de las tranformadas del modelo del robot
-![image](/doc/imgs_md/four-arm-no-moveit-tree.pdf  "Árbol de tranformadas")
-
-<object data="/doc/imgs_md/four-arm-no-moveit-tree.pdf" type="application/pdf" width="100%">
-    
-</object>
-
-xfun::embed_file("https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/four-arm-no-moveit-tree.pdf")
+![image](/doc/imgs_md/four-arm-no-moveit-tree.png  "Árbol de tranformadas")
 
 
 
