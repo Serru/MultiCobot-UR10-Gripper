@@ -1015,6 +1015,12 @@ Es necesario 5 terminales:
 - Árbol de las tranformadas del modelo del robot
 ![image](/doc/imgs_md/four-arm-no-moveit-tree.pdf  "Árbol de tranformadas")
 
+<object data="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/four-arm-no-moveit-tree.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/four-arm-no-moveit-tree.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view.</p>
+    </embed>
+</object>
+
 
 
 <div>
