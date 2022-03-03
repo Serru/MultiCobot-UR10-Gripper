@@ -1021,6 +1021,9 @@ Es necesario 5 terminales:
     </embed>
 </object>
 
+xfun::embed_file("https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/four-arm-no-moveit-tree.pdf")
+
+
 
 
 <div>
