@@ -2,7 +2,7 @@
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/pruebas.md)
 ## Si hay *warnings* durante la compilación
 ### Warnings ignorados:
-```{bash}
+```bash
 WARNING: Package 'ur_modern_driver' is deprecated (This package has been deprecated. Users of CB3 and e-Series controllers should migrate to ur_robot_driver.)
 
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:418 (message):
@@ -19,7 +19,7 @@ Call Stack (most recent call first):
 ### Warnings resueltos:
 
 **gazebo_version_helpers warning:**
-```{bash}
+```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
   catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
   'gazebo_LIBRARIES' is defined.
@@ -28,8 +28,7 @@ Call Stack (most recent call first):
   gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
 ```
 Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, a partir de la línea 26 por lo siguiente:
-
-```{bash}
+```bash
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES gazebo_version_helpers
@@ -40,7 +39,7 @@ catkin_package(
 
 **gazebo_grasp_plugin warning:**
 	
-```{bash}
+```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
   catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
   'gazebo_LIBRARIES' is defined.
@@ -50,7 +49,7 @@ Call Stack (most recent call first):
 [...]
 ```
 Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, a partir de la línea 31 por lo siguiente:
-```{bash}
+```bash
 catkin_package(
   # Binary directory required for proto headers inclusion to work, because install commands don't
   # get executed in devel space. The directory above is required so that an include of
@@ -66,7 +65,7 @@ catkin_package(
 ```
 
 **gazebo_grasp_plugin_ros warning:**	
-```{bash}
+```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
   catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
   'gazebo_LIBRARIES' is defined.
@@ -76,7 +75,7 @@ Call Stack (most recent call first):
 [...]
 ```
 Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, a partir de la línea 34 por lo siguiente:
-```{bash}
+```bash
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES gazebo_grasp_plugin_ros
@@ -88,7 +87,7 @@ catkin_package(
 ## Pequeña comprobación de la instalación del sistema
 
 ### Activación del entorno de trabajo actual
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper
 source ~/MultiCobot-UR10-Gripper/devel/setup.bash
 ```
@@ -97,7 +96,7 @@ source ~/MultiCobot-UR10-Gripper/devel/setup.bash
 Tras realizar previamente toda la instalación y configuración del sistema se puede proceder a realizar pruebas para comprobar su funcionamiento antes de proceder a realizar otras modificaciones. No se va a indicar que pruebas se puede efectuar porque los repositorios de origen tiene indicaciones para ejecutar pequeñas demostraciones que son muy útiles para comprender lo que pueden hacer.
 
 El entorno de trabajo debería quedar de la siguiente manera tras la instalación de todos los repositorios:
-```{bash}
+```bash
 miguel@Omen:~/MultiCobot-UR10-Gripper/src$ ls
 CMakeLists.txt        geometry                  ros_control
 gazebo-pkgs           leap_motion               roslint
@@ -1965,7 +1964,7 @@ Una vez que se tiene todos los recursos necesarios para el sistema, instalados c
 Se ha decidido organizarlo de esta manera para que los recursos comunes estén compartidos entre las diferentes implementaciones, y las modificaciones específicas que se tengan que hacer se guardarán en sus respectivos directorios. Lo que permitirá ejecutar los ficheros modificados en vez de los ficheros originales de los que parten modificando simplemente el fichero a incluir en los ficheros con extensión *launch*.
 
 Por ello se procede primero a crear el directorio que contendrá todas las soluciones propuestas:
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src
 mkdir multirobot
 ```
@@ -1989,3 +1988,4 @@ Añadir, que las modificaciones que sean comunes a todas las soluciones se modif
     	</button> 
     </span>
 </p>
+</div>

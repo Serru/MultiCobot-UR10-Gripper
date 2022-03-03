@@ -1,7 +1,7 @@
 # Instalación de ROS Kinetic y dependencias
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/install-ROS.md)
 ## Instalación de ROS Kinetic Kame
-```{bash}
+```bash
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 
 sudo apt install curl # if you haven't already installed curl
@@ -25,13 +25,13 @@ source /opt/ros/kinetic/setup.bash
 
 ## Instalación de dependencias de ROS
 
-```{bash}
+```bash
 sudo apt-get install ros-kinetic-$(dependencia_name)
 ```
 
 Si la dependencia es *moveit_ros_planning*, entonces *dependencia_name* será *moveit-ros-planning*, se sigue este patrón para instalar todas las dependencias, para el ejemplo anterior quedaría:
 
-```{bash}
+```bash
 sudo apt-get install ros-kinetic-moveit-ros-planning
 ```
 
