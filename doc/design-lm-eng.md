@@ -1,6 +1,6 @@
 # Diseño del sistema multirobot
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm-eng.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md) | **English**
 
 Tras realizar numerosas pruebas en el entorno de ROS para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero URDF que define el modelo del robot y los paquetes de ros que en el esquema está representado por el paquete de MoveIt! que su función principal es la de planificador.
 
@@ -22,11 +22,10 @@ Las soluciones que se proponen giran en torno a las modificaciones y combinacion
 - [Un UR10 con pinza mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit_lm.md)
 - [Dos UR10s con pinzas mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit_lm.md)
 
-
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md">Inicio</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md">Initial</a>
 </button>
 </p>
 </div>

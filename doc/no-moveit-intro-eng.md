@@ -1,6 +1,6 @@
 # Soluciones propuestas utilizando un planificador propio o de terceros (sin el paquete de `MoveIt!`)
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro-eng.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md) | **English**
 
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
@@ -35,7 +35,7 @@ al sistema.
 <div>
 <p align="left">
 <button name="button">
-              <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md">Menú</a>
+              <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md">Menu</a>
 </button>
 </p>
 </div>

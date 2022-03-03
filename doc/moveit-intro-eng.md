@@ -1,6 +1,6 @@
 # Soluciones propuestas utilizando el paquete `MoveIt!`
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro-eng.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md) | **English**
 
 ## Índice
 - [Modelando varios robots en el fichero URDF](#modelado)
@@ -84,7 +84,7 @@ planificar trayectorias evitando colisiones entre los robots no funcionarı́a a
 <div>
 <p align="left">
 <button name="button">
-              <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md">Menú</a>
+              <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md">Menu</a>
 </button>
 </p>
 </div>
