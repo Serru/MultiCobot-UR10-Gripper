@@ -954,7 +954,7 @@ En esta sección lo importante es implementar los scripts que utilizarán la [li
 
 El cual realizará la tarea de *pick & place*, se implementarán cuatro scripts que se lanzarán en distintos terminales para que manden ordenes simultáneamente a cada robot.
 
-###### :computer: Modificación del pick and place
+##### :computer: Modificación del pick and place
 En el directorio *four_arm_no_moveit_manipulator* se modificará los siguientes ficheros:
 - [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_1_robot_manipulator.py*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_1_robot_manipulator.py).
 - [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_2_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_2_robot_manipulator.py).

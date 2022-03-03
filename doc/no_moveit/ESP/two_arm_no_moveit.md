@@ -842,14 +842,16 @@ Hay que modificar los ficheros *.urdf*, *ur10_joint_limited_robot.urdf.xacro* y 
 Fase 3: Implementación de un planificador propio que realiza un <i>pick & place</i>
   </h3>
 </a>
+
 #### :book: Creación del planificador y nodos auxiliares
+
 El planificador ya esta desarrollado previamente en la [Fase 1](#modificaciones1) de esta sección de modificaciones para un sistema multirobot de dos robots, en donde se ha implementado los nodos que forman parte del planificador.
 
 En esta sección lo importante es implementar los scripts que utilizarán la [librería](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/scripts/kinematics_utils.py) desarrollado para realizar la cinemática directa para controlar los brazos robóticos.
 
 El cual realizará la tarea de *pick & place*, se implementarán dos scripts que se lanzarán en distintos terminales para que manden ordenes simultáneamente a cada robot.
 
-###### :computer: Modificación del pick and place
+##### :computer: Modificación del pick and place
 En el directorio *two_arm_no_moveit_manipulator* se modificará los siguientes ficheros:
 - [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/ur10_1_robot_manipulator.py*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/scripts/ur10_1_robot_manipulator.py).
 - [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/ur10_2_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/scripts/ur10_2_robot_manipulator.py).
