@@ -6,17 +6,17 @@ Redistribution and use in source and binary forms, with or without modification,
 
 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
     in the documentation and/or other materials provided with the distribution.
 
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived 
     from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
-BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
-SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, 
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
@@ -35,7 +35,7 @@ MimicJointPlugin::MimicJointPlugin()
 
 MimicJointPlugin::~MimicJointPlugin()
 {
-  this->updateConnection.reset();
+  event::Events::DisconnectWorldUpdateBegin(this->updateConnection);
 
   kill_sim = true;
 }
@@ -73,7 +73,7 @@ void MimicJointPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
     ROS_ERROR("No joint element present. MimicJointPlugin could not be loaded.");
     return;
   }
-
+  
   joint_name_ = _sdf->GetElement("joint")->Get<std::string>();
 
   // Check for mimicJoint element
@@ -82,7 +82,7 @@ void MimicJointPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
     ROS_ERROR("No mimicJoint element present. MimicJointPlugin could not be loaded.");
     return;
   }
-
+  
   mimic_joint_name_ = _sdf->GetElement("mimicJoint")->Get<std::string>();
 
   has_pid_ = false;
@@ -136,10 +136,11 @@ void MimicJointPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
     ROS_ERROR("No (mimic) joint named %s. MimicJointPlugin could not be loaded.", mimic_joint_name_.c_str());
     return;
   }
-
+  
   // Set max effort
   if(!has_pid_)
-    mimic_joint_->SetParam("fmax", 0, max_effort_);//SetMaxForce(0,max_effort_);
+    mimic_joint_->SetForce(0,max_effort_);
+
   // Listen to the update event. This event is broadcast every
   // simulation iteration.
   this->updateConnection = event::Events::ConnectWorldUpdateBegin(
@@ -148,23 +149,24 @@ void MimicJointPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
 
 void MimicJointPlugin::UpdateChild()
 {
-  static ros::Duration period(world_->Physics()->GetMaxStepSize());
+  static ros::Duration period(world_->GetPhysicsEngine()->GetMaxStepSize());
 
   // Set mimic joint's angle based on joint's angle
-  double angle = joint_->Position(0)*multiplier_+offset_;
-
-  if(abs(angle-mimic_joint_->Position(0))>=sensitiveness_)
+  double angle = joint_->GetAngle(0).Radian()*multiplier_+offset_;
+  
+  if(abs(angle-mimic_joint_->GetAngle(0).Radian())>=sensitiveness_)
   {
     if(has_pid_)
     {
-      double a = mimic_joint_->Position(0);
+      double a = mimic_joint_->GetAngle(0).Radian();
       if(a!=a)
         a = angle;
       double error = angle-a;
-      double effort = ignition::math::clamp(pid_.computeCommand(error, period), -max_effort_, max_effort_);
+      double effort = gazebo::math::clamp(pid_.computeCommand(error, period), -max_effort_, max_effort_);
     }
     else
-      mimic_joint_->SetPosition(0, angle);
+      //mimic_joint_->SetAngle(0, math::Angle(angle));
+    	mimic_joint_->SetPosition(0, angle);
   }
 }
 

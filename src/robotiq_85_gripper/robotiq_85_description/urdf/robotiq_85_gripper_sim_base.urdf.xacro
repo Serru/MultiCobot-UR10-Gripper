@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 
-<robot name="robotiq_85_gripper_sim_base" xmlns:xacro="http://wiki.ros.org/xacro">
+<robot name="robotiq_85_gripper_sim_base" xmlns:xacro="http://ros.org/wiki/xacro">
     <xacro:macro name="robotiq_85_gripper_sim_base" params="prefix">
 
         <link name="${prefix}gripper_root_link">

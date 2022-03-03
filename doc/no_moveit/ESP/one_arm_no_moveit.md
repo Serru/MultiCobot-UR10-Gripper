@@ -73,7 +73,7 @@ Con esto ya se puede lanzar Gazebo desde el directorio del proyecto.
 roslaunch one_arm_no_moveit_gazebo ur10.launch
 ```
 
-#### Configuración del mundo de Gazebo
+#### :computer: Configuración del mundo de Gazebo
 Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá realizar simples tareas, este proyecto se enfoca en las tareas que pueda realizar el robot, por tanto no es necesario que el mundo sea muy detallado.
 
 Para ello lo primero es crear el directorio *world*, en donde se guardará los worlds que se creen:

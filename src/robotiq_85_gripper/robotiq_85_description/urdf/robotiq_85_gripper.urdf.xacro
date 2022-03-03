@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 
 
-<robot name="robotiq_85_gripper" xmlns:xacro="http://wiki.ros.org/xacro">
+<robot name="robotiq_85_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
     <xacro:include filename="$(find robotiq_85_description)/urdf/robotiq_85_gripper.transmission.xacro" />
+    <property name="pi" value="3.14159"/>
+    
     
     <xacro:macro name="robotiq_85_gripper" params="prefix parent *origin">
 
@@ -256,29 +258,6 @@
                          izx = "0.000000" izy = "0.000000" izz = "0.000006" />
             </inertial>
         </link>
-
-        <!-- Improve grasping physics -->
-        <gazebo reference="${prefix}robotiq_85_left_finger_tip_link">
-          <!--kp>1000000.0</kp>
-          <mu1>1.0</mu1>
-          <mu2>1.0</mu2-->
-          <mu1>100000</mu1>
-          <mu2>100000</mu2>
-          <kp>100000000.0</kp>
-          <kd>1.0</kd>
-          <minDepth>0.001</minDepth>
-        </gazebo>
-
-        <gazebo reference="${prefix}robotiq_85_right_finger_tip_link">
-          <!--kp>1000000.0</kp>
-          <mu1>1.0</mu1>
-          <mu2>1.0</mu2-->
-          <mu1>100000</mu1>
-          <mu2>100000</mu2>
-          <kp>100000000.0</kp>
-          <kd>1.0</kd>
-          <minDepth>0.001</minDepth>
-        </gazebo>
         
         <xacro:robotiq_85_gripper_transmission prefix="${prefix}" />
 
