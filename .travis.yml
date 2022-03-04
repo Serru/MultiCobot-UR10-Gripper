@@ -84,6 +84,7 @@ before_install:
   # Prepare rosdep to install dependencies.
   - sudo rosdep init
   - rosdep update
+  - sudo apt install libprotobuf-dev protobuf-compiler
   - sudo apt install python-pymodbus
   - sudo apt-get install ros-kinetic-moveit-ros-planning ros-kinetic-moveit-kinematics
   - sudo apt-get install ros-kinetic-moveit-simple-controller-manager ros-kinetic-position-controllers
