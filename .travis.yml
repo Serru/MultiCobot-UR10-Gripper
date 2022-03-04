@@ -57,7 +57,7 @@ matrix:
 env:
   global:
     - ROS_CI_DESKTOP="`lsb_release -sc`"  # e.g. [xenial|...]
-    - CI_SOURCE_PATH=$(pwd)
+    #- CI_SOURCE_PATH=$(pwd)
     #- ROSINSTALL_FILE=$CI_SOURCE_PATH/dependencies.rosinstall
     #- CATKIN_OPTIONS=$CI_SOURCE_PATH/catkin.options
     - ROS_PARALLEL_JOBS='-j8 -l6'
@@ -113,12 +113,14 @@ install:
   # Create the devel/setup.bash (run catkin_make with an empty workspace) and
   # source it to set the path variables.
   - cd ~/MultiCobot-UR10-Gripper
+  - rosdep update
+  - rosdep install --rosdistro kinetic --ignore-src --from-paths src
   - catkin_make
   - rospack profile
   - source devel/setup.bash
   # Add the package under integration to the workspace using a symlink.
-  - cd ~/MultiCobot-UR10-Gripper/src
-  - ln -s $CI_SOURCE_PATH .
+  #- cd ~/MultiCobot-UR10-Gripper/src
+  #- ln -s $CI_SOURCE_PATH .
   # Prepare Leap Motion
   - sudo printf "[Unit] \nDescription=LeapMotion Daemon \nAfter=syslog.target \n \n[Service] \nType=simple \nExecStart=/usr/sbin/leapd \n \n[Install] \nWantedBy=multi-user.target" > /lib/systemd/system/leapd.service
   - sudo ln -s /lib/systemd/system/leapd.service /etc/systemd/system/leapd.service
