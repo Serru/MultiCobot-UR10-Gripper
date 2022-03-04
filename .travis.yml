@@ -117,11 +117,6 @@ install:
   # Add the package under integration to the workspace using a symlink.
   #- cd ~/MultiCobot-UR10-Gripper/src
   #- ln -s $CI_SOURCE_PATH .
-  # Prepare Leap Motion
-  - sudo printf "[Unit] \nDescription=LeapMotion Daemon \nAfter=syslog.target \n \n[Service] \nType=simple \nExecStart=/usr/sbin/leapd \n \n[Install] \nWantedBy=multi-user.target" > /lib/systemd/system/leapd.service
-  - sudo ln -s /lib/systemd/system/leapd.service /etc/systemd/system/leapd.service
-  - echo "export PYTHONPATH=$PYTHONPATH:$HOME/tfg_multirobot/src/leap_motion/LeapSDK/lib:$HOME/tfg_multirobot/src/leap_motion/LeapSDK/lib/x64" >> ~/.bashrc
-
 
 # Install all dependencies, using wstool first and rosdep second.
 # wstool looks for a ROSINSTALL_FILE defined in the environment variables.
@@ -145,11 +140,11 @@ before_script:
 # fails. Running `catkin_test_results` aggregates all the results and returns
 # non-zero when a test fails (which notifies Travis the build failed).
 script:
-  - sudo systemctl daemon-reload # Start Leap Motion
   - source /opt/ros/$ROS_DISTRO/setup.bash
   - cd ~/MultiCobot-UR10-Gripper
   #- catkin_make $( [ -f $CATKIN_OPTIONS ] && cat $CATKIN_OPTIONS )
   - catkin_make
   # Run the tests, ensuring the path is set correctly.
   - source devel/setup.bash
+  - rospack profile
   - catkin_make run_tests && catkin_test_results
