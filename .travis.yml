@@ -84,30 +84,19 @@ before_install:
   # Prepare rosdep to install dependencies.
   - sudo rosdep init
   - rosdep update
-  - pip install  -U pymodbus
-  - sudo apt-get install ros-kinetic-moveit-ros-planning
-  - sudo apt-get install ros-kinetic-moveit-kinematics
-  - sudo apt-get install ros-kinetic-moveit-simple-controller-manager
-  - sudo apt-get install ros-kinetic-position-controllers
-  - sudo apt-get install ros-kinetic-moveit-fake-controller-manager
-  - sudo apt-get install ros-kinetic-gazebo-ros-control
-  - sudo apt-get install ros-kinetic-joint-trajectory-controller
-  - sudo apt-get install ros-kinetic-moveit-ros-visualization
-  - sudo apt-get install ros-kinetic-moveit-planners-ompl
-  - sudo apt-get install ros-kinetic-joint-state-controller
-  - sudo apt-get install ros-kinetic-effort-controllers
-  - sudo apt-get install ros-kinetic-ros-controllers
-  - sudo apt-get install ros-kinetic-industrial-msgs
-  - sudo apt-get install ros-kinetic-leap-motion
+  - sudo apt install python-pymodbus
+  - sudo apt-get install ros-kinetic-moveit-ros-planning ros-kinetic-moveit-kinematics
+  - sudo apt-get install ros-kinetic-moveit-simple-controller-manager ros-kinetic-position-controllers
+  - sudo apt-get install ros-kinetic-moveit-fake-controller-manager ros-kinetic-gazebo-ros-control
+  - sudo apt-get install ros-kinetic-joint-trajectory-controller ros-kinetic-moveit-ros-visualization
+  - sudo apt-get install ros-kinetic-moveit-planners-ompl ros-kinetic-joint-state-controller
+  - sudo apt-get install ros-kinetic-effort-controllers ros-kinetic-ros-controllers
+  - sudo apt-get install ros-kinetic-industrial-msgs ros-kinetic-leap-motion
 
 
 # Create a catkin workspace with the package under integration.
 install:
   - ls ~
-  - cd ~
-  - git clone git://github.com/bashwork/pymodbus.git
-  - cd pymodbus
-  - sudo python setup.py install
   - cd ~
   - git clone https://github.com/Serru/MultiCobot-UR10-Gripper
   - ls ~
@@ -120,7 +109,7 @@ install:
   - cd ~/MultiCobot-UR10-Gripper
   - rospack profile
   - rosdep update
-  - rosdep install --rosdistro kinetic --ignore-src --from-paths src
+  - rosdep install -r --rosdistro kinetic --ignore-src --from-paths src
   - catkin_make
   - rospack profile
   - source devel/setup.bash
