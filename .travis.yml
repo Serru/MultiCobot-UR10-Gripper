@@ -129,7 +129,7 @@ before_script:
   # package depdencies: install using rosdep.
   - cd ~/MultiCobot-UR10-Gripper
   - ls
-  - rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
+  - rosdep install -r -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
 
 # Compile and test (mark the build as failed if any step fails). If the
 # CATKIN_OPTIONS file exists, use it as an argument to catkin_make, for example
