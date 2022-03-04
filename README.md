@@ -8,7 +8,7 @@ Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https:/
 
 <p align="center">
   <img alt="Doc" style="border-width:0" src="https://img.shields.io/badge/doc-incomplete-red?logo=markdown&style=plastic" />
-  <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://img.shields.io/travis/Serru/MultiCobot-UR10-Gripper?style=plastic&logo=travisci" />
+  <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://img.shields.io/travis/com/Serru/MultiCobot-UR10-Gripper?logo=travis&style=plastic" />
     </a>
   <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://img.shields.io/github/license/Serru/MultiCobot-UR10-Gripper?style=plastic" />
   </a>
