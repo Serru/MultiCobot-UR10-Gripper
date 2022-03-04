@@ -113,6 +113,7 @@ install:
   # Create the devel/setup.bash (run catkin_make with an empty workspace) and
   # source it to set the path variables.
   - cd ~/MultiCobot-UR10-Gripper
+  - rospack profile
   - rosdep update
   - rosdep install --rosdistro kinetic --ignore-src --from-paths src
   - catkin_make
