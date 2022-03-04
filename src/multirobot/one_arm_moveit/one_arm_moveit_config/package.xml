@@ -30,5 +30,7 @@
   <build_depend>one_arm_moveit_description</build_depend>
   <run_depend>one_arm_moveit_description</run_depend>
 
+  <test_depend>roslaunch</test_depend>
+  <buildtool_depend>catkin</buildtool_depend>
 
 </package>

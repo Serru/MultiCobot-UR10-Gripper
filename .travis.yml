@@ -51,6 +51,7 @@ matrix:
   - name: "Xenial kinetic"
     dist: xenial
     env: ROS_DISTRO=kinetic
+    language: cpp
 
 # Configuration variables. All variables are global now, but this can be used to
 # trigger a build matrix for different ROS distributions if desired.
@@ -103,6 +104,10 @@ before_install:
 # Create a catkin workspace with the package under integration.
 install:
   - ls ~
+  - cd ~
+  - git clone git://github.com/bashwork/pymodbus.git
+  - cd pymodbus
+  - python setup.py install
   - cd ~
   - git clone https://github.com/Serru/MultiCobot-UR10-Gripper
   - ls ~
