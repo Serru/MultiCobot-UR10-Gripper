@@ -78,6 +78,7 @@ before_install:
   # Prepare rosdep to install dependencies.
   - sudo rosdep init
   - rosdep update --include-eol-distros  # Support EOL distros.
+  - pip install  -U pymodbus
 
 # Create a catkin workspace with the package under integration.
 install:
