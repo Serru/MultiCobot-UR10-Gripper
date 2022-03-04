@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(gazebo_grasp_plugin_ros)
 
+add_compile_options(-std=c++11)
+
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   gazebo_grasp_plugin
