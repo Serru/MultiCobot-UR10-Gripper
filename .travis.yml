@@ -146,4 +146,5 @@ script:
   # Run the tests, ensuring the path is set correctly.
   - source devel/setup.bash
   - rospack profile
+  - catkin config --blacklist hardware_interface ros_control tf robotiq_85_gripper geometry transmission_interface gazebo_ros_pkgs gazebo_plugins ur_e_gazebo ur10_moveit_config ur5_e_moveit_config
   - catkin_make run_tests && catkin_test_results
