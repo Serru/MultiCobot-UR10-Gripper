@@ -1,16 +1,17 @@
 <p align="center">
 
-<img alt="MultiCobot-UR10-Gripper imagen" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/proyect-logo.png" />
+  <a rel="MultiCobot-UR10-Gripper" href="https://github.com/Serru/MultiCobot-UR10-Gripper"><img alt="MultiCobot-UR10-Gripper" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/proyect-logo.png" />
   </a>
+</p>
 
 # MultiCobot-UR10-Gripper
+
 <p align="center">
 Sistema multirobot para el transporte de colaborativo de objetos, desarrollo del proyecto de fin de grado en la Universidad de Zaragoza.</p>
 
 <p align="center">
   <a rel="license" href="http://creativecommons.org/licenses/by/2.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/2.0/80x15.png" />
-  </a>
-  
+  </a>  
 </p>
 
 
