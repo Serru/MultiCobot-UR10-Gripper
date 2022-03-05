@@ -1,4 +1,7 @@
 <p align="center">
+
+<meta name="google-site-verification" content="OBV2E4ytBsU0e3HKRs_G55_TAWX6la52NOCrRmYnmu8" />
+
 <img alt="MultiCobot-UR10-Gripper imagen" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/proyect-logo.png" />
   </a>
 

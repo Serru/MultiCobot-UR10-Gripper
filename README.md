@@ -1,4 +1,7 @@
 <p align="center">
+
+<meta name="google-site-verification" content="OBV2E4ytBsU0e3HKRs_G55_TAWX6la52NOCrRmYnmu8" />
+
 <img alt="MultiCobot-UR10-Gripper imagen" style="border-width:0" src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/proyect-logo.png" />
   </a>
 
@@ -13,7 +16,7 @@ Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https:/
   <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://img.shields.io/github/license/Serru/MultiCobot-UR10-Gripper?style=plastic" />
   </a>
       <a rel="Python" href="https://github.com/Serru/MultiCobot-UR10-Gripper">
-  <img alt="Python 2.7" style="border-width:0" src="https://img.shields.io/badge/Python-14354C?logo=python&style=plastic" />
+  <img alt="Python 2.7" style="border-width:0" src="https://img.shields.io/badge/Python-14354C?logo=python&logoColor=white&style=plastic" />
   </a>
     <a rel="C++" href="https://github.com/Serru/MultiCobot-UR10-Gripper">
   <img alt="C++" style="border-width:0" src="https://img.shields.io/badge/C%2B%2B-00599C?logo=c%2B%2B&style=plastic" />
