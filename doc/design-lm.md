@@ -80,6 +80,7 @@ Identificación de Gestos
 </a>
 Durante la identificación de los gestos hay que tener en cuenta que si los gestos que se utilizan son muy similares, *Leap Motion* puede realizar falsos positivos durante la identificación de los gestos ası́ como partes ocultas de la mano al moverse puede hacerle pensar que ha reconocido un gesto que no se ha realizado.
 
+
 Se ha implementado cuatro tipos de gestos que son los que se muestran en la imagen, el *puño* indica que hay parar de enviar instrucciones, el *gesto de la pinza* es para controlar la pinza del cobot, el *gesto thumb up* indica que está preparado y el *gesto de rock* indica que toma la posición actual de la mano como origen de referencias. Se ha preparado para la implementación para el control de la orientación del *end-effector*, pero dado que da problemas de identificación con algunos de los gestos se decidió que es mejor tener una orientación fija.
 
 ![image](/doc/imgs_md/gestos-leap-motion.png  "Definición de gestos para Leap Motion")
