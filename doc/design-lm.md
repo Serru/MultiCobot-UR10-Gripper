@@ -1,26 +1,154 @@
-# Diseño del sistema multirobot
+# Diseño e integración de Leap Motion
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm-eng.md)
 
-Tras realizar numerosas pruebas en el entorno de *ROS* para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero *URDF* que define el modelo del robot y los paquetes de *ROS* que en el esquema está representado por el paquete de `MoveIt!` que su función principal es la de planificador.
+![image](/doc/imgs_md/Diseno-moveit-general-un-cobot-leap-motion.png  "Diseño e integración de Leap Motion")
 
-![image](/doc/imgs_md/Diseno-General-focus.png  "Herramientas y Drivers de ROS en el diseño")
+Se va a explicar cómo integrar *Leap Motion* al sistema desarrollado hasta el momento, con el objetivo de controlar hasta dos robots simultáneamente para las diferentes soluciones propuestas en este repositorio. En la imagen del esquema del diseño, esta sección representan las etapas 4 y 5.
 
-Es decir, las variaciones posibles:
+## Requisito previo
+- Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
+- [Implementación de una de las soluciones propuestas](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)  (corresponden a las fases 1, 2 y 3 del esquema).
 
-- *Fichero URDF*: describe el modelo del robot, en este modelo se puede integrar varios robots, objetos o lo que se quiera modelar.
-- *Paquetes de ROS*: pueden ser propios o instalados de terceros sobre el que se realizarán modificaciones para adaptarlos a la solución a desarrollar.
+## Índice
+- [Fase 4: Diseño de la interfaz de *Leap Motion*](#fase4)
+	- [Funcionamiento General](#lm1)
+	- [Sistemas de coordenadas](#lm2)
+	- [Workspace de *Leap Motion*](#lm3)
+	- [Formas de control](#lm4)
+	- [Identificación de Gestos](#lm5)
+	- [Calibración de la velocidad de movimiento](#lm6)
+	- [Creación de los msgs que transmitirán la información](#lm7)
+	- [Obtención y publicación de datos por el topic](#lm8)
+- [Fase 5: Integración de *Leap Motion* en el sistema](#fase5)
 
-Las soluciones que se proponen giran en torno a las modificaciones y combinaciones entre el modelado del robot (`URDF`) y los `paquetes de ROS` que se utilicen, por organización las soluciones propuestas se van a dividir en las soluciones que utilicen el paquete  `MoveIt!` y las que no. Hay que tener en cuenta que el entorno de trabajo es complejo y hay muchos elementos que interaccionan o tienen dependencias entre sı́, por lo que durante el desarrollo de los diseños propuestos pueden surgir problemas que no tienen solución o que el coste de corregirlos es muy alto.
+<a name="fase4">
+  <h2>
+Fase 4: Diseño de la interfaz de <i>Leap Motion</i>
+  </h2>
+</a>
+
+<a name="lm1">
+  <h3>
+Funcionamiento General
+  </h3>
+</a>
+
+![image](/doc/imgs_md/Diseno-leap-motion.png  "Esquema de funcionalmiento de Leap Motion")
+
+Utilizando las librerı́as de *Leap Motion* se identifican los gestos y se obtiene los datos necesarios para el control de la pinza, los movimientos del cobot y las orientaciones del *end-effector*. En la imagen muestra un esquema del funcionamiento general, se creará el fichero `leap_interface.py`, utilizando la librerı́a `Leap` de *Leap Motion* que estará a la escucha de eventos (`frames` de *Leap Motion*) y en cada evento obtendrá de ellos los datos que se necesitan y los almacenará en un `objeto` que luego es accedido por el nodo `sender` mediante la interfaz creada para acceder a ese objeto.
+
+
+El nodo `sender` es el que obtiene la información, los almacena adecuadamente en un mensaje y los publica por el *topic* `leapmotion/data1`, a este *topic* estará suscrito el nodo `UR10_lm_arm_1`, que con la información obtenida del *topic*, envı́a las órdenes al cobot. Finalmente, el nodo `UR10_lm_arm_1` es básicamente el *script* que realiza el *pick & place*, pero la introducción de datos se obtiene del topic `leapmotion/data_1` en vez de ser introducidos manualmente.
+
+En el esquema de la imagen, se ve que hay dos *topic*s que sale del nodo `sender`, esto es debido a que se ha tenido en cuenta durante el diseño que *Leap Motion* puede identificar hasta dos manos, por esta razón se han separado los datos de la mano derecha (`right.msg`) y de la izquierda (`left.msg`) en el esquema porque la información es enviada a través de diferentes *topic*s, no se ha metido toda la información en un único mensaje porque esto permite jugar con el ratio de las publicaciones, da más claridad y es más sencilla la depuración.
+
+<a name="lm2">
+  <h3>
+Sistemas de coordenadas
+  </h3>
+</a>
+
+![image](/doc/imgs_md/distintintos-sistemas-referencia.png  "Distintos sistemas de coordenadas de referencia")
+
+Hay que tener en cuenta durante el diseño que las coordenadas de referencia de *ROS* y las que utiliza *Leap Motion* son distintas (como se muestra en la imagen), por ello durante la implementación hay que adaptaras adecuadamente.
+
+<a name="lm3">
+  <h3>
+Workspace de <i>Leap Motion</i>
+  </h3>
+</a>
+
+También hay que tener en cuenta que la zona de trabajo de *Leap Motion* bastante pequeña en comparación con la del cobot UR10, por ello según que tareas se quiera realizar hay que tenerlo en cuenta, pero realizar un simple *pick & place* como es en este caso, no hay problema.
+
+<a name="lm4">
+  <h3>
+Formas de control
+  </h3>
+</a>
+
+Los datos que se obtienen del *Leap Motion*, permiten implementar de manera sencilla dos formas de control:
+
+- **Joystick:** Este tipo de control tiene una zona muerta (*death zone*), que toma un origen como referencia y en esa zona muerta no se realizará ningún movimiento, en el momento en que se sale de esa zona muerta, se va incrementando/decrementando el valor en esa coordenada dependiendo de la distancia a la que esté del origen de referencia. Esto debe ser calibrado para no realizar movimientos bruscos.
+- **Imitación:** Esta es la solución que se ha escogido porque es más intuitivo a la hora de realizar movimientos, consiste en tener el origen de referencia de *Leap Motion* y el origen de referencia del *end-effector* del cobot mapeado, es decir, que las coordenadas que se tomen de referencia para Leap Motion estará relacionada con la posición inicial del robot UR10. Esto permite al cobot imitar los
+movimientos de la mano, igualmente hay que calibrarlo adecuadamente para evitar movimientos bruscos.
+
+<a name="lm5">
+  <h3>
+Identificación de Gestos
+  </h3>
+</a>
+Durante la identificación de los gestos hay que tener en cuenta que si los gestos que se utilizan son muy similares, *Leap Motion* puede realizar falsos positivos durante la identificación de los gestos ası́ como partes ocultas de la mano al moverse puede hacerle pensar que ha reconocido un gesto que no se ha realizado.
+
+Se ha implementado cuatro tipos de gestos que son los que se muestran en la imagen, el *puño* indica que hay parar de enviar instrucciones, el *gesto de la pinza* es para controlar la pinza del cobot, el *gesto thumb up* indica que está preparado y el *gesto de rock* indica que toma la posición actual de la mano como origen de referencias. Se ha preparado para la implementación para el control de la orientación del *end-effector*, pero dado que da problemas de identificación con algunos de los gestos se decidió que es mejor tener una orientación fija.
+
+![image](/doc/imgs_md/gestos-leap-motion.png  "Definición de gestos para Leap Motion")
+
+
+En el fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py) es donde se define los gestos, se va a analizar la parte del código que identifica un gesto como ejemplo. El trozo de código fuente que se muestra a continuación trata de comprobar cada vez que *Leap Motion* envı́a un `frame` si se ha realizado el gesto thumb up, por ello cada vez que se recibe un `frame`, comprueba si es de la mano derecha o izquierda, después se comprueba lo cerrada que esté la mano comprobando si el valor del atributo `grab strength`, en caso de ser mayor que lo definido identifica que la mano está cerrada. Sabiendo que la mano está cerrada se quiere saber si el pulgar está extendido o no y eso lo obtiene comprobando si el atributo `thumb_finger.extended()` es igual a `1` y esta es la manera de identificar gestos con *Leap Motion*.
+
+```python
+def on_frame(self, controller):
+        frame = controller.frame()
+
+        for hand in frame.hands:
+            handType = "Left hand" if hand.is_left else "Right hand"
+
+            if handType == "Right hand":
+                if hand.grab_strength > self.GRAB_STRENGTH_THRESHOLD:
+                    thumb_finger = hand.fingers.finger_type(0)
+                    for _ in thumb_finger:
+                        if len(thumb_finger.extended()) == 0:
+                            self.right_hand_fist = True
+                            self.right_hand_thumb_up = False
+                        elif len(thumb_finger.extended()) == 1:
+                            self.right_hand_thumb_up = True
+                            self.right_hand_fist = False
+            else:
+                if hand.grab_strength > self.GRAB_STRENGTH_THRESHOLD:
+                    thumb_finger = hand.fingers.finger_type(0)
+                    for _ in thumb_finger:
+                        if len(thumb_finger.extended()) == 0:
+                            self.left_hand_fist = True
+                            self.left_hand_thumb_up = False
+                        elif len(thumb_finger.extended()) == 1:
+                            self.left_hand_fist = False
+                            self.left_hand_thumb_up = True
+```
+
+<a name="lm6">
+  <h3>
+Calibración de la velocidad de movimiento
+  </h3>
+</a>
+
+<a name="lm7">
+  <h3>
+Creación de los msgs que transmitirán la información
+  </h3>
+</a>
+
+<a name="lm8">
+  <h3>
+Obtención y publicación de datos por el topic
+  </h3>
+</a>
+
+<a name="fase5">
+  <h2>
+Fase 5: Integración de <i>Leap Motion</i> en el sistema
+  </h2>
+</a>
+
+### Incorporación del dispositivo Leap Motion al sistema `sin` el paquete de `MoveIt!`
+- [Un UR10 con pinza mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit_lm.md)
+- [Dos UR10s con pinzas mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit_lm.md)
 
 
 ### Incorporación del dispositivo Leap Motion al sistema `con` el paquete de `MoveIt!`
 - [Un UR10 con pinza mediante el paquete `MoveIt!` y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit_lm.md)
 - [Dos UR10s con pinzas mediante el paquete `MoveIt!` y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit_lm.md)
 
-### Incorporación del dispositivo Leap Motion al sistema `sin` el paquete de `MoveIt!`
-- [Un UR10 con pinza mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit_lm.md)
-- [Dos UR10s con pinzas mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit_lm.md)
 
 ---
 
