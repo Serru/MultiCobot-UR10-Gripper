@@ -70,6 +70,7 @@ Formas de control
 Los datos que se obtienen del *Leap Motion*, permiten implementar de manera sencilla dos formas de control:
 
 - **Joystick:** Este tipo de control tiene una zona muerta (*death zone*), que toma un origen como referencia y en esa zona muerta no se realizará ningún movimiento, en el momento en que se sale de esa zona muerta, se va incrementando/decrementando el valor en esa coordenada dependiendo de la distancia a la que esté del origen de referencia. Esto debe ser calibrado para no realizar movimientos bruscos.
+
 - **Imitación:** Esta es la solución que se ha escogido porque es más intuitivo a la hora de realizar movimientos, consiste en tener el origen de referencia de *Leap Motion* y el origen de referencia del *end-effector* del cobot mapeado, es decir, que las coordenadas que se tomen de referencia para Leap Motion estará relacionada con la posición inicial del robot UR10. Esto permite al cobot imitar los
 movimientos de la mano, igualmente hay que calibrarlo adecuadamente para evitar movimientos bruscos.
 
@@ -78,8 +79,8 @@ movimientos de la mano, igualmente hay que calibrarlo adecuadamente para evitar 
 Identificación de Gestos
   </h3>
 </a>
-Durante la identificación de los gestos hay que tener en cuenta que si los gestos que se utilizan son muy similares, *Leap Motion* puede realizar falsos positivos durante la identificación de los gestos ası́ como partes ocultas de la mano al moverse puede hacerle pensar que ha reconocido un gesto que no se ha realizado.
 
+Durante la identificación de los gestos hay que tener en cuenta que si los gestos que se utilizan son muy similares, *Leap Motion* puede realizar falsos positivos durante la identificación de los gestos ası́ como partes ocultas de la mano al moverse puede hacerle pensar que ha reconocido un gesto que no se ha realizado.
 
 Se ha implementado cuatro tipos de gestos que son los que se muestran en la imagen, el *puño* indica que hay parar de enviar instrucciones, el *gesto de la pinza* es para controlar la pinza del cobot, el *gesto thumb up* indica que está preparado y el *gesto de rock* indica que toma la posición actual de la mano como origen de referencias. Se ha preparado para la implementación para el control de la orientación del *end-effector*, pero dado que da problemas de identificación con algunos de los gestos se decidió que es mejor tener una orientación fija.
 
