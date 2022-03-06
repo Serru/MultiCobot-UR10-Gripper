@@ -71,7 +71,7 @@ Los datos que se obtienen del *Leap Motion*, permiten implementar de manera senc
 
 - **Joystick:** Este tipo de control tiene una zona muerta (*death zone*), que toma un origen como referencia y en esa zona muerta no se realizará ningún movimiento, en el momento en que se sale de esa zona muerta, se va incrementando/decrementando el valor en esa coordenada dependiendo de la distancia a la que esté del origen de referencia. Esto debe ser calibrado para no realizar movimientos bruscos.
 
-- **Imitación:** Esta es la solución que se ha escogido porque es más intuitivo a la hora de realizar movimientos, consiste en tener el origen de referencia de *Leap Motion* y el origen de referencia del *end-effector* del cobot mapeado, es decir, que las coordenadas que se tomen de referencia para Leap Motion estará relacionada con la posición inicial del robot UR10. Esto permite al cobot imitar los
+- **Imitación:** Esta es la solución que se ha escogido porque es más intuitivo a la hora de realizar movimientos, consiste en tener el origen de referencia de *Leap Motion* y el origen de referencia del *end-effector* del cobot mapeado, es decir, que las coordenadas que se tomen de referencia para *Leap Motion* estará relacionada con la posición inicial del robot UR10. Esto permite al cobot imitar los
 movimientos de la mano, igualmente hay que calibrarlo adecuadamente para evitar movimientos bruscos.
 
 <a name="lm5">
@@ -124,11 +124,32 @@ Calibración de la velocidad de movimiento
   </h3>
 </a>
 
+Para evitar movimientos bruscos, se ha utilizado la velocidad del *end-effector* como limitante, para ello se ha cogido como velocidad máxima *0.05 rad/s* y la distancia se basa en el mayor error entre los valores de los joints actuales y de los joints de la posición futura, realizando una división se obtiene el tiempo que debe durar ese movimiento.
+
 <a name="lm7">
   <h3>
 Creación de los msgs que transmitirán la información
   </h3>
 </a>
+
+Se han creado dos tipos de mensajes para su implementación, una para identificar los movimientos y gestos de la mano derecha y la otra para la mano izquierda que también se utilizarán para definir el tipo de dato que se transmitirá por ese *topic*. Estos ficheros con extensión `msg` tienen que ser compilados dentro de un directorio llamado *msg* para ser integrados en el sistema *ROS* o no lo encontrará. Concretamente, el contenido del siguiente código fuente es para la mano derecha, para la mano izquierda serı́a igual pero sustituyendo `right` por `left`. 
+
+```bash
+Header header
+
+# Right hand information
+bool is_right_hand                      # Right hand detected
+geometry_msgs/Point right_hand_palmpos  # Palm's position
+bool right_hand_fist                    # Fist gesture recognize
+bool right_hand_thumb_up                # Thumb up gesture recognize
+bool right_hand_pinch                   # Pinch gesture recognize
+float32 right_hand_pinch_value			# Pinch gesture value
+bool right_hand_origin_frame            # Reference frame set
+bool right_hand_set_origin_frame_detected # Detect gesture
+float32 right_hand_rotate_value         # Values between [-1..0..1] rads
+float32 right_hand_turn_value           # Values between [-1..0..1] rads
+float32 right_hand_swing_value          # Values between [-1..0..1] rads
+```
 
 <a name="lm8">
   <h3>
@@ -136,11 +157,43 @@ Obtención y publicación de datos por el topic
   </h3>
 </a>
 
+Para la obtención de los datos de *Leap Motion*, se utiliza la interfaz (por ejemplo `li.get_is_right_hand()`) definida en el fichero `leap_interface.py` que permite acceder al *objeto* que almacena los datos que interesan como se muestra a continuación en el código fuente y una vez que el mensaje esté formado, se envı́a por el *topic* `leapmotion/data` con el tipo de mensaje `leapcobotright`.
+
+```python
+pub_ros_right   = rospy.Publisher('leapmotion/data', leapcobotright, queue_size=1)
+
+while not rospy.is_shutdown():
+        right_hand_palm_pos_    = li.get_right_hand_palmpos()   # Palm's position
+
+        # Right hand information
+        msg_right = leapcobotright()
+        msg_right.is_right_hand = li.get_is_right_hand()                     # Right hand detected
+        msg_right.right_hand_palmpos.x = right_hand_palm_pos_[0]
+        msg_right.right_hand_palmpos.y = right_hand_palm_pos_[1]
+        msg_right.right_hand_palmpos.z = right_hand_palm_pos_[2]
+
+        msg_right.right_hand_fist = li.get_right_hand_fist()                 # Fist gesture recognize
+        msg_right.right_hand_thumb_up = li.get_right_hand_thumb_up()         # Thumb up gesture recognize
+[...]
+        pub_ros_right.publish(msg_right)
+        rospy.sleep(rospy.get_param(PARAMNAME_FREQ_ENTIRE, FREQUENCY_ROSTOPIC_DEFAULT))
+
+```
+
 <a name="fase5">
   <h2>
 Fase 5: Integración de <i>Leap Motion</i> en el sistema
   </h2>
 </a>
+
+Para la integración de *Leap Motion* en el sistema de *ROS* y formar parte de la solución diseñada es muy sencillo, simplemente en el *script* que controle los movimientos del cobot este debe estar suscrito al *topic* `leapmotion/data` (en el caso para dos cobots, uno de los scripts se suscribirá al *topic* que envı́e información de la mano derecha y otro al que envı́e información de la mano izquierda) y utilice esa de entrada de datos adecuadamente para gestionar los movimientos del cobot.
+
+
+En la imagen se muestra la arquitectura del sistema mediante nodos y *topic*s, se puede apreciar la incorporación del *Leap Motion* en el sistema. En la parte inferior de la imagen, se aprecia el nodo *sender* (`one_arm_no_moveit_lm_pub`), el *topic* que publica los datos que se obtiene del dispositivo de *Leap Motion* (`/leapmotion/data`) y el *script* que procesa la información para enviar órdenes al robot es el nodo `ur10_dual_moveit`.
+
+![image](/doc/imgs_md/one-arm-moveit-rqt-graph-gazebo-moveit-fase-4-detalle.png  "Integración de Leap Motion en el sistema")
+
+
 
 ### Incorporación del dispositivo Leap Motion al sistema `sin` el paquete de `MoveIt!`
 - [Un UR10 con pinza mediante un planificador propio y Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit_lm.md)
