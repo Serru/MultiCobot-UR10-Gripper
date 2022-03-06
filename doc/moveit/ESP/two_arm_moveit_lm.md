@@ -466,11 +466,12 @@ Terminal 6 (en caso de fallo en leap motion):
 ```{bash}
 sudo service leapd restart
 ```
+---
 
 <div>
   <p align="left">
     <button name="button">
-                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md">Anterior</a>
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md">Anterior</a>
     </button>
   </p>
 </div>
