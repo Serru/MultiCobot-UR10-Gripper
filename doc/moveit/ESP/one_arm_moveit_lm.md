@@ -38,8 +38,7 @@ touch leap_interface.py
 
 - Contenido del fichero [sender.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/sender.py).
 
-- Contenido del fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_
-moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py).
+- Contenido del fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py).
 
 ### :computer: Se ha modificado del repositiorio original
 
