@@ -3,857 +3,109 @@
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/two_arm_no_moveit_lm.md)
 
-Esta sección la continuación del apartado anterior, pero en vez de tener un script que envié las trayectorias deseadas, será mediante Leap Motion el cual es controlado por una persona.
 
-Para ello se va a modificar parte del repositorio de Leap Motion directamente y adaptarlo para que controle adecuadamente el robot simulado.
+![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
-La idea es identica a lo presentado anteriormente, pero tiene como entrada de datos la información que Leap Motion provee.
+Esta sección la continuación de las etapas 1, 2 y 3, en donde se realiza la integración de *Leap Motion* en el sistema, es decir las fases 4 y 5. En las fases anteriores se controlaba los robots enviando las trayectorias previamente definidias para realizar el *pick & place*, pero ahora será mediante Leap Motion el cual es controlado por una persona el que envie los comandos a los dos robots.
 
-Hay que tratar esta informaócin adecuadamente con la API que provee y adecuarlo para su uso.
+Para ello se va a modificar parte del repositorio de *Leap Motion* directamente y adaptarlo para que controle adecuadamente los robots simulados. La idea es identica a lo presentado anteriormente, pero tiene como entrada de datos la información que *Leap Motion* provee. Hay que tratar esta informaócin adecuadamente con la API que provee y adecuarlo para su uso.
 
-### Leap Motion GUI
-Se proveerá de un GUI para el usuario en el futuro si se decide que esta es la versión que se elegirá para realizar las pruebas en el robot real.
 
-### Implementación del manipulador con Leap Motion
-Para realizar la implementaócin hay que tener varias cosas en cuenta:
-* Las referencias que de la posición del robot que se obtiene de script *ur10_robot_pose.py*
-* El entorno de trabajo del robot
-* El entorno de trabajo de Leap Motion
+## :book: Implementación del manipulador con Leap Motion
 
-Como se desea que el robot siga los movimientos que realiza Leap Motion, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
+Para realizar la implementación hay que tener varias cosas en cuenta:
 
-Hay otra posibilidad y es tratar leap motion como si fuese un Joystick, que se implementará si hay tiempo en el futuro.
+- Las referencias de la posición del robot que se obtiene de script *ur10_robot_pose.py*
+- El entorno de trabajo del *robot*
+- El entorno de trabajo de *Leap Motion*
 
-#### Creación del paquete
-```{bash}
+Como se desea que el robot siga los movimientos que realiza *Leap Motion*, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
+
+### :computer: Creación del paquete
+
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit
 catkin_create_pkg two_arm_no_moveit_leap_motion rospy
 cd two_arm_no_moveit_leap_motion
 mkdir scripts
 cd scripts
-cp ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/kinematics_utils.py .
-cp ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/leap_interface.py .
-cp ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/lm_robot_manipulator.py .
-cp ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/sender.py .
+cp ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/scripts/kinematics_utils.py .
+touch ur10_1_lm_robot_manipulator.py
+touch ur10_2_lm_robot_manipulator.py
+touch sender.py
+touch leap_interface.py
 ```
 
-Cotenido del fichero *ur10_1_lm_robot_manipulator.py*
-```{C}
-#!/usr/bin/env python
+- Contenido del fichero [ur10_1_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/ur10_1_lm_robot_manipulator.py).
 
-import sys
-import copy
-import rospy
+- Contenido del fichero [ur10_2_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/ur10_2_lm_robot_manipulator.py).
 
-from std_msgs.msg import Header
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-import geometry_msgs.msg
+- Contenido del fichero [sender.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/sender.py).
 
-import tf.transformations as tf
-from geometry_msgs.msg import Pose, Quaternion
-from kinematics_utils import *
+### :computer: Se ha modificado del repositiorio original
 
-from leap_motion.msg import leapcobotright
+Se han creado los ficheros: *leapcobotright.msg* y *leapcobotleft.msg* en el directorio *msg* del repositorio [Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/leap_motion):
 
-class CmdTrajectory():
-    def __init__(self):
-        self.send_trajectory_pub = rospy.Publisher('/ur10_1_pub_ik_trajectory', JointTrajectory, queue_size=10)
-        self.send_gripper_cmd_pub = rospy.Publisher('/ur10_1_pub_gripper_control', JointTrajectory, queue_size=10)
-        self.current_robot_pose = Pose()
-        self.robot_pose_sub = rospy.Subscriber('/ur10_1_robot_pose', Pose, self.update_current_pose)
-        self.robot_pose_updated = False
-        
-        ## LEAP MOTION CONFIG
-        self.leap_motion_right_hand_sub = rospy.Subscriber('/leapmotion/data_right', leapcobotright, self.send_leap_motion_trajectory, queue_size=10)
+Cotenido del fichero [leapcobotright.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg).
 
-        self.set_leap_motion_reference_position = False
-        self.leap_motion_reference_position = geometry_msgs.msg.Pose().position
-        self.robot_reference = geometry_msgs.msg.Pose()
-        self.start_leap_motion_control = False
+Cotenido del fichero [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg).
 
-    def send_leap_motion_trajectory(self, frame):
-        # Gestos:
-        # Punyo: Para de enviar nuevas instrucciones
-        # Ok: Comienza a enviar instrucciones
-        # Pinza: Cierra o abre el gripper
-        # Movimiento de munyeca: Rota el Gripper [para la simulacion no se activan]
-        # Gesto de ROCK: Configura el frame de referencia de Leap Motion
-        # Antes de comenzar, es bueno situar el robot en una posicion en donde trabajara
+Y el fichero [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt) añadiendo los ficheros de mensajes recién creados para su compilación:
+```bash
+[...]
+## Generate messages in the 'msg' folder
 
+add_message_files(
+  FILES
+  Arm.msg
+  Bone.msg
+  Finger.msg
+  Gesture.msg
+  Hand.msg
+  Human.msg
 
-        # Obtiene la posicion de la palma de la mano
-        palm_pos = frame.right_hand_palmpos
+  # For backwards compatibility with the old driver files
+  leap.msg
+  leapros.msg
+  leapcobotright.msg
+  leapcobotleft.msg
+)
+[...]
 
-        if frame.right_hand_fist:
-            self.start_leap_motion_control = False
+## :computer: Pruebas en el simulador Gazebo
+Para realizar las pruebas, se necesitarán al menos 4 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero para visualizar mejor la información que se envía y para su depuración se ha dejado así.
 
-        if frame.right_hand_thumb_up:
-            self.start_leap_motion_control = True
-
-        if self.start_leap_motion_control:
-            # Configura la posicion de referencia en Leap Motion,
-            # cada vez que reconozca el gesto de ROCK&ROLL
-            if frame.right_hand_set_origin_frame_detected:
-                self.set_leap_motion_reference_position = True
-                self.leap_motion_reference_position.x = palm_pos.x
-                self.leap_motion_reference_position.y = palm_pos.y
-                self.leap_motion_reference_position.z = palm_pos.z
-
-            # Solamente si la referencia de lm esta configurada
-            if self.set_leap_motion_reference_position:
-    
-                if frame.right_hand_pinch:
-                    #self.send_gripper_cmd(frame.right_hand_pinch_value)
-                    self.send_gripper_cmd(0.43)
-                else:
-                    self.send_gripper_cmd(0.0)
-    
-                ## Se obvia las rotaciones de momento
-                #r = frame.right_hand_rotate_value
-                #p = frame.right_hand_turn_value
-                #y = frame.right_hand_swing_value
-                #rpy = tf.quaternion_from_euler(r, p, y)
-            
-                #print str(self.robot_reference.position.x)
-                #print str(palm_pos.x*0.001)
-                desired_pos = self.get_transformed_position(palm_pos)
-                print("desired_pos (xyz): "+ str(desired_pos.x) + ", " + str(desired_pos.y) + ", " + str(desired_pos.z))
-                pos_x = self.robot_reference.position.x + desired_pos.x * 0.001
-                pos_y = self.robot_reference.position.y + desired_pos.z * 0.001
-                pos_z = self.robot_reference.position.z + desired_pos.y * 0.001
-                print("desired_pos (xyz) * 0.001: "+ str(desired_pos.x*0.001) + ", " + str(desired_pos.y*0.001) + ", " + str(desired_pos.z*0.001))
-                print("robot_reference (xyz): "+ str(self.robot_reference.position.x) + ", " + str(self.robot_reference.position.y) + ", " + str(self.robot_reference.position.z))            
-                print pos_x
-                print pos_y
-                print pos_z
-                
-                #self.send_trajectory(palm_pos.x, palm_pos.y, palm_pos.z, rpy[0], rpy[1], rpy[2], rpy[3])
-                self.send_trajectory(round(pos_x, 3), round(pos_y, 3), round(pos_z, 3), -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-
-    def get_transformed_position(self, palm_pos):
-        
-        desired_pos = geometry_msgs.msg.Pose().position
-        pos_x = abs(self.leap_motion_reference_position.x - palm_pos.x)
-        pos_y = abs(self.leap_motion_reference_position.y - palm_pos.y)
-        pos_z = abs(self.leap_motion_reference_position.z - palm_pos.z)
-
-        if palm_pos.x > self.leap_motion_reference_position.x:
-            desired_pos.x = -pos_x
-        if palm_pos.x < self.leap_motion_reference_position.x:
-            desired_pos.x = pos_x
-        if palm_pos.x == self.leap_motion_reference_position.x:
-            desired_pos.x = 0
-
-        if palm_pos.y > self.leap_motion_reference_position.y:
-            desired_pos.y = pos_y
-        if palm_pos.y < self.leap_motion_reference_position.y:
-            desired_pos.y = -pos_y
-        if palm_pos.y == self.leap_motion_reference_position.y:
-            desired_pos.y = 0
-
-        if palm_pos.z > self.leap_motion_reference_position.z:
-            desired_pos.z = pos_z
-        if palm_pos.z < self.leap_motion_reference_position.z:
-            desired_pos.z = -pos_z
-        if palm_pos.z == self.leap_motion_reference_position.z:
-            desired_pos.z = 0
-
-        return desired_pos
-    def send_gripper_cmd(self, gripper_distance):
-        gripper = JointTrajectory()
-        gripper.header.stamp=rospy.Time.now()
-        gripper.header.frame_id = "/ur10_1_ee_link"    
-        gripper.joint_names = ['ur10_1_robotiq_85_left_knuckle_joint']
-        
-        points = JointTrajectoryPoint()
-        points.positions = [gripper_distance]
-        points.time_from_start = rospy.Duration.from_sec(0.4)
-        gripper.points.append(points)
-        self.send_gripper_cmd_pub.publish(gripper)
-        print('\033[93m[' + str(gripper_distance) + ']\033[0m')
-
-    def pick_place(self):
-        # Obtener el primer cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-    
-        # Primer cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-    
-        # Obtener el segundo cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.9, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(4)
-        self.send_trajectory(0.9, 0.632, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.9, 0.5, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.9, 0.5, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-    
-        # Segundo cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-    
-        # Obtener el tercer cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.675, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(4)
-        self.send_trajectory(0.675, 0.632, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.675, 0.88, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.675, 0.88, 0.1, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.675, 0.88, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-    
-        # Tercer cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-
-        # Posicion inicial del brazo
-        cmd.send_gripper_cmd(0.0)
-        cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(7)
-
-    def set_robot_reference(self):
-        ## Puede que se anyada las orientaciones... primero posiciones
-        self.robot_reference.position.x = self.current_robot_pose.position.x
-        self.robot_reference.position.y = self.current_robot_pose.position.y
-        self.robot_reference.position.z = self.current_robot_pose.position.z
-
-
-    def update_current_pose(self, pose):
-        self.current_robot_pose.position.x = (-1 * pose.position.x)
-        self.current_robot_pose.position.y = (-1 * pose.position.y)
-        self.current_robot_pose.position.z = pose.position.z
-        self.current_robot_pose.orientation.x = pose.orientation.x
-        self.current_robot_pose.orientation.y = pose.orientation.y
-        self.current_robot_pose.orientation.z = pose.orientation.z
-        self.current_robot_pose.orientation.w = pose.orientation.w
-        self.robot_pose_updated = True
-
-    # Set init pose with articular values
-    def set_init_pose(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/ur10_1_base_link"    
-        position.joint_names = ['ur10_1_shoulder_pan_joint','ur10_1_shoulder_lift_joint','ur10_1_elbow_joint',
-                          'ur10_1_wrist_1_joint','ur10_1_wrist_2_joint','ur10_1_wrist_3_joint']
-        
-        rcs = [pos_x, pos_y, pos_z, rot_x, rot_y, rot_z]
-        
-        points = JointTrajectoryPoint()
-        points.positions = rcs
-        points.time_from_start = rospy.Duration.from_sec(5)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-
-    def send_trajectory(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, rot_w):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/ur10_1_base_link"    
-        position.joint_names = ['ur10_1_shoulder_pan_joint','ur10_1_shoulder_lift_joint','ur10_1_elbow_joint',
-                          'ur10_1_wrist_1_joint','ur10_1_wrist_2_joint','ur10_1_wrist_3_joint']
-        
-        rate = rospy.Rate(10)
-        while not self.robot_pose_updated:
-            rate.sleep()
-
-        #print self.current_robot_pose
-
-        (roll, pitch, yaw) = tf.euler_from_quaternion([
-                                            self.current_robot_pose.orientation.x,
-                                            self.current_robot_pose.orientation.y,
-                                            self.current_robot_pose.orientation.z,
-                                            self.current_robot_pose.orientation.w])
-
-        rcs = [ self.current_robot_pose.position.x,
-                self.current_robot_pose.position.y,
-                self.current_robot_pose.position.z,
-                roll, pitch, yaw]
-
-        #print rcs
-        #array_pos = fwd_kin(self.current_robot_pose, 'r', 'n')
-        #print(cartesian_pos)
-
-        ps = Pose()
-        ps.position.x = pos_x
-        ps.position.y = pos_y
-        ps.position.z = pos_z
-        ps.orientation.x = rot_x
-        ps.orientation.y = rot_y
-        ps.orientation.z = rot_z
-        ps.orientation.w = rot_w
-    
-        #state = []
-    
-        #sol = inv_kin(ps, array_pos)
-        #print(sol)
-
-        
-        points = JointTrajectoryPoint()
-        try:
-            points.positions = inv_kin(ps, rcs)
-        except Exception:
-            print('\033[91m[ Singularidad, valores:' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-        duration = max([abs(points.positions[0])-abs(rcs[0]), abs(points.positions[1])-abs(rcs[1]), abs(points.positions[2])-abs(rcs[2])])
-        print duration
-
-        points.time_from_start = rospy.Duration.from_sec(duration*0.1)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-        #state = sol
-        #rospy.sleep(0.1)
-        self.robot_pose_updated = False
-        print points.positions
-        print('\033[93m[' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-if __name__ == '__main__':
-    rospy.init_node('ur10_1_robot_manipulator_lm', anonymous=True)
-    cmd = CmdTrajectory()
-    rpy = tf.quaternion_from_euler(-3.12, 0.0, 1.62)
-    print rpy
-    #[-0.68945825 -0.72424496  0.00781949  0.00744391]
-    #cmd.send_trajectory(-0.6, -0.16, 0.62, rpy[0], rpy[1], rpy[2], rpy[3])
-    
-    # Posicion inicial del brazo
-    cmd.set_init_pose(2.176, -1.518, -1.671, -1.511, 1.589, -1.014)
-    cmd.send_gripper_cmd(0.0)
-    cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(4)
-    cmd.send_trajectory(0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(4)
-    cmd.send_trajectory(0.24, 0.8, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(4)
-
-
-    cmd.set_robot_reference()
-
-    # Ejemplo de movmiento no deseado
-    #cmd.send_trajectory(-0.30, 0.300, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    #rospy.sleep(4)
-    #cmd.send_trajectory(-0.40, 0.0, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    #rospy.sleep(4)
-    #cmd.send_trajectory(-0.80, -0.3, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    #rospy.sleep(4)
-    
-    #cmd.pick_place()
-    while not rospy.is_shutdown():
-        rospy.sleep(0.1)
-```
-
-Cotenido del fichero *ur10_1_lm_robot_manipulator.py*
-```{C}
-#!/usr/bin/env python
-
-import sys
-import copy
-import rospy
-
-from std_msgs.msg import Header
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-import geometry_msgs.msg
-
-import tf.transformations as tf
-from geometry_msgs.msg import Pose, Quaternion
-from kinematics_utils import *
-
-from leap_motion.msg import leapcobotleft
-
-class CmdTrajectory():
-    def __init__(self):
-        self.send_trajectory_pub = rospy.Publisher('/ur10_2_pub_ik_trajectory', JointTrajectory, queue_size=10)
-        self.send_gripper_cmd_pub = rospy.Publisher('/ur10_2_pub_gripper_control', JointTrajectory, queue_size=10)
-        self.current_robot_pose = Pose()
-        self.robot_pose_sub = rospy.Subscriber('/ur10_2_robot_pose', Pose, self.update_current_pose)
-        self.robot_pose_updated = False
-        
-        ## LEAP MOTION CONFIG
-        self.leap_motion_left_hand_sub = rospy.Subscriber('/leapmotion/data_left', leapcobotleft, self.send_leap_motion_trajectory, queue_size=10)
-
-        self.set_leap_motion_reference_position = False
-        self.leap_motion_reference_position = geometry_msgs.msg.Pose().position
-        self.robot_reference = geometry_msgs.msg.Pose()
-        self.start_leap_motion_control = False
-
-    def send_leap_motion_trajectory(self, frame):
-        # Gestos:
-        # Punyo: Para de enviar nuevas instrucciones
-        # Ok: Comienza a enviar instrucciones
-        # Pinza: Cierra o abre el gripper
-        # Movimiento de munyeca: Rota el Gripper [para la simulacion no se activan]
-        # Gesto de ROCK: Configura el frame de referencia de Leap Motion
-        # Antes de comenzar, es bueno situar el robot en una posicion en donde trabajara
-
-
-        # Obtiene la posicion de la palma de la mano
-        palm_pos = frame.left_hand_palmpos
-
-        if frame.left_hand_fist:
-            self.start_leap_motion_control = False
-
-        if frame.left_hand_thumb_up:
-            self.start_leap_motion_control = True
-
-        if self.start_leap_motion_control:
-            # Configura la posicion de referencia en Leap Motion,
-            # cada vez que reconozca el gesto de ROCK&ROLL
-            if frame.left_hand_set_origin_frame_detected:
-                self.set_leap_motion_reference_position = True
-                self.leap_motion_reference_position.x = palm_pos.x
-                self.leap_motion_reference_position.y = palm_pos.y
-                self.leap_motion_reference_position.z = palm_pos.z
-
-            # Solamente si la referencia de lm esta configurada
-            if self.set_leap_motion_reference_position:
-    
-                if frame.left_hand_pinch:
-                    #self.send_gripper_cmd(frame.left_hand_pinch_value)
-                    self.send_gripper_cmd(0.43)
-                else:
-                    self.send_gripper_cmd(0.0)
-    
-                ## Se obvia las rotaciones de momento
-                #r = frame.left_hand_rotate_value
-                #p = frame.left_hand_turn_value
-                #y = frame.left_hand_swing_value
-                #rpy = tf.quaternion_from_euler(r, p, y)
-            
-                #print str(self.robot_reference.position.x)
-                #print str(palm_pos.x*0.001)
-                desired_pos = self.get_transformed_position(palm_pos)
-                print("desired_pos (xyz): "+ str(desired_pos.x) + ", " + str(desired_pos.y) + ", " + str(desired_pos.z))
-                pos_x = self.robot_reference.position.x + desired_pos.x * 0.001
-                pos_y = self.robot_reference.position.y + desired_pos.z * 0.001
-                pos_z = self.robot_reference.position.z + desired_pos.y * 0.001
-                print("desired_pos (xyz) * 0.001: "+ str(desired_pos.x*0.001) + ", " + str(desired_pos.y*0.001) + ", " + str(desired_pos.z*0.001))
-                print("robot_reference (xyz): "+ str(self.robot_reference.position.x) + ", " + str(self.robot_reference.position.y) + ", " + str(self.robot_reference.position.z))            
-                print pos_x
-                print pos_y
-                print pos_z
-                
-                #self.send_trajectory(palm_pos.x, palm_pos.y, palm_pos.z, rpy[0], rpy[1], rpy[2], rpy[3])
-                self.send_trajectory(round(pos_x, 3), round(pos_y, 3), round(pos_z, 3), -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-
-    def get_transformed_position(self, palm_pos):
-        
-        desired_pos = geometry_msgs.msg.Pose().position
-        pos_x = abs(self.leap_motion_reference_position.x - palm_pos.x)
-        pos_y = abs(self.leap_motion_reference_position.y - palm_pos.y)
-        pos_z = abs(self.leap_motion_reference_position.z - palm_pos.z)
-
-        if palm_pos.x > self.leap_motion_reference_position.x:
-            desired_pos.x = -pos_x
-        if palm_pos.x < self.leap_motion_reference_position.x:
-            desired_pos.x = pos_x
-        if palm_pos.x == self.leap_motion_reference_position.x:
-            desired_pos.x = 0
-
-        if palm_pos.y > self.leap_motion_reference_position.y:
-            desired_pos.y = pos_y
-        if palm_pos.y < self.leap_motion_reference_position.y:
-            desired_pos.y = -pos_y
-        if palm_pos.y == self.leap_motion_reference_position.y:
-            desired_pos.y = 0
-
-        if palm_pos.z > self.leap_motion_reference_position.z:
-            desired_pos.z = pos_z
-        if palm_pos.z < self.leap_motion_reference_position.z:
-            desired_pos.z = -pos_z
-        if palm_pos.z == self.leap_motion_reference_position.z:
-            desired_pos.z = 0
-
-        return desired_pos
-    def send_gripper_cmd(self, gripper_distance):
-        gripper = JointTrajectory()
-        gripper.header.stamp=rospy.Time.now()
-        gripper.header.frame_id = "/ur10_2_ee_link"    
-        gripper.joint_names = ['ur10_2_robotiq_85_left_knuckle_joint']
-        
-        points = JointTrajectoryPoint()
-        points.positions = [gripper_distance]
-        points.time_from_start = rospy.Duration.from_sec(0.4)
-        gripper.points.append(points)
-        self.send_gripper_cmd_pub.publish(gripper)
-        print('\033[93m[' + str(gripper_distance) + ']\033[0m')
-
-    def pick_place(self):
-        # Obtener el primer cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.29, 0.775, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-    
-        # Primer cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-    
-        # Obtener el segundo cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.9, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(4)
-        self.send_trajectory(0.9, 0.632, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.9, 0.5, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.9, 0.5, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-    
-        # Segundo cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-    
-        # Obtener el tercer cubo
-        self.send_trajectory(0.29, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.675, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(4)
-        self.send_trajectory(0.675, 0.632, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(0.675, 0.88, 0.2, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.675, 0.88, 0.1, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(3)
-        self.send_trajectory(0.675, 0.88, 0.08, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(5)
-    
-        # Tercer cubo
-        self.send_gripper_cmd(0.43)
-        rospy.sleep(4)
-    
-        # Enviar el cubo a la caja
-        self.send_trajectory(0.28, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.775, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(2)
-        self.send_trajectory(-0.70, 0.6, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(10)
-        self.send_gripper_cmd(0.0)
-        rospy.sleep(4)
-
-        # Posicion inicial del brazo
-        cmd.send_gripper_cmd(0.0)
-        cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-        rospy.sleep(7)
-
-    def set_robot_reference(self):
-        ## Puede que se anyada las orientaciones... primero posiciones
-        self.robot_reference.position.x = self.current_robot_pose.position.x
-        self.robot_reference.position.y = self.current_robot_pose.position.y
-        self.robot_reference.position.z = self.current_robot_pose.position.z
-
-
-    def update_current_pose(self, pose):
-        self.current_robot_pose.position.x = (-1 * pose.position.x)
-        self.current_robot_pose.position.y = (-1 * pose.position.y)
-        self.current_robot_pose.position.z = pose.position.z
-        self.current_robot_pose.orientation.x = pose.orientation.x
-        self.current_robot_pose.orientation.y = pose.orientation.y
-        self.current_robot_pose.orientation.z = pose.orientation.z
-        self.current_robot_pose.orientation.w = pose.orientation.w
-        self.robot_pose_updated = True
-
-    # Set init pose with articular values
-    def set_init_pose(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/ur10_2_base_link"    
-        position.joint_names = ['ur10_2_shoulder_pan_joint','ur10_2_shoulder_lift_joint','ur10_2_elbow_joint',
-                          'ur10_2_wrist_1_joint','ur10_2_wrist_2_joint','ur10_2_wrist_3_joint']
-        
-        rcs = [pos_x, pos_y, pos_z, rot_x, rot_y, rot_z]
-        
-        points = JointTrajectoryPoint()
-        points.positions = rcs
-        points.time_from_start = rospy.Duration.from_sec(5)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-
-    def send_trajectory(self, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, rot_w):
-        position = JointTrajectory()
-        position.header.stamp=rospy.Time.now()
-        position.header.frame_id = "/ur10_2_base_link"    
-        position.joint_names = ['ur10_2_shoulder_pan_joint','ur10_2_shoulder_lift_joint','ur10_2_elbow_joint',
-                          'ur10_2_wrist_1_joint','ur10_2_wrist_2_joint','ur10_2_wrist_3_joint']
-        
-        rate = rospy.Rate(10)
-        while not self.robot_pose_updated:
-            rate.sleep()
-
-        #print self.current_robot_pose
-
-        (roll, pitch, yaw) = tf.euler_from_quaternion([
-                                            self.current_robot_pose.orientation.x,
-                                            self.current_robot_pose.orientation.y,
-                                            self.current_robot_pose.orientation.z,
-                                            self.current_robot_pose.orientation.w])
-
-        rcs = [ self.current_robot_pose.position.x,
-                self.current_robot_pose.position.y,
-                self.current_robot_pose.position.z,
-                roll, pitch, yaw]
-
-        #print rcs
-        #array_pos = fwd_kin(self.current_robot_pose, 'r', 'n')
-        #print(cartesian_pos)
-
-        ps = Pose()
-        ps.position.x = pos_x
-        ps.position.y = pos_y
-        ps.position.z = pos_z
-        ps.orientation.x = rot_x
-        ps.orientation.y = rot_y
-        ps.orientation.z = rot_z
-        ps.orientation.w = rot_w
-    
-        #state = []
-    
-        #sol = inv_kin(ps, array_pos)
-        #print(sol)
-
-        
-        points = JointTrajectoryPoint()
-        try:
-            points.positions = inv_kin(ps, rcs)
-        except Exception:
-            print('\033[91m[ Singularidad, valores:' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-        duration = max([abs(points.positions[0])-abs(rcs[0]), abs(points.positions[1])-abs(rcs[1]), abs(points.positions[2])-abs(rcs[2])])
-        print duration
-
-        points.time_from_start = rospy.Duration.from_sec(duration*0.1)
-        position.points.append(points)
-        self.send_trajectory_pub.publish(position)
-        #state = sol
-        #rospy.sleep(0.1)
-        self.robot_pose_updated = False
-        print points.positions
-        print('\033[93m[' + str(ps.position.x) + ', ' + str(ps.position.y) + ', ' + str(ps.position.z) + ']\033[0m')
-        
-if __name__ == '__main__':
-    rospy.init_node('ur10_2_robot_manipulator_lm', anonymous=True)
-    cmd = CmdTrajectory()
-    rpy = tf.quaternion_from_euler(-3.12, 0.0, 1.62)
-    print rpy
-    #[-0.68945825 -0.72424496  0.00781949  0.00744391]
-    #cmd.send_trajectory(-0.6, -0.16, 0.62, rpy[0], rpy[1], rpy[2], rpy[3])
-    
-    # Posicion inicial del brazo
-    cmd.set_init_pose(2.176, -1.518, -1.671, -1.511, 1.589, -1.014)
-    cmd.send_gripper_cmd(0.0)
-    cmd.send_trajectory(-0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(4)
-    cmd.send_trajectory(0.24, 0.632, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(4)
-    cmd.send_trajectory(0.24, 0.8, 0.15, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    rospy.sleep(4)
-
-
-    cmd.set_robot_reference()
-
-    # Ejemplo de movmiento no deseado
-    #cmd.send_trajectory(-0.30, 0.300, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    #rospy.sleep(4)
-    #cmd.send_trajectory(-0.40, 0.0, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    #rospy.sleep(4)
-    #cmd.send_trajectory(-0.80, -0.3, 0.62, -0.68945825, -0.72424496, 0.00781949, 0.00744391)
-    #rospy.sleep(4)
-    
-    #cmd.pick_place()
-    while not rospy.is_shutdown():
-        rospy.sleep(0.1)
-```
-
-Cotenido del fichero *sender.py*
-```{C}
-#!/usr/bin/env python
-
-""" For backwards compatibility with the old driver files
-                Will be DELETED in the future               """
-
-__author__ = 'Miguel Burgh Olivan'
-
-import argparse
-
-import rospy
-import leap_interface
-
-from leap_motion.msg import leap_motion
-from leap_motion.msg import leapcobotright, leapcobotleft
-
-FREQUENCY_ROSTOPIC_DEFAULT = 0.1
-NODENAME = 'two_arm_no_moveit_lm_pub'
-PARAMNAME_FREQ = 'freq'
-PARAMNAME_FREQ_ENTIRE = '/' + NODENAME + '/' + PARAMNAME_FREQ
-
-def sender():
-    '''
-    This method publishes the data defined in leapcobotright to /leapmotion/data
-    '''
-    rospy.loginfo("Parameter set on server: PARAMNAME_FREQ={}".format(rospy.get_param(PARAMNAME_FREQ_ENTIRE, FREQUENCY_ROSTOPIC_DEFAULT)))
-
-    li = leap_interface.Runner()
-    li.setDaemon(True)
-    li.start()
-
-    pub_ros_right   = rospy.Publisher('leapmotion/data_right', leapcobotright, queue_size=1)
-    pub_ros_left   = rospy.Publisher('leapmotion/data_left', leapcobotleft, queue_size=1)
-    rospy.init_node(NODENAME)
-
-    while not rospy.is_shutdown():
-        right_hand_palm_pos_    = li.get_right_hand_palmpos()   # Palm's position
-        left_hand_palm_pos_    = li.get_left_hand_palmpos()     # Palm's position
-
-        # Right hand information
-        msg_right = leapcobotright()
-        msg_right.is_right_hand = li.get_is_right_hand()                     # Right hand detected
-        msg_right.right_hand_palmpos.x = right_hand_palm_pos_[0]
-        msg_right.right_hand_palmpos.y = right_hand_palm_pos_[1]
-        msg_right.right_hand_palmpos.z = right_hand_palm_pos_[2]
-
-        msg_right.right_hand_fist = li.get_right_hand_fist()                 # Fist gesture recognize
-        msg_right.right_hand_thumb_up = li.get_right_hand_thumb_up()         # Thumb up gesture recognize
-        msg_right.right_hand_pinch = li.get_right_hand_pinch()               # Pinch gesture recognize
-        msg_right.right_hand_pinch_value = li.get_right_hand_pinch_value()   # Pinch gesture value
-        msg_right.right_hand_origin_frame = li.get_right_hand_origin_frame() # Reference frame set
-        msg_right.right_hand_set_origin_frame_detected = li.get_right_hand_set_origin_frame_detected()
-        msg_right.right_hand_rotate_value = li.get_right_hand_rotate_value() # Values between [-1..0..1]
-        msg_right.right_hand_turn_value = li.get_right_hand_turn_value()     # Values between [-1..0..1]
-        msg_right.right_hand_swing_value = li.get_right_hand_swing_value()   # Values between [-1..0..1]
-
-
-        # Left hand information
-        msg_left = leapcobotleft()
-        msg_left.is_left_hand = li.get_is_left_hand()                       # Left hand detected
-        msg_left.left_hand_palmpos.x = left_hand_palm_pos_[0]
-        msg_left.left_hand_palmpos.y = left_hand_palm_pos_[1]
-        msg_left.left_hand_palmpos.z = left_hand_palm_pos_[2]
-
-        msg_left.left_hand_fist = li.get_left_hand_fist()                    # Fist gesture recognize
-        msg_left.left_hand_thumb_up = li.get_left_hand_thumb_up()            # Thumb up gesture recognize
-        msg_left.left_hand_pinch = li.get_left_hand_pinch()                  # Pinch gesture recognize
-        msg_left.left_hand_pinch_value = li.get_left_hand_pinch_value()   # Pinch gesture value
-        msg_left.left_hand_origin_frame = li.get_left_hand_origin_frame()   # Reference frame set
-        msg_left.left_hand_set_origin_frame_detected = li.get_left_hand_set_origin_frame_detected()
-        msg_left.left_hand_rotate_value = li.get_left_hand_rotate_value()    # Values between [-1..0..1]
-        msg_left.left_hand_turn_value = li.get_left_hand_turn_value()       # Values between [-1..0..1]
-        msg_left.left_hand_swing_value = li.get_left_hand_swing_value()      # Values between [-1..0..1]
-
-        print(msg_right)
-        print("\n")
-        pub_ros_right.publish(msg_right)
-        pub_ros_left.publish(msg_left)
-        rospy.sleep(rospy.get_param(PARAMNAME_FREQ_ENTIRE, FREQUENCY_ROSTOPIC_DEFAULT))
-
-
-if __name__ == '__main__':
-    try:
-        sender()
-    except rospy.ROSInterruptException:
-        pass
-
-```
-
-#### Pruebas en el simulador Gazebo
-Para realizar las pruebas, se necesitarán al menos 3 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero visualizar la información que síe envía se va a dejaír así de momento.
-
-Terminal 1:
-```{bash}
+- Terminal 1:
+```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 source devel/setup.bash
 roslaunch two_arm_no_moveit_gazebo ur10_joint_limited.launch
 ```
 
-Terminal 2:
-```{bash}
+- Terminal 2:
+```bash
 cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun two_arm_no_moveit_leap_motion sender.py
 ```
 
-Terminal 3:
-```{bash}
+- Terminal 3:
+```bash
 cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun two_arm_no_moveit_leap_motion ur10_1_lm_robot_manipulator.py 
 ```
-Terminal 4:
-```{bash}
+
+- Terminal 4:
+```bash
 cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun two_arm_no_moveit_leap_motion ur10_2_lm_robot_manipulator.py 
 ```
 
-Terminal 5 (en caso de fallo en leap motion):
-```{bash}
+- Terminal 5 (en caso de fallo en el dispositivo de *Leap Motion*):
+```bash
 sudo service leapd restart
 ```
 
