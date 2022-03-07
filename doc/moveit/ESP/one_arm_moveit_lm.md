@@ -21,7 +21,8 @@ Para realizar la implementación hay que tener varias cosas en cuenta:
 Como se desea que el robot siga los movimientos que realiza *Leap Motion*, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
 
 ### :computer: Creación del paquete
-```{bash}
+
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_moveit
 catkin_create_pkg one_arm_moveit_leap_motion rospy
 cd one_arm_moveit_leap_motion
@@ -30,14 +31,15 @@ cd scripts
 cp ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/leap_interface.py .
 touch lm_robot_manipulator.py
 touch sender.py
-touch leap_interface.py```
+touch leap_interface.py
+```
 
 - Contenido del fichero [lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/lm_robot_manipulator.py).
 
 - Contenido del fichero [sender.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/sender.py).
 
 - Contenido del fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_
-moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py)
+moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py).
 
 ### :computer: Se ha modificado del repositiorio original
 
