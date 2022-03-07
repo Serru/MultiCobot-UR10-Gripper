@@ -35,7 +35,7 @@ Multi-robot system of collaborative robots (cobots) <a rel="UR10s" href="https:/
 
 
 
-##About this project
+## About this project
 This Final Degree Project focuses on the development of a multirobot system that can perform tasks cooperatively, such as the transport of objects. There is not much documentation on how to develop a system where several robots can be controlled simultaneously in the ROS environment, which is widely used in research and prototyped for testing before being put into production.
 
 Two solutions have been designed, developed, implemented and experimentally evaluated: the first is through the *ROS* package called `MoveIt!`, where the work focuses mainly on its configuration to allow the simultaneous control of various cobots; the second is the creation or use of a third-party planner that sends the orders directly to the controllers in charge of executing the movements of the cobots and each of them has a built-in gripper that allows them to carry out different tasks.
