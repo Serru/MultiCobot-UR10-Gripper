@@ -67,7 +67,7 @@ The Leap Motion device is also incorporated into the system, which is capable of
 - [Design and integration of the Leap Motion device in the system for the control of one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
 
 ### Configuration on the physical robot
-- [Configuration for a UR10 with gripper using its scheduler on the physical robot](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
+- [Configuration for a UR10 with gripper using its motion planning on the physical robot](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
 ## Video with the results
 Here is a video with the results obtained from the simulations carried out in `Gazebo`. The video contains two and four robots doing a *pick & place* without human intervention, follow up by using the Leap Motion device to control two cobots by one person is shown, and finally the developed result has been tested in the physical Campero robot.
