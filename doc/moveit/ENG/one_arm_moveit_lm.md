@@ -1,239 +1,123 @@
-<!--- Para un robot  opción B--->
-## Instalación y configuración para un único robot UR10 con MoveIt! y Leap Motion
+<!--- Para dos robots opción B--->
+## Instalación y configuración para dos robots UR10 replicando MoveIt! y Leap Motion
 
-Esta sección la continuación del apartado anterior, pero en vez de tener un script que envié las trayectorias deseadas, será mediante Leap Motion el cual es controlado por una persona.
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/two_arm_moveit_lm.md)
 
-La idea es identica a lo presentado anteriormente, pero tiene como entrada de datos la información que Leap Motion provee.
+![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
-Hay que tratar esta informaócin adecuadamente con la API que provee y adecuarlo para su uso.
+Esta sección la continuación de las etapas 1, 2 y 3, en donde se realiza la integración de *Leap Motion* en el sistema, es decir las fases 4 y 5. En las fases anteriores se controlaba los robots enviando las trayectorias previamente definidas para ejecutar el *pick & place*, pero ahora será mediante *Leap Motion* el cual es controlado por una persona y será el que envíe los comandos a los robots.
 
-### Leap Motion GUI
-Se proveerá de un GUI para el usuario en el futuro si se decide que esta es la versión que se elegirá para realizar las pruebas en el robot real.
+Para ello se va a modificar parte del repositorio de *Leap Motion* directamente y adaptarlo para que controle adecuadamente los robots simulados. La idea es idéntica a lo presentado anteriormente, pero tiene como entrada de datos la información que *Leap Motion* provee. Hay que tratar esta información adecuadamente con la API que provee y adecuarlo para su uso.
 
-### Implementación del manipulador con Leap Motion
-Como se desea que el robot siga los movimientos que realiza Leap Motion, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
+## :book: Implementación del manipulador con Leap Motion
 
-Hay otra posibilidad y es tratar leap motion como si fuese un Joystick, que se implementará si hay tiempo en el futuro.
+Para realizar la implementación hay que tener varias cosas en cuenta:
+- Obtención de la posición del robot mediante la API del nodo `move_group`
+- El entorno de trabajo del *robot*
+- El entorno de trabajo de *Leap Motion*
 
-#### Creación del paquete
-```{bash}
-cd ~/tfg_multirobot/src/tfg_project/one_arm_moveit
-catkin_create_pkg one_arm_moveit_leap_motion rospy
-cd one_arm_moveit_leap_motion
+Como se desea que el robot siga los movimientos que hace *Leap Motion*, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
+
+### :computer: Creación del paquete
+
+```bash
+cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
+catkin_create_pkg two_arm_moveit_leap_motion rospy
+cd two_arm_moveit_leap_motion
 mkdir scripts
 cd scripts
-cp ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/leap_interface.py .
-cp ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/sender.py .
-cp ~/tfg_multirobot/src/tfg_project/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/lm_robot_manipulator.py .
+cp ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/leap_interface.py .
+touch ur10_1_lm_robot_manipulator.py
+touch ur10_2_lm_robot_manipulator.py
+touch sender.py
+touch leap_interface.py
 ```
 
-ünicamente modicicar el cotenido del fichero *lm_robot_manipulator.py*
-```{C}
-#!/usr/bin/env python
+- Contenido del fichero [ur10_1_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_leap_motion/scripts/ur10_1_lm_robot_manipulator.py).
 
-import sys
-import copy
-import rospy
+- Contenido del fichero [ur10_2_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_leap_motion/scripts/ur10_2_lm_robot_manipulator.py).
 
-from std_msgs.msg import Header
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-import geometry_msgs.msg
-import moveit_msgs.msg
-from std_msgs.msg import String
+- Contenido del fichero [sender.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_leap_motion/scripts/sender.py).
 
-import moveit_commander
+### :computer: Se ha modificado del repositorio original
 
-import tf.transformations as tf
-from geometry_msgs.msg import Pose, Quaternion
-#from kinematics_utils import *
+Se han creado los ficheros: *leapcobotright.msg* y *leapcobotleft.msg* en el directorio *msg* del repositorio [Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/leap_motion):
 
-from leap_motion.msg import leapcobotright
+- Contenido del fichero [leapcobotright.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg).
 
-class CmdTrajectory():
-    def __init__(self):
-        self.robot_pose_updated = False
-        
-        ## LEAP MOTION CONFIG
-        self.leap_motion_right_hand_sub = rospy.Subscriber('/leapmotion/data', leapcobotright, self.send_leap_motion_trajectory, queue_size=1)
+- Contenido del fichero [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg).
 
-        self.set_leap_motion_reference_position = False
-        self.leap_motion_reference_position = geometry_msgs.msg.Pose().position
-        self.robot_reference = geometry_msgs.msg.Pose()
-        self.start_leap_motion_control = False
+- Y el fichero [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt) añadiendo los ficheros de mensajes recién creados para su compilación:
+```bash
+[...]
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  Arm.msg
+  Bone.msg
+  Finger.msg
+  Gesture.msg
+  Hand.msg
+  Human.msg
 
-        self.PLANNING_GROUP_GRIPPER = "gripper"
-        self.PLANNING_GROUP_ARM = "manipulator"
-        self.PLANNING_NS = ""
-        self.executing = False
-
-        ## Instantiate a RobotCommander object.  This object is an interface to
-        ## the robot as a whole.
-        self.robot = moveit_commander.RobotCommander("%srobot_description"%self.PLANNING_NS, ns="")
-
-        self.arm = moveit_commander.move_group.MoveGroupCommander(self.PLANNING_GROUP_ARM,"%srobot_description"%self.PLANNING_NS, ns="")
-        self.gripper = moveit_commander.move_group.MoveGroupCommander(self.PLANNING_GROUP_GRIPPER, "%srobot_description"%self.PLANNING_NS, ns="")
-
-        self.display_trajectory_publisher = rospy.Publisher(
-                                      '/move_group/display_planned_path',
-                                      moveit_msgs.msg.DisplayTrajectory, queue_size=10)
-
-    def send_leap_motion_trajectory(self, frame):
-        # Gestos:
-        # Punyo: Para de enviar nuevas instrucciones
-        # Ok: Comienza a enviar instrucciones
-        # Pinza: Cierra o abre el gripper
-        # Movimiento de munyeca: Rota el Gripper [para la simulacion no se activan]
-        # Gesto de ROCK: Configura el frame de referencia de Leap Motion
-        # Antes de comenzar, es bueno situar el robot en una posicion en donde trabajara
+  # For backwards compatibility with the old driver files
+  leap.msg
+  leapros.msg
+  leapcobotright.msg
+  leapcobotleft.msg
+)
+[...]
 
 
-        # Obtiene la posicion de la palma de la mano
-        palm_pos = frame.right_hand_palmpos
+## :computer: Pruebas en el simulador Gazebo
+Para realizar las pruebas, se necesitarán al menos 4 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero para visualizar mejor la información que se envía y para su depuración se ha dejado así.
 
-        if frame.right_hand_fist:
-            self.start_leap_motion_control = False
-
-        if frame.right_hand_thumb_up:
-            self.start_leap_motion_control = True
-
-        if self.start_leap_motion_control:
-            # Configura la posicion de referencia en Leap Motion,
-            # cada vez que reconozca el gesto de ROCK&ROLL
-            if frame.right_hand_set_origin_frame_detected:
-                self.set_leap_motion_reference_position = True
-                self.leap_motion_reference_position.x = palm_pos.x
-                self.leap_motion_reference_position.y = palm_pos.y
-                self.leap_motion_reference_position.z = palm_pos.z
-
-            # Solamente si la referencia de lm esta configurada
-            if self.set_leap_motion_reference_position:
-    
-                if frame.right_hand_pinch:
-                    #self.send_gripper_cmd(frame.right_hand_pinch_value)
-                    self.send_gripper_cmd(self.gripper, frame.right_hand_pinch_value)
-                else:
-                    self.send_gripper_cmd(self.gripper, 0.0)
-    
-                if not self.executing:
-                    self.executing = True
-                    desired_pos = self.get_transformed_position(palm_pos)
-                    #print("desired_pos (xyz): "+ str(desired_pos.x) + ", " + str(desired_pos.y) + ", " + str(desired_pos.z))
-                    pos_x = self.robot_reference.position.x + desired_pos.x * 0.001
-                    pos_y = self.robot_reference.position.y + desired_pos.z * 0.001
-                    pos_z = self.robot_reference.position.z + desired_pos.y * 0.001
-                    print("desired_pos (xyz) * 0.001: "+ str(desired_pos.x*0.001) + ", " + str(desired_pos.y*0.001) + ", " + str(desired_pos.z*0.001))
-                    print("robot_reference (xyz): "+ str(self.robot_reference.position.x) + ", " + str(self.robot_reference.position.y) + ", " + str(self.robot_reference.position.z))
-                    current_pose = self.arm.get_current_pose().pose.position
-                    #print("robot_current_pose (xyz): "+ str(current_pose.x) + ", " + str(current_pose.y) + ", " + str(current_pose.z))
-                    #print pos_x
-                    #print pos_y
-                    #print pos_z
-                    
-                    self.send_trajectory(self.arm, round(pos_x, 3), round(pos_y, 3), round(pos_z, 3))
-                    self.executing = False
-
-    def get_transformed_position(self, palm_pos):
-        
-        desired_pos = geometry_msgs.msg.Pose().position
-        pos_x = abs(self.leap_motion_reference_position.x - palm_pos.x)
-        pos_y = abs(self.leap_motion_reference_position.y - palm_pos.y)
-        pos_z = abs(self.leap_motion_reference_position.z - palm_pos.z)
-
-        if palm_pos.x > self.leap_motion_reference_position.x:
-            desired_pos.x = pos_x
-        if palm_pos.x < self.leap_motion_reference_position.x:
-            desired_pos.x = -pos_x
-        if palm_pos.x == self.leap_motion_reference_position.x:
-            desired_pos.x = 0
-
-        if palm_pos.y > self.leap_motion_reference_position.y:
-            desired_pos.y = pos_y
-        if palm_pos.y < self.leap_motion_reference_position.y:
-            desired_pos.y = -pos_y
-        if palm_pos.y == self.leap_motion_reference_position.y:
-            desired_pos.y = 0
-
-        if palm_pos.z > self.leap_motion_reference_position.z:
-            desired_pos.z = -pos_z
-        if palm_pos.z < self.leap_motion_reference_position.z:
-            desired_pos.z = pos_z
-        if palm_pos.z == self.leap_motion_reference_position.z:
-            desired_pos.z = 0
-
-        return desired_pos
-    def send_gripper_cmd(self, group, gripper_distance):
-        self.gripper.set_joint_value_target("robotiq_85_left_knuckle_joint", round(gripper_distance, 2))
-        self.gripper.go(wait = True)
-        print('\033[93m[' + str(gripper_distance) + ']\033[0m')
-
-
-    def set_robot_reference(self):
-        ## Puede que se anyada las orientaciones... primero posiciones
-        self.robot_reference.position = self.arm.get_current_pose().pose.position
-
-    # Set init pose with articular values
-    def set_init_pose(self):
-        self.arm.set_named_target("home")
-        self.arm.go(wait = True)
-        self.gripper.set_named_target("gripper_open")
-        self.gripper.go(wait = True)
-        #print(self.gripper.get_current_joint_values())
-        #print(self.gripper.get_joints())
-        #print(self.gripper.get_current_joint_values())
-        #print(self.gripper.get_current_pose())
-
-#    def send_trajectory(self,group, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, rot_w):
-    def send_trajectory(self, group, pos_x, pos_y, pos_z):
-        group.set_pose_target([pos_x, pos_y, pos_z,  0.714702085642, 0.0169188757643, -0.69900917270, 0.0173452269234], "ee_link")
-        group.go(wait=True)
-        print('\033[93m[' + str(pos_x) + ', ' + str(pos_y) + ', ' + str(pos_z) + ']\033[0m')
-        
-if __name__ == '__main__':
-    ## First initialize moveit_commander and rospy.
-    print("============ Starting dual arms moveit")
-    moveit_commander.roscpp_initializer.roscpp_initialize(sys.argv)
-    rospy.init_node('ur10_1_dual_moveit',
-                  anonymous=True)
-    rospy.sleep(2)
-    
-    cmd = CmdTrajectory()
-    cmd.set_init_pose()
-    cmd.set_robot_reference()    
-    while not rospy.is_shutdown():
-        rospy.sleep(0.1)```
-
-#### Pruebas en el simulador Gazebo
-Para realizar las pruebas, se necesitarán al menos 3 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero visualizar la información que síe envía se va a dejaír así de momento.
-
-Terminal 1:
-```{bash}
-cd ~/tfg_mutilrobot
+- Terminal 1:
+```bash
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
-roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch
+roslaunch two_arm_moveit_manipilator two_arm_moveit_gazebo.launch
 ```
 
-Terminal 2:
-```{bash}
-cd ~/tfg_mutilrobot
+- Terminal 2:
+```bash
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
-roslaunch one_arm_moveit_manipulator one_arm_moveit_execution.launch
+roslaunch one_arm_moveit_manipulator two_arm_moveit_execution.launch
 ```
 
-Terminal 3:
-```{bash}
-cd ~/tfg_mutilrobot
+- Terminal 3:
+```bash
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
-rosrun one_arm_moveit_leap_motion sender.py
+rosrun two_arm_moveit_leap_motion sender.py
 ```
 
-Terminal 4:
-```{bash}
-cd ~/tfg_mutilrobot
+- Terminal 4:
+```bash
+cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
-rosrun one_arm_moveit_leap_motion lm_robot_manipulator.py 
+rosrun two_arm_moveit_leap_motion ur10_1_lm_robot_manipulator.py 
 ```
 
-Terminal 5 (en caso de fallo en leap motion):
-```{bash}
+- Terminal 5:
+```bash
+cd ~/MultiCobot-UR10-Gripper
+source devel/setup.bash
+rosrun two_arm_moveit_leap_motion ur10_2_lm_robot_manipulator.py 
+```
+
+- Terminal 6 (en caso de fallo en el dispositivo de *Leap Motion*):
+```bash
 sudo service leapd restart
 ```
+
+---
+
+<div>
+  <p align="left">
+    <button name="button">
+                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md">Anterior</a>
+    </button>
+  </p>
+</div>

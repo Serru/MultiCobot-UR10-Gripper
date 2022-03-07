@@ -1,5 +1,5 @@
 # Configuración del sistema base
-**English** | [Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
+**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md)
 
 Se va a explicar paso a paso cómo instalar *ROS Kinetic Kame* y todas las herramientas y paquetes que se han necesitado.
 
@@ -7,10 +7,11 @@ Se va a explicar paso a paso cómo instalar *ROS Kinetic Kame* y todas las herra
 ***No se garantiza que funcione una vez realizada la reproducción del proyecto. Esto es debido a las posibles actualizaciones que pueden haber sufrido los paquetes instalados y por ello una adecuación al contenido actualizado.***
 
 ## Requisitos mínimos del sistema
+
 - Sistema operativo: Ubuntu 16.04 (Xenial Xerus)
 
 ## Instalación y configuración base del sistema
-Se instala las dependencias y los repositorios comunes a todas las soluciones.
+Se instalan las dependencias y los paquetes que harán la función de `recursos compartidos` para todas las soluciones desarrolladas.
 
 - [Instalación de *ROS Kinetic y dependencias*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md)
 - [Instalación de los paquetes de *ROS*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ros-packages.md)
@@ -35,3 +36,4 @@ Se instala las dependencias y los repositorios comunes a todas las soluciones.
             	</button>
     </span>
 </p>
+</div>
