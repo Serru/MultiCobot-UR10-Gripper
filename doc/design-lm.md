@@ -36,7 +36,7 @@ Funcionamiento General
 
 ![image](/doc/imgs_md/Diseno-leap-motion.png  "Esquema de funcionalmiento de Leap Motion")
 
-Utilizando las librerı́as de *Leap Motion* se identifican los gestos y se obtiene los datos necesarios para el control de la pinza, los movimientos del cobot y las orientaciones del *end-effector*. En la imagen muestra un esquema del funcionamiento general, se creará el fichero `leap_interface.py`, utilizando la librerı́a `Leap` de *Leap Motion* que estará a la escucha de eventos (`frames` de *Leap Motion*) y en cada evento obtendrá de ellos los datos que se necesitan y los almacenará en un `objeto` que luego es accedido por el nodo `sender` mediante la interfaz creada para acceder a ese objeto.
+Utilizando las librerı́as de *Leap Motion* se identifican los gestos y se obtiene los datos necesarios para el control de la pinza, los movimientos del cobot y las orientaciones del *end-effector*. En la imagen muestra un esquema del funcionamiento general, se creará el fichero `leap_interface.py`, empleando la librerı́a `Leap` de *Leap Motion* que estará a la escucha de eventos (`frames` de *Leap Motion*) y en cada evento obtendrá de ellos los datos que se necesitan y los almacenará en un `objeto` que luego es accedido por el nodo `sender` mediante la interfaz creada para acceder a ese objeto.
 
 
 El nodo `sender` es el que obtiene la información, los almacena adecuadamente en un mensaje y los publica por el *topic* `leapmotion/data1`, a este *topic* estará suscrito el nodo `UR10_lm_arm_1`, que con la información obtenida del *topic*, envı́a las órdenes al cobot. Finalmente, el nodo `UR10_lm_arm_1` es básicamente el *script* que realiza el *pick & place*, pero la introducción de datos se obtiene del topic `leapmotion/data_1` en vez de ser introducidos manualmente.
@@ -69,9 +69,9 @@ Formas de control
 
 Los datos que se obtienen del *Leap Motion*, permiten implementar de manera sencilla dos formas de control:
 
-- **Joystick:** Este tipo de control tiene una zona muerta (*death zone*), que toma un origen como referencia y en esa zona muerta no se realizará ningún movimiento, en el momento en que se sale de esa zona muerta, se va incrementando/decrementando el valor en esa coordenada dependiendo de la distancia a la que esté del origen de referencia. Esto debe ser calibrado para no realizar movimientos bruscos.
+- **Joystick:** Este tipo de control tiene una zona muerta (*death zone*), que toma un origen como referencia y en esa zona muerta no se realizará ningún movimiento, en el momento en que se sale de esa zona muerta, se va incrementando/decrementando el valor en esa coordenada dependiendo de la distancia a la que esté del origen de referencia. Esto debe ser calibrado para no ejecutar movimientos bruscos.
 
-- **Imitación:** Esta es la solución que se ha escogido porque es más intuitivo a la hora de realizar movimientos, consiste en tener el origen de referencia de *Leap Motion* y el origen de referencia del *end-effector* del cobot mapeado, es decir, que las coordenadas que se tomen de referencia para *Leap Motion* estará relacionada con la posición inicial del robot UR10. Esto permite al cobot imitar los
+- **Imitación:** Esta es la solución que se ha escogido porque es más intuitivo a la hora de efectuar movimientos, consiste en tener el origen de referencia de *Leap Motion* y el origen de referencia del *end-effector* del cobot mapeado, es decir, que las coordenadas que se tomen de referencia para *Leap Motion* estará relacionada con la posición inicial del robot UR10. Esto permite al cobot imitar los
 movimientos de la mano, igualmente hay que calibrarlo adecuadamente para evitar movimientos bruscos.
 
 <a name="lm5">
@@ -87,7 +87,7 @@ Se ha implementado cuatro tipos de gestos que son los que se muestran en la imag
 ![image](/doc/imgs_md/gestos-leap-motion.png  "Definición de gestos para Leap Motion")
 
 
-En el fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py) es donde se define los gestos, se va a analizar la parte del código que identifica un gesto como ejemplo. El trozo de código fuente que se muestra a continuación trata de comprobar cada vez que *Leap Motion* envı́a un `frame` si se ha realizado el gesto thumb up, por ello cada vez que se recibe un `frame`, comprueba si es de la mano derecha o izquierda, después se comprueba lo cerrada que esté la mano comprobando si el valor del atributo `grab strength`, en caso de ser mayor que lo definido identifica que la mano está cerrada. Sabiendo que la mano está cerrada se quiere saber si el pulgar está extendido o no y eso lo obtiene comprobando si el atributo `thumb_finger.extended()` es igual a `1` y esta es la manera de identificar gestos con *Leap Motion*.
+En el fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py) es donde se define los gestos, se va a analizar la parte del código que identifica un gesto como ejemplo. El trozo de código fuente que se muestra a continuación trata de comprobar cada vez que *Leap Motion* envı́a un `frame` si se ha realizado el gesto thumb up, por ello cada vez que se recibe un `frame`, comprueba si es de la mano derecha o izquierda, después se comprueba lo cerrada que esté la mano comprobando si el valor del atributo `grab strength`, en caso de ser mayor que lo definido identifica que la mano está cerrada. Sabiendo que la mano está cerrada se quiere saber si el pulgar está extendido o no y eso lo obtiene revisando si el atributo `thumb_finger.extended()` es igual a `1` y esta es la manera de identificar gestos con *Leap Motion*.
 
 ```python
 def on_frame(self, controller):

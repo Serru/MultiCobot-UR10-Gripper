@@ -6,7 +6,7 @@
 # MultiCobot-UR10-Gripper
 
 <p align="center">
-Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> con pinzas de robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
+Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> con pinzas de Robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
 
 <p align="center">
   <img alt="Doc" style="border-width:0" src="https://img.shields.io/badge/doc-incomplete-red?logo=markdown&style=plastic" />
@@ -35,11 +35,10 @@ Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https:/
 
 
 ## Sobre este proyecto
-Este Trabajo Fin de Grado se enfoca en el desarrollo de un sistema multirobot que pueda realizar tareas de forma cooperativa como es el transporte de objetos. No hay mucha documentación en cómo desarrollar un sistema en donde se controle varios robots simultáneamente de forma correcta en el entorno de ROS, el cual es ampliamente utilizado en la investigación y prototipado para realizar pruebas antes de su puesta en producción.
+Este Trabajo Fin de Grado se enfoca en el desarrollo de un sistema multirobot que pueda realizar tareas de forma cooperativa como es el transporte de objetos. No hay mucha documentación en cómo desarrollar un sistema en donde se controle varios robots simultáneamente de manera correcta en el entorno de ROS, el cual es ampliamente utilizado en la investigación y prototipado para hacer pruebas antes de su puesta en producción.
 
 Se han diseñado, desarrollado, implementado y evaluado experimentalmente dos soluciones: la primera es mediante el paquete de *ROS* `MoveIt!`, en donde el trabajo se centra sobre todo en su configuración para permitir el control simultáneo de varios
-cobots; y la segunda es la creación o utilización de un planificador de terceros que envía las órdenes directamente a los controladores encargados de realizar los movimientos de los cobots y cada uno de ellos tienen incorporado una pinza que les permiten realizar
-diferentes tareas. 
+cobots; y la segunda es la creación o utilización de un planificador de terceros que envía las órdenes directamente a los controladores encargados de efectuar los movimientos de los cobots y cada uno de ellos tienen incorporado una pinza que les permiten ejecutar diferentes tareas.
 
 También está incorporado al sistema el dispositivo Leap Motion que es capaz de detectar, rastrear y reconocer gestos de las manos del usuario como interfaz para el control simultáneo de hasta dos cobots, permitiendo la manipulación de objetos.
 
