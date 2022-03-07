@@ -4,9 +4,9 @@
 
 ![image](/doc/imgs_md/Diseno-no-moveit-general-un-cobot-leap-motion.png  "Cargado el modelo URDF del robot UR10")
 
-Esta sección la continuación de las etapas 1, 2 y 3, en donde se realiza la integración de *Leap Motion* en el sistema, es decir las fases 4 y 5. En las fases anteriores se controlaba el robot enviando las trayectorias previamente definidias para realizar el *pick & place*, pero ahora será mediante Leap Motion el cual es controlado por una persona el que envie los comandos al robot.
+Esta sección la continuación de las etapas 1, 2 y 3, en donde se realiza la integración de *Leap Motion* en el sistema, es decir las fases 4 y 5. En las fases anteriores se controlaba el robot enviando las trayectorias previamente definidas para llevar a cabo el *pick & place*, pero ahora será mediante *Leap Motion* el cual es controlado por una persona el que envíe los comandos al robot.
 
-Para ello se va a modificar parte del repositorio de *Leap Motion* directamente y adaptarlo para que controle adecuadamente el robot simulado. La idea es identica a lo presentado anteriormente, pero tiene como entrada de datos la información que *Leap Motion* provee. Hay que tratar esta informaócin adecuadamente con la API que provee y adecuarlo para su uso.
+Para ello se va a modificar parte del repositorio de *Leap Motion* directamente y adaptarlo para que controle adecuadamente el robot simulado. La idea es idéntica a lo presentado anteriormente, pero tiene como entrada de datos la información que *Leap Motion* provee. Hay que tratar esta información adecuadamente con la API que provee y adecuarlo para su uso.
 
 ## :book: Implementación del manipulador con Leap Motion
 
@@ -67,8 +67,8 @@ add_message_files(
 [...]
 ```
 
-## :computer: Pruebas en el simulador Gazebo
-Para realizar las pruebas, se necesitarán al menos 3 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero para visualizar mejor la información que se envía y para su depuración se ha dejado así.
+## :computer: Pruebas en el simulador *Gazebo*
+Para efectuar las pruebas, se necesitarán al menos 3 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros *launch*, pero para visualizar mejor la información que se envía y para su depuración se ha dejado así.
 
 - Terminal 1:
 ```bash
@@ -92,7 +92,7 @@ rosrun one_arm_no_moveit_leap_motion lm_robot_manipulator.py
 ```
 
 - Terminal 4 (en caso de fallo en el dispositivo de *Leap Motion*):
-```{bash}
+```bash
 sudo service leapd restart
 ```
 

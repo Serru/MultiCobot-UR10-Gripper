@@ -7,6 +7,7 @@ Se va a explicar paso a paso cómo instalar *ROS Kinetic Kame* y todas las herra
 ***No se garantiza que funcione una vez realizada la reproducción del proyecto. Esto es debido a las posibles actualizaciones que pueden haber sufrido los paquetes instalados y por ello una adecuación al contenido actualizado.***
 
 ## Requisitos mínimos del sistema
+
 - Sistema operativo: Ubuntu 16.04 (Xenial Xerus)
 
 ## Instalación y configuración base del sistema

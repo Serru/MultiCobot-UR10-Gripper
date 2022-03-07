@@ -208,7 +208,7 @@ Durante la compilación puede aparecer un **error** que pide que esté compilado
 /usr/include/c++/5/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
 ```
 
-Para solventarlo, hay que modificar el make de catkin al compilar el proyecto:
+Para solventarlo, hay que modificar el `make` de *catkin* al compilar el proyecto:
 - Simplemente, hay que modificar el fichero ~/MultiCobot-UR10-Gripper/src/CMakeLists.txt y añadir *add_compile_options(-std=c++11)* al principio del fichero, como se muestra a continuación.
 ```bash
 # toplevel CMakeLists.txt for a catkin workspace

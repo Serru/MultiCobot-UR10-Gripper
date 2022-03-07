@@ -1973,7 +1973,7 @@ mkdir multirobot
 ```
 Este directorio será el directorio raíz de las implementaciones y con esto, la preparación para la reproducción de las diferentes soluciones está terminada.
 
-Añadir, que las modificaciones que sean comunes a todas las soluciones se modificarán sobre los recursos compartidos.
+Añadir, que las modificaciones que sean frecuentes a todas las soluciones se modificarán sobre los recursos compartidos.
 
 ---
 

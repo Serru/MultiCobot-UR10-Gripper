@@ -1,11 +1,11 @@
-# Instalación y configuración de Leap Motion
+# Instalación y configuración de *Leap Motion*
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/leap-motion.md)
 
-## Configuración de Leap Motion
-Driver de *ROS* para el controlador de Leap Motion
+## Configuración de *Leap Motion*
+Driver de *ROS* para el controlador de *Leap Motion*
 
-Para la correcta instalación y configuración del controlador de Leap Motion en *ROS Kinetic Kame*, hay que realizar un poco más de trabajo que en los repositorios previos.
+Para la correcta instalación y configuración del controlador de *Leap Motion* en *ROS Kinetic Kame*, hay que realizar un poco más de trabajo que en los repositorios previos.
 
 Lo primero es reemplazar o crear el fichero que da servicio al controlador: ***/lib/systemd/system/leapd.service***
 ```bash
@@ -43,7 +43,7 @@ cd ~/tfg_multirobot/src
 git clone https://github.com/ros-drivers/leap_motion.git
 ```
 
-En los pasos de instalación dice de mover el directorio LeapSDK al directorio $HOME, pero se va a mantener en el repositorio original y se modificarán los PATHS adecuadamente.
+En los pasos de instalación dice de mover el directorio `LeapSDK` al directorio `$HOME`, pero se va a mantener en el repositorio original y se modificarán los `PATHS` adecuadamente.
 
 ```bash
 # 64-bit operating system
@@ -51,7 +51,7 @@ echo "export PYTHONPATH=$PYTHONPATH:$HOME/tfg_multirobot/src/leap_motion/LeapSDK
 source ~/.bashrc
 ```
 
-Instalación del paquete de *ROS* de Leap Motion:
+Instalación del paquete de *ROS* de *Leap Motion*:
 
 ```bash
 sudo apt-get install ros-kinetic-leap-motion
@@ -70,7 +70,7 @@ cd ~/tfg_multirobot
 catkin_make
 ```
 
-Si surgen errores durante el uso de los drivers de Leap Motion, con reiniciar el servicio suele ser suficiente:
+Si surgen errores durante el uso de los *drivers* de *Leap Motion*, con reiniciar el servicio suele ser suficiente:
 ```bash
 sudo service leapd restart
 ```
