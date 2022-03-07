@@ -109,7 +109,7 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_
 mkdir world
 ```
 
-Se utilizará el fichero `world`, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá el testeo posterior de tareas en el robot.
+Se utilizará el fichero `world`, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá la comprobación posterior de tareas en el robot.
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_gazebo
@@ -126,7 +126,7 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_
 nano ur10.launch
 ```
 
-E incluir el mundo en el *launch* , añadiendo el argumento `world`y reemplazando el valor de *default* en el argumento *world_name*:
+E incluir el mundo en el *launch*, añadiendo el argumento `world`y reemplazando el valor de *default* en el argumento *world_name*:
 
 ```xml
  <arg name="world" default="$(find two_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
@@ -151,7 +151,7 @@ Al lanzarlo, muestra dos errores:
 Error [parser.cc:581] Unable to find uri[model://dropbox]
 ```
 
-Este error no se puede solucionar, a no ser que se cree el modelo de cero, ya que `Gazebo` no lo provee o se ha eliminado. Por tanto, en el fichero [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) se comenta el objeto dropbox:
+Este error no se puede solucionar, a no ser que se cree el modelo de cero, ya que `Gazebo` no lo provee o se ha eliminado. Por tanto, en el fichero [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) se comenta el objeto *dropbox*:
 
 ```{xml}
 <!--include>
@@ -228,7 +228,7 @@ Fase 2: Configuración del URDF
 </a>
 
 #### :book: Descripción del fichero *URDF*
-El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML*el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
+El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML* el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
 
 El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
 
@@ -244,7 +244,7 @@ En la imagen se representa el contenido del [fichero *URDF*](https://github.com/
 ##### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot UR10 [No ha sido posible, problemas con `Gazebo`]
 Para agregar correctamente la pinza hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
  
- Tomando la siguiente imagen para entender el funcionamiento del controllador de la pinza:
+ Tomando la siguiente imagen para entender el funcionamiento del controlador de la pinza:
  ![esquema del gripper](/doc/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
 
 Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El *servidor* es que se encarga de enviar las órdenes a la pinza y feedback al cliente y el *cliente* envía órdenes al servidor.
@@ -295,7 +295,7 @@ No se sabe la razón exacta de porque no es posible simular correctamente la pin
 [FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
 ```
 
-Para la simulación con `Gazebo` no funciona, pero sí en la herramienta de Rosviz. Esto indica que el paquete de *ROS* para la pinza funciona correctamente, pero la configuración del robot simulado en `Gazebo` (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en `Gazebo`.
+Para la simulación con `Gazebo` no funciona, pero sí en la herramienta de *Rosviz*. Esto indica que el paquete de *ROS* para la pinza funciona correctamente, pero la configuración del robot simulado en `Gazebo` (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en `Gazebo`.
 
 ![rviz-robotiq-2f-85-gripper](/doc/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
 
@@ -541,7 +541,7 @@ Contiene una serie de funciones para enviar correctamente las trayectorias final
 - Ver el contenido de la librería [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py).
 
 
-El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
+El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej.: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
 
 Para evitar eso, se puede definir un *workspace* en donde no sufra de estas singularidades.
 
@@ -553,7 +553,7 @@ Ejecución de las pruebas
 </a>
 
 #### :computer: Realización de pruebas en `Gazebo`
-Se a creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
+Se ha creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
 
 El fichero con el código del manipulador para realizar la prueba: [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py)
 
@@ -582,7 +582,7 @@ Esto es debido a que falta incluir el plugin de `Gazebo` *gazebo_grasp* que est�
 ##### :computer: Gazbebo Grasp plugin
 Se va a proceder a realizar los pasos necesarios para cargar el plugin que permita al robot interaccionar con los objetos en simulación.
 
-Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podria guardarlo en el paquete de *universal robots*, pero como es una modificación realizada para este proyecto, se ha decidido en moverlo al directorio [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf).
+Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podría guardarlo en el paquete de *universal robots*, pero como es una modificación realizada para este proyecto, se ha decidido en moverlo al directorio [~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf).
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf
@@ -616,7 +616,7 @@ nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urd
 - Ver el contenido del fichero [robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro).
 
 
-Y esta es toda la configuración necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada gripper, si no esas pinzas no podrá agrrar objetos durante la simulación.
+Y esta es toda la configuración necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada pinza, si no esas pinzas no podrá agarrar objetos durante la simulación.
 
 <a name="modificaciones">
   <h2>
@@ -729,8 +729,7 @@ Fase 2: Configuración del URDF
 #### :book: Descripción del fichero *URDF*
  ![image](/doc/imgs_md/solo-dos-urdf-robot.png  "Representación del fichero URDF para dos robots")
 
-Es parecido a lo realizado en la [Fase 1](#fase1) de la *Configuración inicial*, pero con la diferencia de que esta vez son dos cobots UR10 y no uno. En el fichero [URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro), se puede ver el cómo se conectan los componentes de los brazos `ur10_robot` con el link `world`, esto se puede apreciar en la imagen, representando `world` (color amarillo) y las bases de los brazos de los
-UR10s `ur10_1_base_link` y `ur10_2_base_link` (color verde) situado justo encima, además los `joints` `ur10_1_world_joint` y `ur10_2_world_joint` son las esferas de color amarillo situado entre ambos links. De la misma manera, los componentes de las pinzas `robotiq_85_gripper` están conectados a los brazos de los UR10s (`ur10_robot`) que se aprecia en la imagen en donde las esferas que representan los `joints` `ur10_1_robotiq_85_base_joint` y `ur10_2_robotiq_85_base_joint` que unen ambos componentes (son de color morado), uniendo los links `ur10_1_robotiq_85_base_link` y `ur10_2_robotiq_85_base_link` de las pinzas con los links `ur10_1_ee link` y `ur10_2_ee_link` de los brazos de los UR10s.
+Es parecido a lo realizado en la [Fase 1](#fase1) de la *Configuración inicial*, pero con la diferencia de que esta vez son dos cobots UR10 y no uno. En el fichero [URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro), se puede ver el cómo se conectan los componentes de los brazos `ur10_robot` con el link `world`, esto se puede apreciar en la imagen, representando `world` (color amarillo) y las bases de los brazos de los UR10s `ur10_1_base_link` y `ur10_2_base_link` (color verde) situado justo encima, además los `joints` `ur10_1_world_joint` y `ur10_2_world_joint` son las esferas de color amarillo situado entre ambos links. De la misma manera, los componentes de las pinzas `robotiq_85_gripper` están conectados a los brazos de los UR10s (`ur10_robot`) que se aprecia en la imagen en donde las esferas que representan los `joints` `ur10_1_robotiq_85_base_joint` y `ur10_2_robotiq_85_base_joint` que unen ambos componentes (son de color morado), uniendo los links `ur10_1_robotiq_85_base_link` y `ur10_2_robotiq_85_base_link` de las pinzas con los links `ur10_1_ee link` y `ur10_2_ee_link` de los brazos de los UR10s.
 
 ##### :computer: Configuración del directorio descripción
 

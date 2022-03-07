@@ -16,7 +16,7 @@ Para realizar la implementación hay que tener varias cosas en cuenta:
 - El entorno de trabajo del *robot*
 - El entorno de trabajo de *Leap Motion*
 
-Como se desea que el robot siga los movimientos que realiza *Leap Motion*, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
+Como se desea que el robot siga los movimientos que ejecuta *Leap Motion*, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
 
 ### :computer: Creación del paquete
 ```bash
@@ -37,15 +37,15 @@ touch leap_interface.py
 
 - Contenido del fichero [leap_interface.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_leap_motion/scripts/leap_interface.py).
 
-### :computer: Se ha modificado del repositiorio original
+### :computer: Se ha modificado del repositorio original
 
 Se han creado los ficheros: *leapcobotright.msg* y *leapcobotleft.msg* en el directorio *msg* del repositorio [Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/leap_motion):
 
-Cotenido del fichero [leapcobotright.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg).
+- Contenido del fichero [leapcobotright.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg).
 
-Cotenido del fichero [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg).
+- Contenido del fichero [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg).
 
-Y el fichero [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt) añadiendo los ficheros de mensajes recién creados para su compilación:
+- Y el fichero [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt) añadiendo los ficheros de mensajes recién creados para su compilación:
 ```bash
 [...]
 ## Generate messages in the 'msg' folder

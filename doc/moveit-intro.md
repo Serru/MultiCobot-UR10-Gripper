@@ -19,7 +19,7 @@ En el diseño del esquema, el componente principal que realiza las funciones de 
 **Las ventajas de esta propuesta son:**
 
 - La potencia de las funciones que ofrece `MoveIt!` para cada robot como en su conjunto.
-- Una sencilla configuración, la mayorı́a, se crea de forma automática con su `MoveIt Setup Assistant`.
+- Una sencilla configuración, la mayoría, se crea de forma automática con su `MoveIt Setup Assistant`.
 - Flexibilidad a la hora de adaptarse o la incorporación de futuros elementos que puedan necesitar las funcionalidades de `MoveIt!`, como pueden ser dispositivos que se utilicen para desarrollo de trabajo de visión por computador, *deep learning*, navegación, etc.
 
 **Las desventajas son:**
@@ -34,7 +34,7 @@ Si se quiere realizar el control de varios robots mediante este diseño, se podr
 
 En caso de forzarlo (lanzando dos scripts que envíen instrucciones para que planifique las trayectorias deseadas para cada controlador) el nodo de `MoveIt!`, `move_group`, envía un mensaje diciendo que la instrucción ha sido *PREEMTED*, es decir que el Scheduler del sistema lo ha retrasado como trabajo futuro.
 
-Para sobrepasar este problema, habría que hacerle pensar al nodo `move_group` que maneja un único controlador. Para conseguir esto, hay que crear mmínimo tres grupos de manipuladores durante la configuración con el asistente de `MoveIt!`, uno para cada brazo junto a su `end effector` y otro grupo que contiene a los dos grupos creados previamente. 
+Para sobrepasar este problema, habría que hacerle pensar al nodo `move_group` que maneja un único controlador. Para conseguir esto, hay que crear mínimo tres grupos de manipuladores durante la configuración con el asistente de `MoveIt!`, uno para cada brazo junto a su `end effector` y otro grupo que contiene a los dos grupos creados previamente. 
 
 Cuando se tiene esta configuración, habría que realizar el plan de trayectorias de cada brazo sin ejecutarlo y añadir los valores de las articulaciones de cada cobot para esa trayectoria adecuadamente en el grupo que contiene a ambos cobots para ejecutarlo posteriormente.
 

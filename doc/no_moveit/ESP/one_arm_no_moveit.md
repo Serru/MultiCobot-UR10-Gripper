@@ -29,7 +29,7 @@ Una vez creada el paquete, hay que configurar los controladores que están almac
 
 A continuación se presenta el contenido de los ficheros de configuración de los controladores, todos estos controladores, en general, siguen la estructura mencionada. La definición de los controladores pueden ser contenidas en un único fichero, lo importante es que en `Gazebo` los cargue correctamente, se procede a explicar brevemente estos controladores:
 
-- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquı́ se define el nombre del controlador `arm_controller`, el tipo de controlador posición `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador, todos estos `joints` son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
+- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquí se define el nombre del controlador `arm_controller`, el tipo de controlador posición `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador, todos estos `joints` son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
 
 - Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los `joints` que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después publicarlo. Es fundamental para el correcto funcionamiento, tanto en simulación como con el robot real, forma parte del paquete de *ROS* *ros_control*.
 
@@ -99,7 +99,7 @@ cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_
 nano ur10.launch
 ```
 
-E incluir el mundo en el *launch* , añadiendo el argumento `world`y reemplazando el valor de *default* en el argumento *world_name*:
+E incluir el mundo en el *launch*, añadiendo el argumento `world`y reemplazando el valor de *default* en el argumento *world_name*:
 
 ```xml
  <arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
@@ -124,7 +124,7 @@ Al lanzarlo, muestra dos errores:
 Error [parser.cc:581] Unable to find uri[model://dropbox]
 ```
 
-Este error no se puede solucionar, a no ser que se cree el modelo de cero, ya que `Gazebo` no lo provee o se ha eliminado. Por tanto, en el fichero [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) se comenta el objeto dropbox:
+Este error no se puede solucionar, a no ser que se cree el modelo de cero, ya que `Gazebo` no lo provee o se ha eliminado. Por tanto, en el fichero [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) se comenta el objeto *dropbox*:
 
 ```{xml}
 <!--include>
@@ -201,7 +201,7 @@ Fase 2: Configuración del URDF
 </a>
 
 ### :book: Descripción del fichero *URDF*
-El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML*el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
+El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML* el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
 
 El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
 
@@ -217,7 +217,7 @@ En la imagen se representa el contenido del [fichero *URDF*](https://github.com/
 #### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot UR10 [No ha sido posible, problemas con `Gazebo`]
 Para agregar correctamente la pinza hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
  
- Tomando la siguiente imagen para entender el funcionamiento del controllador de la pinza:
+ Tomando la siguiente imagen para entender el funcionamiento del controlador de la pinza:
  ![esquema del gripper](/doc/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
 
 Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El *servidor* es que se encarga de enviar las órdenes a la pinza y feedback al cliente y el *cliente* envía órdenes al servidor.
@@ -268,7 +268,7 @@ No se sabe la razón exacta de porque no es posible simular correctamente la pin
 [FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
 ```
 
-Para la simulación con `Gazebo` no funciona, pero sí en la herramienta de rosviz. Esto indica que el paquete de *ROS* para la pinza funciona correctamente, pero la configuración del robot simulado en `Gazebo` (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en `Gazebo`.
+Para la simulación con `Gazebo` no funciona, pero sí en la herramienta de *Rosviz*. Esto indica que el paquete de *ROS* para la pinza funciona correctamente, pero la configuración del robot simulado en `Gazebo` (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en `Gazebo`.
 
 ![rviz-robotiq-2f-85-gripper](/doc/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
 
@@ -514,7 +514,7 @@ Contiene una serie de funciones para enviar correctamente las trayectorias final
 - Ver el contenido de la librería [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py).
 
 
-El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
+El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej.: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
 
 Para evitar eso, se puede definir un *workspace* en donde no sufra de estas singularidades.
 
@@ -526,7 +526,7 @@ Ejecución de las pruebas
 </a>
 
 ### :computer: Realización de pruebas en `Gazebo`
-Se a creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
+Se ha creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
 
 El fichero con el código del manipulador para realizar la prueba: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py)
 
@@ -601,7 +601,7 @@ Y esta es toda la configuración necesaria para que el plugin funcione correctam
 ![image](/doc/imgs_md/one-arm-no-moveit-graph.png  "Nodos y topics del sistema")
 
 - Árbol de las transformadas del modelo del robot
-![image](/doc/imgs_md/one-arm-no-moveit-tree.png  "Árbol de tranformadas")
+![image](/doc/imgs_md/one-arm-no-moveit-tree.png  "Árbol de transformadas")
 
 ---
 

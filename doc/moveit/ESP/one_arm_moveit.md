@@ -25,9 +25,9 @@ Fase 1: Configuración del URDF
 ### :book: Descripción del fichero *URDF*
 El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML*el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
 
-El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
+El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representa al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
 
-Además, como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometrı́a, inercia, orientación, etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo, que podrı́a ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
+Además, como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometría, inercia, orientación, etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo, que podría ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
 
 Dicho esto, se realiza una representación de los componentes del robot:
  
@@ -98,7 +98,7 @@ Se va a escoger como modelo del robot el fichero *URDF*: [~/MultiCobot-UR10-Grip
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
 
 - En la pestaña *Self-Collisions*, darle al botón *Generate Collision Matrix*, lo que generará una matriz entre los diferentes componentes del robot que puedan generar autocolisiones durante la planificación de las trayectorias:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matirz de colisiones")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matriz de colisiones")
 
 - En la pestaña *Virtual Joints* está dirigida especialmente para brazos robóticos instalados sobre una base móvil, en este caso no afecta en la configuración, ya que la base es fija, pero se configurará igualmente para configuraciones futuras, hay que crear un joint entre el robot `base_link` y el frame `world`, siendo la configuración la siguiente:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_4.png  "Definiendo Virtual Joint")
@@ -110,7 +110,7 @@ Se va a escoger como modelo del robot el fichero *URDF*: [~/MultiCobot-UR10-Grip
 - Después hay que darle al botón *Add Kin. Chain*:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_7.png  "Manipulator Kinetic Chain configuración")
 
-- Finalmente se guarda la configuración:
+- Finalmente, se guarda la configuración:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_8.png  "Grupo manipulator configurado")
 
 - Ahora hay que hacerlo para el grupo *Gripper* que controlará la pinza, se pulsa el botón *Add Group*, se rellena con el nombre del grupo y se pone *kdl* como *Kinematic Solver*:
@@ -149,7 +149,7 @@ Se va a escoger como modelo del robot el fichero *URDF*: [~/MultiCobot-UR10-Grip
 - Hay que rellenar la pestaña *Author Information* para que la configuración pueda terminar:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_21.png  "Configurando Author Information")
 
-- La útima pestaña *Configuration Files*, permite decidir dónde se guardará la configuración de `MoveIt!`, en este caso en `one_arm_moveit_config` creado previamente, se genera la configuración mediante el botón *Generate Package* y finalmente
+- La última pestaña *Configuration Files*, permite decidir dónde se guardará la configuración de `MoveIt!`, en este caso en `one_arm_moveit_config` creado previamente, se genera la configuración mediante el botón *Generate Package* y finalmente
  *Exit Setup Assistant* para terminar:
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_22.png  "Configurando Author Information")
 ![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_23.png  "Configurando Author Information")
@@ -171,9 +171,9 @@ Los controladores se definen en ficheros con extensión *yaml*, para definir est
 
 Se procede a explicar brevemente estos controladores:
 
-- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquı́ se define el nombre del controlador `arm_controller`, el tipo de controlador posición `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador, todos estos `joints` son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
+- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquí se define el nombre del controlador `arm_controller`, el tipo de controlador posición `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador, todos estos `joints` son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
 
-- Fichero [gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml): En este fichero se define el controlador para la pinza de *Robotiq*, aquı́ se define el nombre del controlador `gripper`, el tipo de controlador `position controllers/JointTrajectoryController` que define el tipo de mensajes y la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador en este caso un único `joint_robotiq_85_left_knuckle_joint` porque el resto de `joints` del controlador imitan los movimientos de este. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran como en el caso anterior.
+- Fichero [gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml): En este fichero se define el controlador para la pinza de *Robotiq*, aquí se define el nombre del controlador `gripper`, el tipo de controlador `position controllers/JointTrajectoryController` que define el tipo de mensajes y la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador en este caso un único `joint_robotiq_85_left_knuckle_joint` porque el resto de `joints` del controlador imitan los movimientos de este. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran como en el caso anterior.
 
 - Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los `joints` que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después publicarlo. Es fundamental para el correcto funcionamiento, tanto en simulación como con el robot real, forma parte del paquete de *ROS* *ros_control*.
 
@@ -273,7 +273,7 @@ roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch
 
 ![ ](/doc/imgs_md/one_arm_moveit_graph_no_changes.png  "Esquema sin cambios")
     
-Se ve que `Gazebo` carga correctamente los controladores `arm_controller` y `gripper`, pero no hay comunicación entre el nodo `move_group` y los controladores del nodo `gazebo`, el único punto en común es el *topic* `/joint_states`. Esto implica que si se planifica y ejecuta trayectorias con el plugin *Motion Planning* de `MoveIt!`, no serán representados en `Gazebo` pero sı́ en *Rviz* . Este no es el resultado que se busca, por ello se procede a modificar la configuración de `MoveIt!` para que pueda comunicarse con los controladores cargados en `Gazebo`.
+Se ve que `Gazebo` carga correctamente los controladores `arm_controller` y `gripper`, pero no hay comunicación entre el nodo `move_group` y los controladores del nodo `gazebo`, el único punto en común es el *topic* `/joint_states`. Esto implica que si se planifica y ejecuta trayectorias con el plugin *Motion Planning* de `MoveIt!`, no serán representados en `Gazebo` pero sı́ en *Rviz*. Este no es el resultado que se busca, por ello se procede a modificar la configuración de `MoveIt!` para que pueda comunicarse con los controladores cargados en `Gazebo`.
 
 Por tanto, hay que modificar los siguientes ficheros. Los ficheros modificados estarán en un paquete diferente con la intención de facilitar la compresión de las modificaciones realizadas sobre la configuración.
 

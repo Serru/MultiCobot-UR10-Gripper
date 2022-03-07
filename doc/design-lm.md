@@ -34,7 +34,7 @@ Funcionamiento General
   </h3>
 </a>
 
-![image](/doc/imgs_md/Diseno-leap-motion.png  "Esquema de funcionalmiento de Leap Motion")
+![image](/doc/imgs_md/Diseno-leap-motion.png  "Esquema del funcionamiento de Leap Motion")
 
 Utilizando las librerías de *Leap Motion* se identifican los gestos y se obtiene los datos necesarios para el control de la pinza, los movimientos del cobot y las orientaciones del *end-effector*. En la imagen muestra un esquema del funcionamiento general, se creará el fichero `leap_interface.py`, empleando la librería `Leap` de *Leap Motion* que estará a la escucha de eventos (`frames` de *Leap Motion*) y en cada evento obtendrá de ellos los datos que se necesitan y los almacenará en un `objeto` que luego es accedido por el nodo `sender` mediante la interfaz creada para acceder a ese objeto.
 
@@ -186,7 +186,7 @@ Fase 5: Integración de <i>Leap Motion</i> en el sistema
   </h2>
 </a>
 
-Para la integración de *Leap Motion* en el sistema de *ROS* y formar parte de la solución diseñada es muy sencillo, simplemente en el *script* que controle los movimientos del cobot este debe estar suscrito al *topic* `leapmotion/data` (en el caso para dos cobots, uno de los scripts se suscribirá al *topic* que envíe información de la mano derecha y otro, información de la mano izquierda) y utilice esa de entrada de datos adecuadamente para gestionar los movimientos del cobot.
+Para la integración de *Leap Motion* en el sistema de *ROS* y formar parte de la solución diseñada es muy sencillo, simplemente en el *script* que controle los movimientos del cobot este debe estar suscrito al *topic* `leapmotion/data` (en el caso para dos cobots, uno de los scripts se suscribirá al *topic* que envíe información de la mano derecha y otro, información de la mano izquierda) y emplee esa de entrada de datos adecuadamente para gestionar los movimientos del cobot.
 
 
 En la imagen se muestra la arquitectura del sistema mediante nodos y *topic*s, se puede apreciar la incorporación del *Leap Motion* en el sistema. En la parte inferior de la imagen, se aprecia el nodo *sender* (`one_arm_no_moveit_lm_pub`), el *topic* que publica los datos que se obtiene del dispositivo de *Leap Motion* (`/leapmotion/data`) y el *script* que procesa la información para enviar órdenes al robot es el nodo `ur10_dual_moveit`.
