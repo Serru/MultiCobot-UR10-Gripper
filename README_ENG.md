@@ -6,7 +6,7 @@
 # MultiCobot-UR10-Gripper
 
 <p align="center">
-Multi-robot system of collaborative robots (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> with grippers from Robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) that allows the performance of tasks simultaneously with different types of controllers and brands of cobots, as well as direct control through the Leap Motion device of the cobot by one person.
+Multi-robot system of collaborative robots (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> with grippers from Robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) that allows simultaneous execution of tasks with different types of controllers and brands of cobots, as well as direct control of the cobot by a person via the Leap Motion device.
 </p>
 
 <p align="center">
@@ -31,22 +31,19 @@ Multi-robot system of collaborative robots (cobots) <a rel="UR10s" href="https:/
   </a>
 </p>
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md)
-
-
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md) | **English**
 
 ## About this project
-This Final Degree Project focuses on the development of a multirobot system that can perform tasks cooperatively, such as the transport of objects. There is not much documentation on how to develop a system where several robots can be controlled simultaneously in the ROS environment, which is widely used in research and prototyped for testing before being put into production.
+This thesis project focuses on developing a multi-robot system that can cooperatively perform tasks such as transporting objects. There is not much documentation on how to develop a system where multiple robots can be controlled simultaneously in the environment of ROS, which is widely used in research and prototyped for testing before going into production.
 
-Two solutions have been designed, developed, implemented and experimentally evaluated: the first is through the *ROS* package called `MoveIt!`, where the work focuses mainly on its configuration to allow the simultaneous control of various cobots; the second is the creation or use of a third-party planner that sends the orders directly to the controllers in charge of executing the movements of the cobots and each of them has a built-in gripper that allows them to carry out different tasks.
+Two solutions have been designed, developed, implemented and experimentally evaluated: the first is the *ROS* package called `MoveIt!`, where the work is mainly focused on the configuration to allow the simultaneous control of different cobots; the second is the creation or use of a third-party planner that sends the commands directly to the controllers in charge of executing the movements of the cobots, and each of them has a built-in gripper that allows them to perform different tasks.
 
-The Leap Motion device is also incorporated into the system, which is capable of detecting, tracking and recognizing the user's hand gestures working as an interface for the simultaneous control of up to two cobots, allowing the manipulation of objects.
+The Leap Motion device is also integrated into the system. It is capable of detecting, tracking and recognizing the user's hand gestures and serves as an interface for the simultaneous control of up to two cobots, enabling the manipulation of objects.
 
 [Read more...](https://deposita.unizar.es/record/66296?ln=es)
 
 
-
-## System Requirements
+## System requirements
 - Ubuntu 16.04
 - Python 2.7
 - ROS Kinetic Kame
@@ -62,15 +59,15 @@ The Leap Motion device is also incorporated into the system, which is capable of
 ## Documentation
 - [Base System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
 
-### Configuration in the `Gazebo` simulator
+### Configuration in the 'Gazebo' simulator
 - [Design and development for one, two and four robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)
-- [Design and integration of the Leap Motion device in the system for the control of one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
+- [Design and integration of the Leap Motion device into the system for control of one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
 
-### Configuration on the physical robot
+### Configuration of the physical robot
 - [Configuration for a UR10 with gripper using its motion planning on the physical robot](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
 ## Video with the results
-Here is a video with the results obtained from the simulations carried out in `Gazebo`. The video contains two and four robots doing a *pick & place* without human intervention, follow up by using the Leap Motion device to control two cobots by one person is shown, and finally the developed result has been tested in the physical Campero robot.
+Here is a video with the results of the simulations performed in `Gazebo`. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots using Leap Motion, and finally the developed result was tested with the physical Campero robot.
 
 <p>
 <a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
@@ -79,10 +76,10 @@ Here is a video with the results obtained from the simulations carried out in `G
 </p>
 
 
-## Help & support
-Unfortunately, this repository is not being actively maintained. The main objective is the public exposure of what has been learned to the community, which may need the knowledge and content of this repository for the development of their project or research.
+## Help & Support
+Unfortunately, this repository is not actively maintained. The main goal is to publish what has been learned for the community, who might need the knowledge and content of this repository to develop their project or research.
 
-A response is not guaranteed, but you can contact the authors with the information contained in the [Authors](#autores) section.
+A response is not guaranteed, but you can contact the authors using the information contained in the [Authors](#autores) section.
 
 ## License
 
@@ -92,12 +89,12 @@ A response is not guaranteed, but you can contact the authors with the informati
   </a>
   </br>
   </br>
-This repository is published under the license of <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">Creative Commons Attribution 4.0 International</a>.
+This repository is published under the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">Creative Commons Attribution 4.0 International</a> license.
 </p>
 
-## Autores
-* [Burgh Oliván, Miguel](https://github.com/Serru) - *Author of the Final Degree Project entitled **Multirobot system for the collaborative transport of objects** .*
-* [López Nicolás, Gonzalo](https://i3a.unizar.es/es/investigadores/gonzalo-lopez-nicolas) - *Director of the Final Degree Project entitled **Multirobot system for the collaborative transport of objects** .*
+## Authors
+- [Burgh Oliván, Miguel](https://github.com/Serru) - *Author of the Final Degree Project entitled **Multirobot system for the collaborative transport of objects**.*
+- [López Nicolás, Gonzalo](https://i3a.unizar.es/es/investigadores/gonzalo-lopez-nicolas) - *Director of the Final Degree Project entitled **Multirobot system for the collaborative transport of objects**.*
 
 The memory of the Final Degree Project can be found in the [Repository](https://deposita.unizar.es/record/66296?ln=es) of TFGs of the [University of Zaragoza](http://www.unizar.es/).
 
