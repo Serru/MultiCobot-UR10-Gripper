@@ -1,10 +1,11 @@
-# Realización de pruebas sobre la instalación realizada
+# Performing tests on the finished installation
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/pruebas.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ ESP /tests.md) | **English**
 
-## Si hay *warnings* durante la compilación
+## If there are *warnings* during the build 
 
-### Warnings ignorados:
+### Ignored warnings:
+
 ```bash
 WARNING: Package 'ur_modern_driver' is deprecated (This package has been deprecated. Users of CB3 and e-Series controllers should migrate to ur_robot_driver.)
 
@@ -19,98 +20,105 @@ Call Stack (most recent call first):
 /home/miguel/MultiCobot-UR10-Gripper/src/ros_control/hardware_interface/include/hardware_interface/internal/interface_manager.h:69:85: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
    static const void callConcatManagers(typename std::vector<T*>& managers, T* result)
 ```
-### Warnings resueltos:
+### Resolved warnings: 
 
 **gazebo_version_helpers warning:**
+
 ```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
-  catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
-  'gazebo_LIBRARIES' is defined.
+catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
+'gazebo_LIBRARIES' is defined.
 Call Stack (most recent call first):
-  /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
-  gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
-```
-Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, a partir de la línea 26 por lo siguiente:
-```bash
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES gazebo_version_helpers
-  CATKIN_DEPENDS gazebo_ros roscpp
-  DEPENDS GAZEBO 
-)
+/opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
 ```
 
-**gazebo_grasp_plugin warning:**
-	
+Modify the file ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, starting at line 26 as follows:
+
+```bash
+catkin_package(
+INCLUDE_DIRS include
+LIBRARIES gazebo_version_helpers
+CATKIN_DEPENDS gazebo_ros roscpp
+DEPENDS GAZEBO
+)
+``` 
+
+**gazebo_grasp_plugin warning:** 
+
 ```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
-  catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
-  'gazebo_LIBRARIES' is defined.
+catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
+'gazebo_LIBRARIES' is defined.
 Call Stack (most recent call first):
-  /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
-  gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
+/opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
 [...]
 ```
-Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, a partir de la línea 31 por lo siguiente:
+
+Modify the file ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, starting at line 31 as follows:
+
 ```bash
 catkin_package(
-  # Binary directory required for proto headers inclusion to work, because install commands don't
-  # get executed in devel space. The directory above is required so that an include of
-  # <gazebo_grasp_plugin/msgs/grasp_event.pb.h> 
-  # also works in devel space like it needs to be in install space.
-  # Probably we can find a better solution for this, but until then this
-  # fix will be OK.
-  INCLUDE_DIRS include ${CMAKE_CURRENT_BINARY_DIR}/..
-  LIBRARIES gazebo_grasp_fix gazebo_grasp_msgs
-  CATKIN_DEPENDS gazebo_ros geometry_msgs roscpp std_msgs gazebo_version_helpers
-  DEPENDS GAZEBO
+# Binary directory required for proto headers inclusion to work, because install commands don't
+# get executed in devel space. The directory above is required so that an include of
+# <gazebo_grasp_plugin>
+# also works in devel space like it needs to be in install space.
+# Probably we can find a better solution for this, but until then this
+# fix will be OK.
+INCLUDE_DIRS include $ {CMAKE_CURRENT_BINARY_DIR} /..
+LIBRARIES gazebo_grasp_fix gazebo_grasp_msgs
+CATKIN_DEPENDS gazebo_ros geometry_msgs roscpp std_msgs gazebo_version_helpers
+DEPENDS GAZEBO
 )
-```
+``` 
 
-**gazebo_grasp_plugin_ros warning:**	
+**gazebo_grasp_plugin_ros warning:**
 ```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
-  catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
-  'gazebo_LIBRARIES' is defined.
+catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
+'gazebo_LIBRARIES' is defined.
 Call Stack (most recent call first):
-  /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
-  gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt:34 (catkin_package)
+/opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt:34 (catkin_package)
 [...]
 ```
-Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, a partir de la línea 34 por lo siguiente:
+
+Modify the file ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, starting at line 34 as follows:
+
 ```bash
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES gazebo_grasp_plugin_ros
- CATKIN_DEPENDS gazebo_grasp_plugin message_runtime roscpp
- DEPENDS GAZEBO
+# INCLUDE_DIRS include
+# LIBRARIES gazebo_grasp_plugin_ros
+CATKIN_DEPENDS gazebo_grasp_plugin message_runtime roscpp
+DEPENDS GAZEBO
 )
-```
+``` 
 
-## Pequeña comprobación de la instalación del sistema
+## Small check of the system installation 
 
-### Activación del entorno de trabajo actual
+### Activation of the current working environment
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 source ~/MultiCobot-UR10-Gripper/devel/setup.bash
-```
+``` 
 
-### Testeo de la configuración base
-Tras realizar previamente toda la instalación y configuración del sistema se puede proceder a realizar pruebas para comprobar su funcionamiento antes de proceder a realizar otras modificaciones. No se va a indicar que pruebas se puede efectuar porque los repositorios de origen tiene indicaciones para ejecutar pequeñas demostraciones que son muy útiles para comprender lo que pueden hacer.
+### Testing the basic configuration
+After you install and configure the system, you can run tests to verify that the system works before making any further changes. It is not specified which tests can be run, as the source code repositories contain instructions for running small demos that are very useful for understanding what they can do. 
 
-El entorno de trabajo debería quedar de la siguiente manera tras la instalación de todos los repositorios:
+The working environment should look like the following after installing all the repositories:
+
 ```bash
 miguel@Omen:~/MultiCobot-UR10-Gripper/src$ ls
-CMakeLists.txt        geometry                  ros_control
-gazebo-pkgs           leap_motion               roslint
-gazebo_ros_pkgs       object_recognition_msgs   universal_robot
-general-message-pkgs  robotiq_2finger_grippers  ur_modern_driver
-```
+CMakeLists.txt geometry ros_control
+gazebo-pkgs leap_motion roslint
+gazebo_ros_pkgs object_recognition_msgs universal_robot
+general-message-pkgs robotiq_2finger_grippers ur_modern_driver
+``` 
 
 <details>
-  <summary>Estructura y contenido detallada de los directorios</summary>
-
-  ```text
+	<summary> Structure and detailed content of the directories </summary> 
+```text
 src/
 ├── CMakeLists.txt -> /opt/ros/kinetic/share/catkin/cmake/toplevel.cmake
 ├── gazebo-pkgs
@@ -1958,29 +1966,30 @@ src/
   ```
 </details>
 
-Estos repositorios o paquetes de *ROS*, serán la base para la implementación que se quiere desarrollar, es decir, actuarán como recursos del sistema.
+These *ROS* repositories or packages form the basis for the implementation to be developed, i.e. they serve as system resources.
 
 
-## Preparación para la implementación del sistema multirobot
-Una vez que se tiene todos los recursos necesarios para el sistema, instalados correctamente, se procede a crear el paquete que contendrá las diferentes soluciones propuestas con sus ventajas y desventajas.
+## Preparation for the implementation of the multi-robot system
+Once all the necessary resources for the system are properly installed, we will proceed with the creation of the package that contains the various proposed solutions with their advantages and disadvantages. 
 
-Se ha decidido organizarlo de esta manera para que los recursos comunes estén compartidos entre las diferentes implementaciones, y las modificaciones específicas que se tengan que hacer se guardarán en sus respectivos directorios. Lo que permitirá ejecutar los ficheros modificados en vez de los ficheros originales de los que parten modificando simplemente el fichero a incluir en los ficheros con extensión *launch*.
+It has been decided to organize the package in such a way that the common resources are shared by the different implementations and the specific changes that need to be made are stored in their respective directories. In this way, the modified files can be run instead of the original files from which they originated, simply by modifying the file contained in the files with the *launch* extension. 
 
-Por ello se procede primero a crear el directorio que contendrá todas las soluciones propuestas:
+For this reason, we first create the directory that will contain all the proposed solutions:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src
 mkdir multirobot
 ```
-Este directorio será el directorio raíz de las implementaciones y con esto, la preparación para la reproducción de las diferentes soluciones está terminada.
 
-Añadir, que las modificaciones que sean frecuentes a todas las soluciones se modificarán sobre los recursos compartidos.
+This directory will be the root directory of the deployments and this will complete the preparation for the reproduction of the various solutions. 
 
----
+Add that the changes that are frequently made to all the solutions will be changed on the shared resources.
 
-<div>
+--- 
+
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md">Menú</a>
+<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a>
 </button>
 </p>
 
@@ -1988,9 +1997,8 @@ Añadir, que las modificaciones que sean frecuentes a todas las soluciones se mo
 
 <p>
 <span style="float:left;">
-    <button name="button">
-    	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md">Anterior</a>
-    	</button> 
-    </span>
+<button name="button">
+<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md"> Previous </a>
+</button>
+</span>
 </p>
-</div>

@@ -1,39 +1,34 @@
-# Soluciones propuestas utilizando un planificador propio o de terceros (sin el paquete de `MoveIt!`)
+# Proposed solutions using a proprietary or third-party scheduler (without the `MoveIt!` package) 
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro-eng.md)
+[Español]](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md) | **English**
 
-![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
+![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png "Loaded the URDF model of the UR10 robot") 
 
+In the schematic design, the main component that performs the motion planner functions must be implemented from scratch. The motion planner communicates directly with the controllers needed to execute the cobot's motions, it does not need to be contained in a *namespace*. 
 
-En el diseño del esquema, el componente principal que realiza las funciones de planificador debe ser implementado de cero, el planificador se comunica directamente con los controladores necesarios para realizar los movimientos del cobot, no es necesario que esté contenido dentro de un *namespace*. 
+You must describe all the cobots you want to control at the same time in the *URDF* file that defines the model. The numbers in the figure indicate the order of the phases this solution goes through. 
 
-Es necesaria la descripción de todos los cobots que se quiera controlar simultáneamente en el fichero *URDF* que define el modelo. Los números en la imagen listan el orden de las fases por las que pasa esta solución.
+**The advantages of this proposal are:** 
 
-**Las ventajas de esta propuesta son:**
+- The scalability of the system and the number of cobots is more complex.
+- It is very efficient compared to previous solutions.
+- It is easy to make changes to the implemented source code.
+- Allows simultaneous control of different models and brands of cobots. 
 
-- La escalabilidad del sistema y del número de cobots es más compleja.
-- Es muy eficiente en comparación con las soluciones anteriores.
-- Es sencillo efectuar cambios en el código fuente implementado.
-- Permite el control de diferentes modelos y marcas de cobots simultáneamente.
+**The disadvantages are:** 
 
-**Las desventajas son:**
+- Low adaptability when integrating into another project, since it is a custom solution.
+- It does not have the ability to plan trajectories to avoid collisions with other cobots or with itself, since these functions are provided by `MoveIt!`.
+- It is necessary to implement the functionality to perform Cartesian motions, as this is a prerequisite for the future integration of *Leap Motion* into the system.
+- Configuration can be tedious (controllers, *topic*s, message handling, interaction between what was created and what was created by third parties, etc.), some familiarity with the environment is required. 
 
-- Poca adaptabilidad a la integración en otro proyecto, al ser una solución a medida.
-- No tiene capacidad para planificar trayectorias evitando colisiones con otro cobots ni consigo mismo porque son funcionalidades proporcionadas por `MoveIt!`.
-- Hay que implementar la funcionalidad para realizar movimientos cartesianos, es un requisito dada la futura incorporación de *Leap Motion* al sistema.
-- La configuración puede ser tediosa (controladores, *topic*s, tratamiento de los mensajes, interacción entre lo que se ha creado con lo creado por terceros, etc.), es necesario cierta familiaridad con el entorno.
-
-#### Desarrollo e implementación de la solución y sus pruebas paso a paso (Fases 1, 2 y 3)
-- [Un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md)
-- [Dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit.md)
-- [Cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/four_arm_no_moveit.md)
+#### Development and implementation of the solution and its tests ( phases 1, 2 and 3)
+- [One UR10 with gripper and its own scheduler](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md)
+- [Two UR10s with grippers using their own scheduler](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/two_arm_no_moveit.md)
+- [Four UR10s with grippers via their own scheduler](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/four_arm_no_moveit.md)
 
 ---
 
-<div>
 <p align="left">
-<button name="button">
-              <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md">Menú</a>
-</button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md"> Menu </a></button>
 </p>
-</div>

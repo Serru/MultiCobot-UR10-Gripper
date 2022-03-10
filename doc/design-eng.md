@@ -1,29 +1,25 @@
-# Diseño del sistema multirobot
+# Design of a multi-robot system 
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md) | **English**
 
-Tras realizar numerosas pruebas en el entorno de *ROS* para crear un sistema multirobot se obtiene que las soluciones deben salir de las combinaciones entre el fichero *URDF* que define el modelo del robot y los paquetes de *ROS* que en el esquema está representado por el paquete de `MoveIt!` que su función principal es la de planificador.
+After running numerous tests in the *ROS* environment to create a multi-robot system, it turns out that the solutions must come from the combinations between the *URDF* file that defines the robot model and the * ROS * packages included in the schema. represented by the `MoveIt!` package, whose main function is motion planning.
 
-![image](/doc/imgs_md/Diseno-General-focus.png  "Herramientas y Drivers de ROS en el diseño")
+![image](/doc/imgs_md/Design-General-focus.png "ROS Tools and Drivers in Design") 
 
-Las variaciones posibles son:
+Possible variants are: 
 
-- *Fichero URDF*: describe el modelo del robot, en este modelo se puede integrar varios robots, objetos o lo que se quiera modelar.
-- *Paquetes de ROS*: pueden ser propios o instalados de terceros sobre el que se ejecutarán modificaciones para adaptarlos a la solución a desarrollar.
+- *URDF file*: Describes the robot model. Multiple robots, objects or whatever you want to model can be integrated into this model.
+- *ROS Packages*: They can be your own or installed by third parties to which modifications are made to adapt them to the solution being developed. 
 
-Las soluciones que se proponen giran en torno a las modificaciones y combinaciones entre el modelado del robot (`URDF`) y los `paquetes de ROS` que se utilicen, por organización las soluciones propuestas se van a dividir en las soluciones que utilicen el paquete `MoveIt!` y las que no. Hay que tener en cuenta que el entorno de trabajo es complejo y hay muchos elementos que interaccionan o tienen dependencias entre sí, por lo que durante el desarrollo de los diseños propuestos pueden surgir problemas que no tienen solución o que el coste de corregirlos es muy alto.
+The proposed solutions revolve around the changes and combinations between the robotic modeling (`URDF`) and the `ROS packages` to be used. Organizationally, the proposed solutions are divided into those that use the `MoveIt!` package and those that do not. It must be taken into account that the working environment is complex and there are many elements that interact or depend on each other. Therefore, problems may arise during the development of the proposed designs for which there is no solution or which are very expensive to fix. 
 
-## Desarrollo y análisis de las soluciones propuestas
-- [Mediante un planificador propio o de terceros (sin el paquete de `MoveIt!`)](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md)
-- [Mediante el paquete `MoveIt!`](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md)
+## Development and analysis of the proposed solutions.
+- [Using your own scheduler or a third-party scheduler (without the `MoveIt!` package)](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro-eng.md )
+- [Using the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro-eng.md)
 
 ---
 
-<div>
 <p align="left">
-<button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md">Inicio</a>
-</button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md"> Home </a></button>
 </p>
-</div>
 

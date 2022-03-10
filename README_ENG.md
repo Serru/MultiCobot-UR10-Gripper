@@ -42,50 +42,48 @@ The Leap Motion device is also integrated into the system. It is capable of dete
 
 [Read more...](https://deposita.unizar.es/record/66296?ln=es)
 
-
 ## System requirements
 - Ubuntu 16.04
 - Python 2.7
 - ROS Kinetic Kame
 
-## 🚀 Quickstart
+## Quick start
 
 1. **paso 1**
 2. **paso 2**
 3. **paso 3**
 4. **paso 4**
 
-
 ## Documentation
-- [Base System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
+- [Basic System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md)
 
 ### Configuration in the 'Gazebo' simulator
-- [Design and development for one, two and four robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)
-- [Design and integration of the Leap Motion device into the system for control of one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
+- [Design and development for one, two and four robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md)
+- [Design and integration of the Leap Motion device into the system to control one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm-eng.md)
 
 ### Configuration of the physical robot
 - [Configuration for a UR10 with gripper using its motion planning on the physical robot](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
 ## Video with the results
-Here is a video with the results of the simulations performed in `Gazebo`. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots using Leap Motion, and finally the developed result was tested with the physical Campero robot.
+Here is a video with the results of the simulations performed in 'Gazebo'. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots with Leap Motion, and finally the developed result was tested with the physical Campero robot.
 
 <p>
 <a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
-	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Resultados del proyecto." />
+	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Results of the project." />
 </a>
 </p>
 
 
 ## Help & Support
-Unfortunately, this repository is not actively maintained. The main goal is to publish what has been learned for the community, who might need the knowledge and content of this repository to develop their project or research.
+Unfortunately, this repository is not actively maintained. The main goal is to publish what has been learned for the community who might need the knowledge and content of this repository to develop their project or research.
 
-A response is not guaranteed, but you can contact the authors using the information contained in the [Authors](#autores) section.
+A response is not guaranteed, but you can contact the authors using the information in the [Authors](#autores) section.
 
 ## License
 
 <p align="left">
   <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">
-    <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="Este repositorio está publicado bajo la licencia de Creative Commons Attribution 4.0 International." />
+    <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="This repository is published under the Creative Commons Attribution 4.0 International license." />
   </a>
   </br>
   </br>
@@ -98,21 +96,21 @@ This repository is published under the <a href="https://github.com/Serru/MultiCo
 
 The memory of the Final Degree Project can be found in the [Repository](https://deposita.unizar.es/record/66296?ln=es) of TFGs of the [University of Zaragoza](http://www.unizar.es/).
 
-## Acknowledgment
+## Acknowledgement
 
-This work is part of the [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigacion/ropert) research group of the [i3A](https://i3a.unizar.es), of the [University of Zaragoza](http://www.unizar.es/).
+This work is part of the [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigacion/ropert) research group of the [i3A](https://i3a.unizar.es), the [University of Zaragoza](http://www.unizar.es/).
 
 ![image](https://www.unizar.es/sites/default/files/i3a.png)
 
 ---
 
-The developed work has been experimentally evaluated and validated, showing a correct operation in the physical robot [Campero](http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg). For this reason, this Final Degree Project is part of the activities of the [COMMANDIA (2019)](http://commandia.unizar.es/) project, co-financed by the [Interreg Sudoe Program](https://www.interreg-sudoe.eu/inicio) and by the [European Regional Development Fund (ERDF)](https://ec.europa.eu/regional_policy/es/funding/erdf/).
+The developed work has been experimentally evaluated and validated, showing a correct operation of the physical robot [Campero] (http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg). For this reason, this work is part of the activities of the project [COMMANDIA (2019)](http://commandia.unizar.es/), co-funded by the [Interreg Sudoe Program](https://www.interreg-sudoe.eu/inicio) and the [European Regional Development Fund (ERDF)](https://ec.europa.eu/regional_policy/es/funding/erdf/).
 
 ![image](http://commandia.unizar.es/wp-content/uploads/cropped-logoCommandia-1.png)
 
 ## Recognition
 
-Please cite this post if the content of this repository has been useful to you:
+Please cite this work if the content of this repository has been useful to you:
 
 BibTeX: 
 ```

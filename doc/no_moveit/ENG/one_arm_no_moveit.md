@@ -1,228 +1,214 @@
-<!--- Para un robot  opción A--->
-# Instalación y configuración para un único robot UR10 sin `MoveIt!`
+# Installation and configuration for a single UR10 robot without `MoveIt!` 
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md) | **English**
 
-![image](/doc/imgs_md/Diseno-no-moveit-general-un-cobot-leap-motion.png  "Cargado el modelo URDF del robot UR10")
+![image](/doc/imgs_md/Diseno-no-moveit-general-un-cobot-leap-motion.png "Loaded the URDF model of the UR10 robot") 
 
-Las fases que se ven en el esquema son de orientación. Se pueden hacer en el orden que se prefiera, se ha dividido el esquema en fases para mantener un orden y conocer sobre qué elemento del esquema se está trabajando. En este caso se comenzará por la fase 1, seguido de la fase 2 y finalmente se termina con la fase 3. Hay que tener en cuenta que puede existir configuraciones en una fase que pertenece realmente a otra fase, cuando esto suceda se señalará adecuadamente.
+The phases you see in the diagram are for orientation. You can go through them in the order you wish. The diagram has been divided into phases so that you can follow a sequence and know which element of the diagram is being worked on. In this case, it starts with Phase 1, followed by Phase 2, and finally ends with Phase 3. Note that there may be configurations in one phase that actually belong to another phase. If this is the case, it will be marked accordingly.
 
-## Requisito previo
-- Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
+## Prerequisite
+- Successfully install the [base system configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md). 
 
-## Índice
-- [Fase 1: Configuración del simulador de `Gazebo`](#fase1)
-- [Fase 2: Configuración del *URDF*](#fase2)
-- [Fase 3: Implementación de un planificador propio que realiza un `pick & place`](#fase3)
-- [Ejecución de las pruebas](#pruebas)
+## Index
+- [Phase 1: `Gazebo` simulator configuration](#phase1)
+- [Phase 2: *URDF* configuration](#phase2)
+- [Phase 3: Implementation of a custom scheduler that performs a `pick &amp; place`](#phase3)
+- [Execution of tests](#tests) 
 
 <a name="fase1">
-  <h2>
-Fase 1: Configuración del simulador de Gazebo
-  </h2>
+<h2>
+Phase 1: Gazebo Simulator configuration
+</h2>
 </a>
 
-### :book: Configuración de `Gazebo`
-Lo primero que hay que hacer es configurar `Gazebo` y los controladores para que pueda simular adecuadamente los movimientos del cobot. Se crea el paquete `one_arm_no_ moveit_gazebo`, que contendrá toda la configuración relacionada con `Gazebo`, entre ellos los controladores. 
+### :book: `Gazebo` configuration
+The first thing to do is to configure the `Gazebo` and the controllers so that it can properly simulate the cobot's movements. The package `one_arm_no_ moveit_gazebo` will be created, which will contain all the configurations for `Gazebo`, including the controllers. 
 
-Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio `controller`. Los controladores se definen en ficheros con extensión *yaml*, para definir estos controladores hay que darles un nombre y definir el tipo del controlador, los `joints` dinámicos que se quieren controlar, las restricciones que tiene, el ratio de publicación y otras opciones.
+Once the package is created, you will need to configure the controllers that are stored in the `controller` directory. The controllers are defined in files with the extension *yaml*. To define these controllers, you must give them a name and specify the type of controller, the dynamic `joints` you want to control, the constraints it has, the publishing ratio and other options. 
 
-A continuación se presenta el contenido de los ficheros de configuración de los controladores, todos estos controladores, en general, siguen la estructura mencionada. La definición de los controladores pueden ser contenidas en un único fichero, lo importante es que en `Gazebo` los cargue correctamente, se procede a explicar brevemente estos controladores:
+The contents of the driver configuration files are shown below. All of these drivers generally follow the structure mentioned above. The definition of the controllers can be contained in a single file, the only important thing is that `Gazebo` loads them correctly. These controllers are briefly explained below: 
 
-- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquí se define el nombre del controlador `arm_controller`, el tipo de controlador posición `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador, todos estos `joints` son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
+- File [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/arm_controller_ur10.yaml): This file defines the controller for the UR10 cobot. It defines the controller name `arm_controller`, the controller type element `controllers/JointTrajectoryController` which contains the definition of the message type and the proper formatting of the information needed to communicate with the controller. Then there is the `joints` field that specifies which `joints` of the robot are part of the controller, all of these `joints` being dynamic. The other fields are left untouched, but care must be taken to name them consistently. 
 
-- Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los `joints` que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después publicarlo. Es fundamental para el correcto funcionamiento, tanto en simulación como con el robot real, forma parte del paquete de *ROS* *ros_control*.
+- File [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller/joint_state_controller.yaml): This file does not actually define a controller as such, its function is that of an interface that translates the `joint` information coming from the real cobot and converts it into `JointState` type messages that are later published. It is essential for correct operation both in simulation and with the real robot. It is part of the package *ROS* *ros_control*.
 
-
-#### :computer: Creación del directorio para la solución
+#### :computer: Create solution directory
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir one_arm_no_moveit
-```
+``` 
 
-#### :computer: Puesta en marcha de `Gazebo`
-Actualmente, desde el directorio creado del proyecto no se puede lanzar `Gazebo` con el robot, y es el primer paso lanzar `Gazebo` con el robot UR10.
+#### :computer: Starting `Gazebo`
+Currently it is not possible to run `Gazebo` with the robot from the created directory of the project. The first step is to start `Gazebo` with the UR10 robot. 
 
-Por imponer cierto orden en la estructura del proyecto a implementar, se van a separar el uso de las diferentes herramientas y sus ficheros siempre que se pueda. Esto permitirá una mejor compresión de cómo está estructurado y facilitará posteriormente su depuración.
+To bring some order to the structure of the project to be implemented, the use of the different tools and their files will be separated if possible. This allows a better understanding of the structure and facilitates later debugging. 
 
-Por ello, se creará un paquete, en vez de un directorio que contendrá todo lo relacionado con `Gazebo`:
+Therefore, instead of a directory, a package will be created that contains everything related to `Gazebo`:
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
 catkin_create_pkg one_arm_no_moveit_gazebo rospy
-```
+``` 
 
-En el directorio creado para `Gazebo`, se copiará del directorio de *ur_gazebo*, las carpetas *controller* y *launch*.
+In the directory created for `Gazebo` it copies the directory *ur_gazebo*, the folders *controller* and *launch*.
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/controller .
 cp -r ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_gazebo/launch .
 ```
-Se compila:
+It compiles: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
-```
+``` 
 
-Con esto ya se puede lanzar `Gazebo` desde el directorio del proyecto.
+With this you can now start `Gazebo` from the project directory. 
 
 ```bash
 roslaunch one_arm_no_moveit_gazebo ur10.launch
-```
+``` 
 
-#### :computer: Configuración del mundo de `Gazebo`
-Ahora se procede a crear el mundo con el robot y un entorno sobre el que podrá realizar simples tareas, este proyecto se enfoca en las tareas que pueda realizar el robot, por tanto, no es necesario que el mundo sea muy detallado.
+#### :computer: `Gazebo`'s world setup
 
-Para ello lo primero es crear el directorio *world*, en donde se guardará los `world`s que se creen:
+Now we proceed to create the world with the robot and an environment where it can perform simple tasks. This project focuses on the tasks that the robot can perform, so it is not necessary for the world to be very detailed. 
+
+For this purpose, you must first create the *world* directory where the created worlds will be stored:: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo
 mkdir world
-```
+``` 
 
-Se utilizará el fichero `world`, de otro [repositorio](https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) que provee de un escenario muy simple que permitirá la depuración posterior de tareas en el robot.
+The file `world` from another [repository] (https://github.com/Infinity8sailor/multiple_arm_setup/tree/main/multiple_ur_description/) is used, which provides a very simple scenario that allows later debugging of the robot's tasks.
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo
 git clone https://github.com/Infinity8sailor/multiple_arm_setup.git
 cp -r multiple_arm_setup/multiple_ur_description/models/ .
 cp -r multiple_arm_setup/multiple_ur_description/world/ .
-sudo rm -r mutiple_arm_setup
-```
+sudo rm -r multiple_arm_setup
+``` 
 
-Para que añadir el `world`con el robot en `Gazebo`, hay que modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) en el directorio *launch*:
+To add the `world` with the robot in `Gazebo` you have to change the file [ur10.launch] (https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/ one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) in the directory *launch*:
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch
 nano ur10.launch
-```
+``` 
 
-E incluir el mundo en el *launch*, añadiendo el argumento `world`y reemplazando el valor de *default* en el argumento *world_name*:
+And include the world in *launch* by adding the `world` argument and replacing the value of *default* in the *world_name* argument:
 
 ```xml
- <arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world" />
+<arg name="world" default="$(find one_arm_no_moveit_gazebo)/world/multiarm_bot.world"></arg><!-- startup simulated world --><include file="$(find gazebo_ros)/launch/empty_world.launch"><arg name="world_name" default="$(arg world)"></arg><arg name="paused" value="$(arg paused)"></arg><arg name="gui" value="$(arg gui)"></arg></include>
+``` 
 
-  <!-- startup simulated world -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(arg world)"/>
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="gui" value="$(arg gui)"/>
-  </include>
-```
-
-Se procede a lanzar `Gazebo` con el nuevo mundo:
+We proceed to launch `Gazebo` with the new world: 
 
 ```bash
 roslaunch one_arm_no_moveit_gazebo ur10.launch
-```
+``` 
 
-Al lanzarlo, muestra dos errores:
+When launching it, it shows two errors: 
 
 ```bash
 Error [parser.cc:581] Unable to find uri[model://dropbox]
-```
+``` 
 
-Este error no se puede solucionar, a no ser que se cree el modelo de cero, ya que `Gazebo` no lo provee o se ha eliminado. Por tanto, en el fichero [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) se comenta el objeto *dropbox*:
+This error can only be fixed if the model is created from scratch, since it is not provided by `Gazebo` or has been removed. Therefore, the object in the [multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world) file is commented with *dropbox*:
 
-```{xml}
-<!--include>
-       <pose frame=''>0.5 0.0 0.3 0 0 0</pose> 
-       <uri>model://dropbox</uri>
-       <name>DropBox</name>
-</include-->
-```
+``` {xml}<!--include>
+      <pose frame=''>0.5 0.0 0.3 0 0 0</pose> 
+      <uri>model://dropbox</uri>
+      <name>DropBox</name>
+</include-->``` 
 
----
+--- 
 
 ```bash
-[ERROR] [1639740881.902412642, 0.057000000]: GazeboRosControlPlugin missing <legacyModeNS> while using DefaultRobotHWSim, defaults to true.
+[ERROR] [1639740881.902412642, 0.057000000]: GazeboRosControlPlugin missing <legacymodens> while using DefaultRobotHWSim, defaults to true.
 This setting assumes you have an old package with an old implementation of DefaultRobotHWSim, where the robotNamespace is disregarded and absolute paths are used instead.
-If you do not want to fix this issue in an old package just set <legacyModeNS> to true.
-```
+If you do not want to fix this issue in an old package just set <legacymodens> to true.
+``` 
 
-Para eliminar este error, se procede a realizar el cambio desde el fichero de [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_descriptiom/urdf/common.gazebo.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_description/urdf/common.gazebo.xacro), hay que añadir *<legacyModeNS>* al fichero:
+To fix this error, we make the change in the file [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_descriptiom/urdf/common.gazebo.xacro] (https://github.com/Serru/MultiCobot -UR10-Gripper/blob/main/src/universal_robot/ur_description/urdf/common.gazebo.xacro) and add  * <legacymodens> * to the file: 
 
 ```xml
-<plugin name="ros_control" filename="libgazebo_ros_control.so">
-      <!--robotNamespace>/</robotNamespace-->
-      <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
-      <legacyModeNS>true</legacyModeNS>
-</plugin>
-```
+<plugin name="ros_control" filename="libgazebo_ros_control.so"><!--robotNamespace> / </robotNamespace--><!--robotSimType> gazebo_ros_control/DefaultRobotHWSim </robotSimType--><legacymodens> true </legacymodens></plugin>
+``` 
 
-#### :computer: Instalación de `Gazebo` 9 [Opcional]
-Puede surgir un *warning*, que puede ser un problema el ignorarlo a la hora de simular el comportamiento de brazo en el futuro, por lo que se procede a resolverlo.
+#### :computer: Installing `Gazebo` 9 [Optional]
+There could be a *warning* that is a problem if ignored when simulating arm behavior in the future. 
 
 ```bash
 [ WARN] [1639745803.729749460, 0.061000000]: The default_robot_hw_sim plugin is using the Joint::SetPosition method without preserving the link velocity.
 [ WARN] [1639745803.729772883, 0.061000000]: As a result, gravity will not be simulated correctly for your model.
-[ WARN] [1639745803.729786659, 0.061000000]: Please set gazebo_pid parameters, switch to the VelocityJointInterface or EffortJointInterface, or upgrade to Gazebo 9.
+[ WARN] [1639745803.729786659, 0.061000000]: Please set gazebo_pid parameters, switch to the VelocityJointInterface or EffortJointInterface, or upgrade to Gazebo 9. 
 
-```
+``` 
 
-Para ello, se ha decidido instalar `Gazebo` 9 en el entorno de *ROS Kinetic Kame*.
+To this end, it was decided to install `Gazebo` 9 in the * ROS Kinetic Kame* environment.
 
 ```bash
 sudo apt-get remove ros-kinetic-desktop-full
 sudo apt-get remove ros-kinetic-gazebo*
-sudo apt-get upgrade
+sudo apt-get upgrade 
 
-sudo apt-get install ros-kinetic-ros-base
+sudo apt-get install ros-kinetic-ros-base 
 
-sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" &gt; /etc/apt/sources.list.d/gazebo-stable.list'
 cat /etc/apt/sources.list.d/gazebo-stable.list
 wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-sudo apt-get update
+sudo apt-get update 
 
-sudo apt-get install ros-kinetic-gazebo9-ros-pkgs ros-kinetic-gazebo9-ros-control ros-kinetic-gazebo9*
+sudo apt-get install ros-kinetic-gazebo9-ros-pkgs ros-kinetic-gazebo9-ros-control ros-kinetic-gazebo9* 
 
-sudo apt-get install ros-kinetic-catkin
+sudo apt-get install ros-kinetic-catkin 
 
-sudo apt-get install rviz
+sudo apt-get install rviz 
 
-sudo apt-get install ros-kinetic-controller-manager ros-kinetic-joint-state-controller ros-kinetic-joint-trajectory-controller ros-kinetic-rqt ros-kinetic-rqt-controller-manager ros-kinetic-rqt-joint-trajectory-controller ros-kinetic-ros-control ros-kinetic-rqt-gui
+sudo apt-get install ros-kinetic-controller-manager ros-kinetic-joint-state-controller ros-kinetic-joint-trajectory-controller ros-kinetic-rqt ros-kinetic-rqt-controller-manager ros-kinetic-rqt- joint-trajectory-controller ros-kinetic-ros-control ros-kinetic-rqt-gui 
 
-sudo apt-get install ros-kinetic-rqt-plot ros-kinetic-rqt-graph ros-kinetic-rqt-rviz ros-kinetic-rqt-tf-tree
+sudo apt-get install ros-kinetic-rqt-plot ros-kinetic-rqt-graph ros-kinetic-rqt-rviz ros-kinetic-rqt-tf-tree 
 
-sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kinetic-kdl-parser ros-kinetic-forward-command-controller ros-kinetic-tf-conversions ros-kinetic-xacro ros-kinetic-joint-state-publisher ros-kinetic-robot-state-publisher
+sudo apt-get install ros-kinetic-gazebo9-ros ros-kinetic-kdl-conversions ros-kinetic-kdl-parser ros-kinetic-forward-command-controller ros-kinetic-tf-conversions ros-kinetic-xacro ros-kinetic -joint-state-publisher ros-kinetic-robot-state-publisher 
 
 sudo apt-get install ros-kinetic-ros-control ros-kinetic-ros-controllers
-```
+``` 
 
-El resultado tras instalar `Gazebo` 9 es similar a la siguiente.
-![setup stage](/doc/imgs_md/one-arm-no-moveit-gazebo-setup.png  "Gazebo9-world-setup")
+The result after installing `Gazebo` 9 looks similar to the following.
+![setup stage](/doc/imgs_md/one-arm-no-moveit-gazebo-setup.png "Gazebo9-world-setup") 
 
 <a name="fase2">
-  <h2>
-Fase 2: Configuración del URDF
-  </h2>
+<h2>
+Phase 2: URDF configuration
+</h2>
 </a>
 
-### :book: Descripción del fichero *URDF*
-El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML* el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
+### :book: Description of the *URDF* file
+The *URDF* (United Robotics Description Format) file models the cobot in *XML* format, which is used by the various applications that *ROS* requires, but mainly to perform a simulation of the modeled robot. 
 
-El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representarı́a al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
+The file is built in the form of a tree in which there are three main tags: ` <robot> `, ` <link> ` and ` <joint> `. For clarity, you can take the arm of the human body as a reference. If you want to model the arm of a person, the tag ` <robot> ` would represent the arm as a whole. This arm consists of several bones (humerus, ulna and radius) represented by tag ` <link> `and a joint connecting these bones (elbow) represented by tag ` <joint> `. 
 
-Además, como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometrı́a, inercia, orientación, etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo, que podrı́a ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
+As with bones, additional information about size, geometry, inertia, orientation, etc. can be added to these tags. Finally, the modeling of a robot can be connected to another model to form a more complex model that can be represented by adding the hand to the arm, where the wrist is a joint that connects the two. Note that ` <joint> `tags connect ` <link> ` tags via a parent-child relationship.
 
-Dicho esto, se realiza una representación de los componentes del robot:
- 
- ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
+This creates a representation of the robot components: 
 
-En la imagen se representa el contenido del [fichero *URDF*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando `world`(color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera, se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
+![image](/doc/imgs_md/urdf-robot.png "URDF file representation") 
+
+The image shows the contents of the [*URDF* file](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro ) that models the robot next to the gripper. You can see how the component of the UR10 robot arm is connected to the link `world` which represents the `world` (yellow color) and the base of the UR10 arm `base_link` (green color) which is directly above it, also the joint `world_joint` is the yellow ball located between both links. In the same way, the component of the gripper `robotiq_85_gripper` is connected to the arm of the UR10 (ur10 robot). The ball representing the joint `robotiq_85_base_joint` connecting both components (purple color) connects the link `robotiq_85_base_link` of the gripper with the link `ee_link` of the UR10 arm.
 
 
-#### :computer: :warning: Agregación del robotiq_2f_85_gripper al robot UR10 [No ha sido posible, problemas con `Gazebo`]
-Para agregar correctamente la pinza hay que entender primero el funcionamiento de este. Las instrucciones de instalación está en [aquí](https://github.com/Danfoa/robotiq_2finger_grippers).
- 
- Tomando la siguiente imagen para entender el funcionamiento del controlador de la pinza:
- ![esquema del gripper](/doc/imgs_md/robotiq_2f_85_gripper.png  "controlador del gripper")
+#### :computer: :warning: Adding the robotiq_2f_85_gripper to the UR10 robot [Not possible, problems with `Gazebo`]
+To add the gripper correctly, you must first understand how it works. Installation instructions can be found [here](https://github.com/Danfoa/robotiq_2finger_grippers). 
 
-Se puede apreciar 2 nodos, uno hace de cliente y otro de servidor. El *servidor* es que se encarga de enviar las órdenes a la pinza y feedback al cliente y el *cliente* envía órdenes al servidor.
+Take a look at the following image to understand how the gripper control works:
+![gripper schematic](/doc/imgs_md/robotiq_2f_85_gripper.png "gripper controller") 
 
-Si comparamos la configuración del controlador con la del UR10, se aprecia que el concepto es diferente, ya que no existe un fichero *yaml* que cargue con la información necesaria para controlar la pinza. En vez de eso, es el servidor que crea los *topic*s */command_robotiq_action* y */robotiq_controller/follow_joint_trajectory*, ambos son de tipo *action*.
+You can see 2 nodes, one acting as a client and the other as a server. The *server* is responsible for sending jobs to the gripper and feedback to the client and the *client* sends jobs to the server. 
+
+If we compare the configuration of the controller with that of the UR10, we notice that the concept is different because there is no *yaml* file that loads the necessary information to control the gripper. Instead, it is the server that creates the *topic*s */command_robotiq_action* and */robotiq_controller/follow_joint_trajectory*, both of which are of type *action*.
 
 ```bash
 miguel@Omen:~$ rostopic list
@@ -244,11 +230,11 @@ miguel@Omen:~$ rostopic list
 /rosout_agg
 /tf
 /tf_static
-```
+``` 
 
-Sabiendo esto, para controlar la pinza, hay un ejemplo en el fichero [robotiq_2f_action_client_example.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_2finger_grippers/robotiq_2f_gripper_control/scripts/robotiq_2f_action_client_example.py) y puede funcionar con una pinza simulada o la pinza real. Teniendo esto en cuenta, a la hora de agregar la pinza al robot UR10, no es necesario el fichero *yaml* que cargaría el controlador del driver, pero hay que lanzar correctamente el nodo que hará de servidor y si se mira el código de servidor y del cliente, hay que tener especial cuidado con la configuración de los *topic*s y *namespace*s.
+Knowing this, to control the gripper, there is an example in the file [robotiq_2f_action_client_example.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_2finger_grippers/robotiq_2f_gripper_control/scripts/robotiq_2f_action_client_example. py) and can work with a simulated gripper or the real gripper. Bearing this in mind, when adding the gripper to the UR10 robot, the *yaml* file that would load the driver controller is not necessary, but the node that will act as the server must be launched correctly and if you look at the server code and from the client, special care must be taken with the configuration of the topic*s and namespace*s. 
 
-El fichero que carga el robot UR10 es [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_description/launch/ur10_upload.launch), por tanto, se va a copiar lo necesario del paquete *ur_description* y modificarlo para añadir la pinza al robot y también modificar el fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_gazebo/launch/ur10.launch) que carga el *URDF* del paquete *ur_gazebo*:
+The file that uploads the UR10 robot is [~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_upload.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/ src/universal_robot/ur_description/launch/ur10_upload.launch), therefore, we will copy what is necessary from the *ur_description* package and modify it to add the gripper to the robot and also modify the file [ur10.launch](https:// github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/universal_robot/ur_gazebo/launch/ur10.launch) which loads the *URDF* of the *ur_gazebo* package: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit
@@ -259,48 +245,48 @@ cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/launch/ur10_uplo
 mkdir urdf
 cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_robot.urdf.xacro udrf/
 cp ~/MultiCobot-UR10-Gripper/src/universal_robot/ur_description/urdf/ur10_joint_limited_robot.urdf.xacro udrf/
-```
+``` 
 
-No se sabe la razón exacta de porque no es posible simular correctamente la pinza, ya que `Gazebo` provee el siguiente error:
+The exact reason why it is not possible to simulate the gripper correctly is not known, because `Gazebo` shows the following error:
 
 ```bash
 [ERROR] [1640030309.858708751, 1040.204000000]: This robot has a joint named "finger_joint" which is not in the gazebo model.
 [FATAL] [1640030309.858805517, 1040.204000000]: Could not initialize robot simulation interface
-```
+``` 
 
-Para la simulación con `Gazebo` no funciona, pero sí en la herramienta de *Rosviz*. Esto indica que el paquete de *ROS* para la pinza funciona correctamente, pero la configuración del robot simulado en `Gazebo` (robot real) no es la adecuada. Seguramente habría que tratarlos como elementos independientes que funcionan físicamente como un conjunto, que no es el enfoque que se está dando para esta simulación en `Gazebo`.
+It does not work in the simulation with `Gazebo`, but it does in the *Rosviz* tool. This indicates that the * ROS * package for the gripper works correctly, but the simulated robot configuration in `Gazebo` (real robot) is not correct. Surely they should be treated as independent elements that physically work as a whole, which is not the case with this simulation in `Gazebo`. 
 
-![rviz-robotiq-2f-85-gripper](/doc/imgs_md/robotiq_2f_85_gripper_rviz.png  "rviz-robotiq-2f-85-gripper")
+![rviz-robotiq-2f-85-gripper](/doc/imgs_md/robotiq_2f_85_gripper_rviz.png "rviz-robotiq-2f-85-gripper") 
 
-Como en el robot real, la pinza es un elemento independiente del brazo robótico puede que sea necesario este repositorio, pero para realizar las simulaciones se va a utilizar otro repositorio que sí es compatible con el simulador `Gazebo`.
+Since the gripper in the real robot is an independent element of the robot arm, this repository may be necessary, but for the simulations another repository compatible with the `Gazebo` simulator is used.
 
 
-#### :computer: Agregación del robotiq_85_gripper al robot UR10
-Se a proceder a agregar la pinza al robot UR10, no hay una referencia clara de cómo hacerlo adecuadamente. Para ello se empezará mirando cómo está estructurado el paquete para tener una idea de cómo adaptarlo al proyecto en cuestión.
+#### :computer: Adding the robotiq_85_gripper to the UR10 robot
+In the process of adding the gripper to the UR10 robot. There are no clear instructions on how to do this properly. So let us first look at how the package is built to get an idea of how to adapt it to the project in question.
 
 ```bash
-LICENSE             robotiq_85_description  robotiq_85_moveit_config  si_utils
-README.md           robotiq_85_driver       robotiq_85_msgs
-robotiq_85_bringup  robotiq_85_gripper      robotiq_85_simulation
-```
+LICENSE robotiq_85_description robotiq_85_moveit_config si_utils
+README.md robotiq_85_driver robotiq_85_msgs
+robotiq_85_bringup robotiq_85_gripper robotiq_85_simulation
+``` 
 
-A primera vista los paquetes que nos interesan son el *robotiq_85_description*, *robotiq_85_bringup* y *robotiq_85_simulation*, el resto son recursos para su uso con `MoveIt!` o scripts, que posteriormente se aplicarán para el control de la pinza en simulación.
+At first glance, the packages we are interested in are *robotiq_85_description*, *robotiq_85_bringup* and *robotiq_85_simulation*, the rest are resources for use with `MoveIt!` or scripts used later to control the gripper in the simulation. 
 
-Teniendo esto en cuenta se va a proceder a la incorporación de la pinza en el robot UR10.
+In this sense, the gripper is built into the UR10 robot. 
 
-Tomando como ejemplo el fichero [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro), se procede a añadir la pinza al robot, para ello hay que modificar los ficheros:
+For example, take the file [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro] (https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper /robotiq_85_description/urdf/robotiq_85_gripper.xacro) and insert the gripper into the robot by changing the files: 
 
-- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro)
-- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro).
+- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot /one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot /one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro). 
 
-Y con esto, se tiene la pinza en el robot UR10, se puede apreciar en la imagen la pinza.
-![ ](/doc/imgs_md/ur10_con_gripper_85.png  "ur10 con gripper")
+And with that you have the gripper on the UR10 robot. You can see the gripper on the picture.
+![ ](/doc/imgs_md/ur10_con_gripper_85.png "ur10 with gripper")
 
----
+--- 
 
-#### :computer: Agregación del controlador de la pinza (Gazebo, fase 1)
+#### :computer: Gripper Controller Aggregation (Gazebo, Phase 1) 
 
-Ahora, faltan los controladores para mandarle órdenes a la pinza, eso se puede comprobar obteniendo la lista de *topic*s activos y se comprobará que no hay ningún controlador para la pinza:
+Now the controllers are missing to send orders to the gripper. You can check this by looking in the list of active *topic*s to see that there is no controller for the gripper:
 
 ```bash
 miguel@Omen:~$ rostopic list
@@ -328,28 +314,27 @@ miguel@Omen:~$ rostopic list
 /rosout_agg
 /tf
 /tf_static
-```
+``` 
 
-Se puede apreciar, que están cargados los controladores del robot UR10 (**/arm_controller**) pero no existe ningún *topic* para el control de la pinza. Para ello hay que añadirlos y cargarlos en `Gazebo` correctamente de la siguiente manera. 
+You can see that the UR10 robot controllers are loaded (**/arm_controller**), but there is no *theme* for the gripper controller. To change this you need to add them as follows and load them correctly in `Gazebo`. 
 
-Los ficheros que contienen la información para controlar la pinza se encuentran en los directorios [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller) y  [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch) que estarían relacionadas respectivamente con los directorios *controller* y *launch* del directorio [one_arm_no_moveit_gazebo](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo).
+The files with the gripper control information are located in the directories [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller](https://github.com/Serru/MultiCobot-UR10-Gripper /tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller) and [~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch](https://github.com/Serru/MultiCobot-UR10- Gripper/tree/main/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/launch), which points to the *controller* and *launch* directories of the [one_arm_no_moveit_gazebo](https://github.com/Serru/MultiCobot-UR10- Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo). 
 
-Al final, se han realizado las siguientes modificaciones:
+Finally, the following changes were made:
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller
 cp ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_simulation/robotiq_85_gazebo/controller/gripper_controller_robotiq.yaml .
-```
+``` 
 
-Y se ha agregado al final del fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) el controlador de la pinza:
+And at the end of the file [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/ main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/ur10.launch) added the gripper controller: 
 
 ```xml
 <!-- robotiq_85_gripper controller -->
-  <rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"/> 
-  <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper" />
-```
+<rosparam file="$(find one_arm_no_moveit_gazebo)/controller/gripper_controller_robotiq.yaml" command="load"></rosparam><node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" args="gripper"></node>
+``` 
 
-Se lanza `Gazebo` de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y con el comando *rostopic list*, se aprecia que los controladores de la pinza aparecen correctamente (**/gripper**):
+Restart `Gazebo` (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) and with the command *rostopic list* you can see that the gripper controllers are displayed correctly (**/gripper**): robotiq_85_gripper controller
 
 ```bash
 /arm_controller/command
@@ -383,7 +368,7 @@ Se lanza `Gazebo` de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y 
 /rosout_agg
 /tf
 /tf_static
-```
+``` 
 
 
 
@@ -394,221 +379,205 @@ Se lanza `Gazebo` de nuevo (*roslaunch one_arm_no_moveit_gazebo ur10.launch*) y 
 
 
 <a name="fase3">
-  <h2>
-Fase 3: Implementación de un planificador propio que realiza un <i>pick & place</i>
-  </h2>
+<h2>
+Phase 3: Implementation of a custom scheduler that performs a <i> pick &amp; place </i>
+</h2>
 </a>
 
-### :book: Creación del planificador y nodos auxiliares
+### :book: 
 
-Se seguirá siempre que se pueda la política de *ROS* en separar las tareas en nodos, para facilitar su reutilización futura.
+Creating scheduler and helper nodes 
 
-![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2.png "Esquema del diseño del planificador propio")
+The * ROS * policy of splitting tasks into nodes is followed whenever possible to facilitate future reuse. 
 
-En la imagen, está el esquema del diseño de la arquitectura del planificador que se ha implementado. Se puede apreciar dos divisiones `Gazebo` (son los nodos de color rojo y los *topic*s de color naranja) y el planificador (son los nodos de color azul y *topic*s de color verde), se ha dividido ası́ para facilitar la explicación.
+![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Design-planner-phase-2.png "Scheme for creating your own motion planner") 
 
-El grupo de nodos y *topic*s del grupo de `Gazebo`, no se han tenido que tocar y se ha tomado ventaja de su existencia para obtener la información necesaria que el planificador necesita para realizar su tarea. Este grupo se comunica con el grupo del planificador mediante tres *topic*s `/tf` que contiene información de las transformadas del robot y los *topic*s `/gripper/command` y `/arm_controller/command` que reciben la información necesaria para realizar movimientos en el robot.
+In the figure you can see the schema for the structure of the implemented planner architecture. You can see two sections: `Gazebo` (the nodes in red color and the *topic*s in orange color) and the planner (the nodes in blue color and the *topic*s in green color), divided in this way to facilitate the explanation. 
 
-Teniendo conocimiento de esos nodos y *topic*s del grupo de `Gazebo`, la solución diseñada para el planificador es comunicarse con ellos para obtener la información que necesita. El nodo `ur10_robot_pose` obtiene la información de las transformadas y le envı́a la posición del *end-effector* al nodo `robot_manipulator`, que realiza dos funciones principales, la primera es el control de la pinza y la segunda es planificar la trayectoria del brazo. Los nodos `cmd_gripper_value_pub` y `cmd_ik_trajectory_pub` obtienen las órdenes del nodo `robot_manipulator` y se lo envı́a a los *topic* de los controladores de `Gazebo` directamente (`/gripper/command` y `/arm_controller/command`).
+The `Gazebo` group of nodes and *topic*s did not need to be touched and their existence was exploited to obtain the necessary information to allow the planner to perform its task. This group communicates with the planning group through three *topic*s `/tf` that contain information about robot transformations, and the *topic*s `/gripper/command` and `/arm_controller/command` that receive the necessary information to execute movements in the robot. 
 
-Una vez explicado el funcionamiento general de la solución se va a explicar lo que hace cada nodo con más detalle:
+Since these nodes and *topic*s are known to the `Gazebo` group, the solution for the planner is to communicate with them to get the needed information. The node `ur10_robot_pose` receives the transformation information and sends the position of the *end-effector* to the node `robot_manipulator`, which performs two main functions: The first is controlling the gripper and the second is planning the trajectory of the effector. The `cmd_gripper_value_pub` and `cmd_ik_trajectory_pub` nodes receive commands from the `robot_manipulator` node and send them directly to the *topic* `Gazebo` controllers (`/gripper/command` and `/arm_controller/command`). 
 
-- [ur10_robot_pose](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py): Este script crea un nodo que únicamente publica la posición del *end-effector* con cierta frecuencia (10 Hz) mediante la librerı́a tf de *ROS* es decir, obtiene la posición del *end-effector* de la información del *topic* `/tf` que es publicada en el *topic* `/robot_pose`. La posición del *end-effector* es obtenida con la diferencia entre las posiciones del `/base_link` y `/ee_link` (es el link que conecta con la pinza). Realmente no es necesario este nodo, el nodo `robot_manipulator` podrı́a gestionarlo de propio, aunque sea redundante, pero muy útil durante la depuración y el entendimiento de cómo funciona el planificador.
-- [pub_gripper_cmd](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py): El script crea un nodo que únicamente recibe y transmite las órdenes recibidas por el *topic* `/pub_gripper_control` al *topic* del controlador de la pinza `/gripper/command`. Aunque la funcionalidad es sencilla, este nodo permite cambios del valor que se le envı́a al controlador en cualquier momento, porque no realiza ninguna comprobación de que se haya realizado el movimiento correctamente, esto es un comportamiento deseado. Y si no recibe ninguna orden sigue publicando la orden anterior manteniendo el valor de la pinza y si recibe una nueva orden, desecha inmediatamente el valor anterior permitiendo realizar cambios durante la ejecución del un movimiento.
-- [pub_ik_trajectory](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py): Funciona de la misma manera que lo descrito para el nodo `cmd_gripper_value_pub`, este script instancia el nodo `cmd_ik_trajectory_pub`. Recibe las órdenes del *topic* `/pub_ik_trajectory` al cual está suscrito y los transmite al *topic* del controlador del brazo `/arm_controller/command`. También permite realizar cambios durante la ejecución de una trayectoria, lo que permite cambios bruscos de dirección sin tener que esperar a que termine de llegar a la posición previamente designada.
-- [robot_manipulator](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py): Este script instancia el nodo `robot_manipulator` que obtiene la posición actual del *end-effector* del *topic* `/robot_pose`, esta información es necesaria para poder obtener los valores de cada uno de las articulaciones necesarias para llegar a la posición en cartesiano que se desea. Una vez obtenido el valor que deben tener las articulaciones se publican por el *topic* `/pub_ik_trajectory`. Se ha tenido que implementar un [script que hace la función de librerı́a](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py), esta librerı́a está compuesta de varias funciones para realizar los cálculos necesarios en la obtención de la cinemática directa (forward kinematic) y la cinemática inversa (inverse kinematic). Para el caso de la pinza, como solamente hay que controlar el valor de una articulación, no es necesario ningún cálculo, simplemente se le pasa el valor deseado. Durante la implementación hay que tener en cuenta el tipo de los mensajes que deben recibir los controladores para construirlos adecuadamente o no realizarán ningún movimiento o realizará movimientos no deseados. Esta solución pueda dar problemas debido a la aparición de singularidades, esto es debido a que pueden existir divisiones por cero durante el cálculo de las ecuaciones, principalmente debido cuando dos articulaciones están alineadas, para evitarlo, en este caso, simplemente se ha limitado el entorno de trabajo del robot.
+Having explained how the solution works in general, we now explain what each node does in detail: 
 
----
+- [ur10_robot_pose](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py): This script creates a node that posts only the position of the *end-effector* with a given frequency (10 Hz) via the tf library of * ROS *, i.e. it obtains the position of the *end-effector* from the information of the *theme* `/tf` published in the *theme* `/robot_pose`. The position of the *end-effector* is obtained from the difference between the positions of `/base_link` and `/ee_link` (the link that connects to the clip). This node is not really necessary, the `robot_manipulator` node could do this itself, albeit redundantly, but very useful for debugging and understanding how the scheduler works.
+- [pub_gripper_cmd](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py): The script creates a node that only receives commands from *topic* `/pub_gripper_control` and forwards them to *topic* gripper controller `/gripper/command`. Although the functionality is simple, this node allows changes to the value sent to the controller at any time because it does not perform a check to see if the move was executed correctly, which is a desired behavior. And if it does not receive an order, it continues to publish the previous order and keeps the value of the parenthesis. If it receives a new order, it immediately discards the previous value so that changes can be made while a move is executing.
+- [pub_ik_trajectory](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py): Works the same way as described for the `cmd_gripper_value_pub` node, this script instantiates the `cmd_ik_trajectory_pub` node. It receives commands from the *topic* `/pub_ik_trajectory` to which it subscribes and transmits them to the arm controller *topic* `/arm_controller/command`. Also, changes can be made while executing a trajectory, allowing sudden changes in direction without having to wait until the previously specified position is reached.
+- [robot_manipulator](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py): This script instantiates the `robot_manipulator` node and determines the current position of the *end-effector* of the *subject* `/robot_pose`. This information is necessary to determine the values of each joint needed to achieve the desired Cartesian position. Once the value that the joints must have is determined, they are published via the *topic* `/pub_ik_trajectory`. I had to implement a [script that runs the library function](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py). This library consists of several functions that perform the necessary calculations to obtain the forward kinematics and the inverse kinematics. In the case of the bracket, since only the value of a joint needs to be controlled, no computation is required; the desired value is simply passed to the function. In the implementation, it is necessary to take into account the type of messages that the controllers must receive in order to set them correctly, otherwise they will not perform any movements or they will perform undesirable movements. This solution can lead to problems since singularities can occur because divisions by zero can occur when calculating the equations, especially when two joints are aligned. To avoid this, the robot's environment was simply constrained in this case.
+
+--- 
 
 #### :computer: robot_pose_publisher script
-Se va a implementar un nodo que publique la posición del end effector `ee_link` en todo momento, mediante la librería *tf*.
+We will implement a node that publishes the position of the end effector `ee_link` at any time, using the library *tf*. 
 
-Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de `Gazebo`.
+Since this is a tool and not a script that gives commands to the robot, this script will be provided in the `Gazebo` directory.
 
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
-touch ur10_robot_pose.py
-chmod +x ur10_robot_pose.py
-```
+```bash cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts touch ur10_robot_pose.py chmod +x ur10_robot_pose.py
+``` 
 
-- Ver el contenido del fichero [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py).
+- View the contents of the [ur10_robot_pose.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/ur10_robot_pose.py) file. 
 
-Este nodo calcula la posición del `ee_link` respecto a la posición del `base_link` mediante la librería *tf* y lo publica en el *topic* `\robot_pose`. Esto permitirá obtener rápidamente la posición actual de la pinza.
+This node calculates the position of the `ee_link` relative to the position of the `base_link` using the *tf* library and publishes it in the *topic* `\robot_pose`. This allows you to quickly determine the current position of the gripper. 
 
-- Automatización del lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch).
+- To automatically launch the file, add the following to the [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot- UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch) file.
 
 ```xml
-  <!-- get the robot position [Own Script]-->
-  <node name="ur10_robot_pose" pkg="one_arm_no_moveit_gazebo" type="ur10_robot_pose.py" respawn="true" />
-```
+<!-- get the robot position [Own Script]-->
+<node name="ur10_robot_pose" pkg="one_arm_no_moveit_gazebo" type="ur10_robot_pose.py" respawn="true"></node>
+``` 
 
----
+--- 
 
 #### :computer: pub_gripper_cmd script
-Permite el control de la pinza, para ello se creará un nodo que escuche de un *topic* (`/pub_gripper_control`) del que obtendrá el valor que enviará al controlador mediante el *topic* `/gripper/command`.
+It enables the control of the gripper. For this purpose, a node is created that listens to a *topic* (`/pub_gripper_control`) from which it receives the value it sends to the controller via the *topic* `/gripper/command`. 
 
-Este nodo es un nodo de apoyo, por ello estará junto a los scripts de `Gazebo`, cerca de los ficheros de los controladores:
+This node is a support node, i.e. it is located next to the `Gazebo` scripts, near the driver files:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
 touch pub_gripper_cmd.py
 chmod +x pub_gripper_cmd.py
-```
+``` 
 
-- Ver el contenido del fichero [pub_gripper_cmd.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py).
+- See the contents of the file [pub_gripper_cmd.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_gripper_cmd.py). 
 
-- Automatización del lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch).
+- To launch the file automatically, add the following to the [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot- UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch) file.
 
 ```xml
 <!-- send the gripper commands [Own Script]-->
-  <node name="cmd_gripper_value_pub" pkg="one_arm_no_moveit_gazebo" type="pub_gripper_cmd.py" respawn="true" />
-```
+<node name="cmd_gripper_value_pub" pkg="one_arm_no_moveit_gazebo" type="pub_gripper_cmd.py" respawn="true"></node>
+``` 
 
----
+--- 
 
 #### :computer: pub_ik_trajectory script
-Se va a implementar un nodo que reciba comandos por el *topic* `/pub_ik_trajectory` y se los irá mandando repetidamente a los controladores del robot, la posición a la que debe ir se irá modificando al recibir nuevas órdenes.
+A node is implemented that receives commands via the *topic* `/pub_ik_trajectory` and sends them repeatedly to the robot controllers. The position it has to move to is changed when it receives new commands. 
 
-Como se considera más una herramienta que el script que realmente da las órdenes al robot, este script se implementará en el directorio de `Gazebo`, igual que en el apartado anterior.
+Since this is a tool and not a script that gives commands to the robot, this script is implemented in the `Gazebo` directory, just like in the previous section.
 
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts
-touch pub_ik_trajectory.py
-chmod +x pub_ik_trajectory.py
-```
+```bash cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts touch pub_ik_trajectory.py chmod +x pub_ik_trajectory.py
+``` 
 
-- Ver el contenido del fichero [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py).
+- View the contents of the [pub_ik_trajectory.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/scripts/pub_ik_trajectory.py) file. 
 
-
-- Automatización del lanzamiento del nodo, hay que añadir lo siguiente al fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch).
+- To automatically launch the file, add the following to the [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch](https://github.com/Serru/MultiCobot- UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch/controller_utils.launch)f file.
 
 ```xml
-  <!-- send the arms commands [Own Script]-->
-  <node name="cmd_ik_trajectory_pub" pkg="one_arm_no_moveit_gazebo" type="pub_ik_trajectory.py" respawn="true" />
-```
+<!-- send the arms commands [Own Script]-->
+<node name="cmd_ik_trajectory_pub" pkg="one_arm_no_moveit_gazebo" type="pub_ik_trajectory.py" respawn="true"></node>
+``` 
 
----
+--- 
 
 #### :computer: robot_manipulator script
-Se va a implementar un nodo que obtendrá la información obtenida del nodo `robot_pose_publisher` y enviará las trayectorias al nodo `pub_ik_trajectory`.
+We will implement a node that receives the information received from the `robot_pose_publisher` node and sends the trajectories to the `pub_ik_trajectory` node. 
 
-Para obtener los valores de las articulaciones dado la posición cartesiana que al que se quiere ir, es necesario la implementación la función *Inverse Kinematics* y *Forward Kinematics*. Estas funciones fueron obtenidas y adaptadas de [The Construct](https://www.theconstructsim.com/).
+To get the values of the joints based on the Cartesian position you want to move to, you need to implement the *Inverse Kinematics* and *Forward Kinematics* functions. These functions were taken from [The Construct] (https://www.theconstructsim.com/) and adapted. 
 
-Para ello:
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
-touch kinematics_utils.py
-chmod +x kinematics_utils.py
+For them:
+```bash cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts touch kinematics_utils.py chmod +x kinematics_utils.py
 ```
-- Ver el contenido de la librería [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py).
+- Displays the contents of the [kinematics_utils.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/kinematics_utils.py) library. 
 
-Una vez que se tiene la librería implementada, se procede a desarrollar el nodo que será el que realmente envíe las órdenes al robot para que realice las tareas deseadas, en este caso el *pick & place*, en donde el cobot cogerá de un cubo de la mesa y lo dejará en una cesta, así hasta que no queden más cubos en la mesa.
+Once the library is implemented, we proceed to develop the node that sends commands to the robot to perform the desired tasks, in this case *pick & place*, where the cobot picks a cube from the table and places it in a basket until there are no more cubes on the table. 
 
-```bash
-cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts
-touch robot_manipulator.py
-chmod +x robot_manipulator.py
-```
+```bash cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts touchrobot_manipulator.py chmod +x robot_manipulator.py
+``` 
 
-Contiene una serie de funciones para enviar correctamente las trayectorias finales así como la obtención de los valores de los `joints` en la posición del robot.
+It contains a set of functions to send the final trajectories correctly and get the values of the `joints` in the position of the robot. 
 
-- Ver el contenido de la librería [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py).
+- See the contents of the library [robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py). 
 
+The robot has problems depending on the coordinates passed, since singularities can occur if the robot is blocked by constraints on the mathematical domain (for example: if theta2 = acos(1), the value is undefined and generates an error or divisions for zero). 
 
-El robot da problemas dependiendo de las coordenadas que se pasen, ya que puede surgir singularidades, es cuando el robot se bloquea por limitaciones del dominio matemático (ej.: si theta2 = acos(1), el valor es indefinido generando un error o divisiones por cero).
-
-Para evitar eso, se puede definir un *workspace* en donde no sufra de estas singularidades.
+To avoid this, a *workspace* can be defined where these singularities do not occur.
 
 
 <a name="pruebas">
-  <h2>
-Ejecución de las pruebas
-  </h2>
+<h2>
+Execution of the tests
+</h2>
 </a>
 
-### :computer: Realización de pruebas en `Gazebo`
-Se ha creado un test en donde, el robot agarra tres cubos de madera y los envía a un contenedor.
+### :computer: Testing in `Gazebo`
+A test was created where the robot grabs three wooden cubes and sends them into a container. 
 
-El fichero con el código del manipulador para realizar la prueba: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py)
+The file with the handler code to perform the test: [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10- Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_manipulator/scripts/robot_manipulator.py) 
 
-Comandos para lanzar el test:
+Commands to launch the test: 
 
-- Terminal 1:
+-Terminal 1: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/
 source devel/setup.bash
 roslaunch one_arm_no_moveit_gazebo ur10_joint_limited.launch
-```
+``` 
 
-- Terminal 2:
+-Terminal 2: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/
 source devel/setup.bash
 rosrun one_arm_no_moveit_manipulator robot_manipulator.py
-```
+``` 
 
-### :book: Problemas durante las pruebas de pick and place
-Durante el inicio de las pruebas se ha visto que en la simulación en `Gazebo` no es posible agarrar los objetos sobre la mesa.
+### :book: Problems with pick-and-place testing
+At the beginning of the tests it turned out that in the simulation in `Gazebo` it is not possible to pick up the objects on the table. 
 
-Esto es debido a que falta incluir el plugin de `Gazebo` *gazebo_grasp* que está en el paquete *gazebo-pkgs* instalado previamente como recurso.
+This is due to the absence of the `Gazebo` plugin *gazebo_grasp*, which is included in the package *gazebo-pkgs*, previously installed as a resource.
 
-#### :computer: Gazbebo Grasp plugin
-Se va a proceder a realizar los pasos necesarios para cargar el plugin que permita al robot interaccionar con los objetos en simulación.
+#### :computer: Gazebo Grasp Plugin
+We now perform the necessary steps to load the plugin that will allow the robot to interact with the objects in the simulation. 
 
-Lo primero es tener el fichero *gzplugin_grasp_fix.urdf.xacro* (se puede obtenerlo del repositorio de [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo-grasp-fix-plugin)), se podría guardarlo en el paquete de *universal robots*, pero como es una modificación realizada para este proyecto, se ha decidido en moverlo al directorio [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf).
+First, we need the file *gzplugin_grasp_fix.urdf.xacro* (you can get it from the repository of [Jennifer Buehler](https://github-wiki-see.page/m/JenniferBuehler/gazebo-pkgs/wiki/The-Gazebo -grasp-fix-plugin)). It could be stored in the *universal robots* package, but since it is a modification for this project, it was decided to move it to the [~/MultiCobot-UR10-Gripper/src/multirobot /one_arm_no_moveit/one_arm_no_moveit_description/urdf](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf) directory.
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf
 touch gzplugin_grasp_fix.urdf.xacro
-```
+``` 
 
-- Ver el contenido del fichero [gzplugin_grasp_fix.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro).
+- See the contents of the file [gzplugin_grasp_fix.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro) . 
 
-Una vez que se tiene el plugin de `Gazebo`, hay que añadirlo al brazo robótico, también se ha añadido a la pinza el código para aumentar su fricción, ayudando al agarre de los objetos en la simulación.
+Once you have the `Gazebo` plugin, you need to add it to the robot arm. The code to increase friction has also been added to the gripper to help it grip objects in the simulation. 
 
 ```bash
 nano ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro
-```
+``` 
 
-Añadir al final el plugin:
+Add the plugin at the end: 
 
 ```xml
-  <xacro:include filename="$(find one_arm_no_moveit_description)/urdf/gzplugin_grasp_fix.urdf.xacro"/>
+<include filename="$(find one_arm_no_moveit_description)/urdf/gzplugin_grasp_fix.urdf.xacro"></include><gzplugin_grasp_fix prefix=""></gzplugin_grasp_fix>
+``` 
 
-  <xacro:gzplugin_grasp_fix prefix=""/>
-```
+- See the contents of the file [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) . 
 
-- Ver el contenido del fichero [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro).
-
-De la misma manera, editamos el fichero de la pinza ([~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro)):
+In the same way we edit the gripper file ([~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10- Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro)): 
 
 ```bash
 nano ~/MultiCobot-UR10-Gripper/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro
-```
+``` 
 
-- Ver el contenido del fichero [robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro).
+- View the contents of the [robotiq_85_gripper.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro) file. 
 
+This is all you need to configure the plugin correctly. If there are multiple robots, the plugin must be assigned correctly for each gripper, otherwise these grippers will not be able to grab objects during the simulation.
 
-Y esta es toda la configuración necesaria para que el plugin funcione correctamente, en el caso de que hubiese varios robots, hay que asignar correctamente el plugin para cada pinza, si no esas pinzas no podrán agarrar objetos durante la simulación.
+### :book: End result information 
 
-### :book: Información del resultado final
+- Visual result in `Gazebo`
+![image](/doc/imgs_md/one-arm-no-moveit-gazebo.png "Result in Gazebo") 
 
-- Resultado visual en `Gazebo`
-![image](/doc/imgs_md/one-arm-no-moveit-gazebo.png  "Resultado en Gazebo")
+- Scheme of the nodes and *topic*s of the system
+![image](/doc/imgs_md/one-arm-no-moveit-graph.png "System nodes and topics") 
 
-- Esquema de los nodos y *topic*s del sistema
-![image](/doc/imgs_md/one-arm-no-moveit-graph.png  "Nodos y topics del sistema")
+- Tree of transformations of the robot model
+![image](/doc/imgs_md/one-arm-no-moveit-tree.png "Transform Tree") 
 
-- Árbol de las transformadas del modelo del robot
-![image](/doc/imgs_md/one-arm-no-moveit-tree.png  "Árbol de transformadas")
+--- 
 
----
-
-<div>
-  <p align="left">
-    <button name="button">
-                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md">Anterior</a>
-    </button>
-  </p>
-</div>
+<p align="left">
+<button name="button">
+<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md"> Previous </a>
+</button>
+</p>
