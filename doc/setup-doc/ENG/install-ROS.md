@@ -3,10 +3,11 @@
 [Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENP/install-ROS.md)  | **English**
 
 ## Installation of *ROS Kinetic Kame*
+
 ```bash
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 
-sudo apt install curl # if you do not have curl already installed curl
+sudo apt install curl # if you haven't already installed curl
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
 sudo apt-get update
@@ -31,7 +32,7 @@ source /opt/ros/kinetic/setup.bash
 sudo apt-get install ros-kinetic-$(dependency_name)
 ``` 
 
-If the dependency is *moveit_ros_planning*, then *dependencia_name* is *moveit-ros-planning*, this pattern is followed to install all dependencies, for the previous example it would be:
+If the dependency is *moveit_ros_planning*, then *dependency_name* is *moveit-ros-planning*, this pattern is followed to install all dependencies, for the previous example it would be:
 
 ```bash
 sudo apt-get install ros-kinetic-moveit-ros-planning
@@ -52,12 +53,12 @@ sudo apt-get install ros-kinetic-moveit-ros-planning
 - ros_controllers
 - industrial_msgs 
 
-*The dependencies may differ from those suggested in this guide. During the installation of the * ROS * tools and packages, the different dependencies that ROS requires will be displayed.
+*The dependencies may differ from those suggested in this guide. During the installation of the * ROS * tools and packages, the different dependencies that ROS requires will be displayed.*
 
  ---
- 
+<div>
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a></button>
+    <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a></button>
 </p>
 
 
@@ -66,4 +67,6 @@ sudo apt-get install ros-kinetic-moveit-ros-planning
  <button name="button">
  <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ros-packages.md"> Next </a>
  </button>
- </span></p>
+ </span>
+</p>
+</div>

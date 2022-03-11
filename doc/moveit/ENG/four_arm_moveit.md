@@ -1,310 +1,311 @@
-<!--- Para cuatro robots opción B--->
-# Instalación y configuración para cuatro robots UR10 replicando `MoveIt!`
+# Installation and configuration for four UR10 robots replicating `MoveIt!` 
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md)
+**Spanish** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md) 
 
-![image](/doc/imgs_md/Diseno-moveit-general-cuatro-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
+![image](/doc/imgs_md/Diseno-moveit-general-cuatro-cobots-leap-motion.png "Loaded the URDF model of the UR10 robot") 
 
-Se va a realizar la solución para cuatro robots esta vez, de la misma manera que se ha realizado para uno, pero modificando el contenido de los ficheros adaptándolo para su simulación con cuatro robots.
+The solution is going to be carried out for four robots this time, in the same way that it has been carried out for one, but modifying the content of the files, adapting it for simulation with four robots. 
 
-## Requisito previo
-- Realizar correctamente la instalación de la [configuración base del sistema](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
-- Implementar la [solución para un robot sin el planificador de `MoveIt!`](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md).
+## Prerequisite
+- Successfully install the [base system configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md).
+- Implement the [solution for a robot without the `MoveIt!` scheduler](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md). 
 
-## Índice
-- [Configuración inicial: Configuración para un robot](#setup-inicial)
-	- [Fase 1: Configuración del *URDF*](#fase1)
-	- [Fase 2: Configuración de `MoveIt!`](#fase2)
-	- [Fase 3: Simulación de un `pick & place` en `Gazebo`](#fase3)
-	- [Ejecución de las pruebas](#pruebas)
-- [Modificaciones: Sistema multirobot compuesto de cuatro robots](#modificaciones)
-	- [Configuración realizada en `Gazebo` para cuatro cobots](#modificaciones1)
-	- [Configuración realizada en `MoveIt!` para cuatro cobots](#modificaciones2)
-	- [Ejecución de las pruebas](#pruebas2)
-	
+## Index
+- [Initial setup: Setup for a robot](#setup-initial)
+- [Phase 1: *URDF* configuration](#phase1)
+- [Phase 2: Configuring `MoveIt!`](#phase2)
+- [Phase 3: Simulation of a `pick &amp; place` in `Gazebo`](#phase3)
+- [Execution of tests](#tests)
+- [Mods: Multirobot system composed of four robots](#mods)
+- [Configuration made in `Gazebo` for four cobots](#modifications1)
+- [Configuration made in `MoveIt!` for four cobots](#modifications2)
+- [Execution of tests](#tests2) 
+
 <a name="setup-inicial">
-  <h2>
-Configuración inicial: Configuración para un robot
-  </h2>
+<h2>
+Initial setup: Setup for a robot
+</h2>
 </a>
 
-En esta sección se realiza una replicación de la configuración para un único robot, del cual se toma como base y así explicar posteriormente las modificaciones realizadas para poder controlar dos robots.
+In this section, a replication of the configuration for a single robot is made, from which it is taken as a base and thus later explains the modifications made to be able to control two robots. 
 
-### :warning: Contenido de los ficheros
-No copiar y pegar el contenido de los ficheros ciegamente en esta sección. Durante la explicación para la configuración para un robot, la información es idéntica a lo que se obtiene del paquete **one_arm_moveit**, pero hay que modificar el contenido para se ajuste al nuevo paquete, en este caso **four_arm_moveit**.
+### :warning: File content
+Do not blindly copy and paste the contents of the files into this section. During the explanation for the configuration for a robot, the information is identical to what you get from the package **one_arm_moveit**, but you have to modify the content to fit the new package, in this case **four_arm_moveit**. 
 
-Hay dos opciones:
-- Si se ha realizado la solución para un robot [one_arm_moveit](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md), se puede continuar sobre lo implementado, pero en la sección de *modificaciones* hay que cambiar **four_arm_moveit** por **one_arm_moveit**.
-- Si no se ha realizado la solución para un robot [one_arm_moveit](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md), se puede seguir los pasos que se presentan en esta sección, pero hay que tener en cuenta que el contenido de los ficheros en esta fase de *configuración inicial* están enlazadas a los ficheros de **one_arm_moveit** y por ello al realizar la copia de este hay que reemplazar las referencias al paquete **one_arm_moveit** por **four_arm_moveit**
+There are two options:
+- If you have done the solution for a robot [one_arm_moveit](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md), you can continue on what implemented, but in the *modifications* section you have to change **four_arm_moveit** to **one_arm_moveit**.
+- If the solution for a [one_arm_moveit](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md) robot has not been done, you can follow the steps presented in this section, but keep in mind that the contents of the files in this phase of *initial configuration* are linked to the files of **one_arm_moveit** and therefore when making the copy of this you have to replace references to package **one_arm_moveit** with **four_arm_moveit** 
 
-Si no se tiene en cuenta esta información, el paquete no compilará correctamente y el propio compilador obligará a que se elija entre una de las opciones sugeridas previamente.
+If this information is not taken into account, the package will not compile correctly and the compiler itself will force a choice between one of the previously suggested options. 
 
 <a name="fase1">
-  <h3>
-Fase 1: Configuración del URDF
-  </h3>
+<h3>
+Phase 1: URDF configuration
+</h3>
 </a>
 
-#### :book: Descripción del fichero *URDF*
-El fichero *URDF* (United Robotics Description Format) modela el cobot utilizando el formato *XML*el cual será utilizado por las diferentes aplicaciones que *ROS* necesite, pero principalmente para realizar una simulación del robot modelado.
+#### :book: File description *URDF*
+The *URDF* (United Robotics Description Format) file models the cobot using the *XML* format, which will be used by the different applications that *ROS* needs, but mainly to perform a simulation of the modeled robot. 
 
-El fichero está construido en forma de árbol, en donde hay tres etiquetas principales: `<robot>`, `<link>` y `<joint>`. Para explicarlo bien, se puede tomar como referencia el brazo del cuerpo humano. Si lo que se quiere modelar es el brazo de una persona, la etiqueta `<robot>` representaría al brazo en su conjunto. Este brazo está compuesto de varios huesos (húmero, cúbito y radio) que son representados por las etiquetas `<link>` y por una articulación que une esos huesos (codo) que es representado por la etiqueta `<joint>`. 
+The file is built in the form of a tree, where there are three main tags: ` <robot> `, ` <link> ` and ` <joint> `. To explain it well, the arm of the human body can be taken as a reference. If what you want to model is a person's arm, the ` <robot> ` tag would represent the arm as a whole. This arm is made up of several bones (humerus, ulna, and radius) that are represented by the ` <link> ` tags, and a joint that joins those bones (elbow) that is represented by the ` <joint> ` tag. 
 
-Además, como en los huesos, estas etiquetas pueden ir con información adicional contenida en ellas que den información del tamaño, geometría, inercia, orientación, etc. Finalmente, el modelado de un robot se puede unir a otro modelo y formar uno más complejo, que podría ser representado con la adición de la mano al brazo, con la muñeca como articulación que conectan ambos. Hay que tener en cuenta que las etiquetas `<joint>` conecta las etiquetas `<link>` a través de una relación padre-hijo.
+In addition, as in the bones, these labels can go with additional information contained in them that give information on size, geometry, inertia, orientation, etc. Finally, the modeling of a robot can be joined to another model and form a more complex one, which could be represented with the addition of the hand to the arm, with the wrist as a joint that connects both. Note that ` <joint> ` tags connect ` <link> ` tags through a parent-child relationship. 
 
-Dicho esto, se realiza una representación de los componentes del robot:
- 
- ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
+Having said that, a representation of the robot components is made: 
 
-En la imagen se representa el contenido del [fichero *URDF*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando `world`(color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera, se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
+![image](/doc/imgs_md/urdf-robot.png "URDF file representation") 
+
+The image shows the content of the [*URDF* file](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro ) that models the robot next to the gripper, you can see how the UR10 robot arm component is connected with the `world` link, representing `world` (yellow color) and the base of the UR10 arm `base_link` (green color ) located just above, also the joint `world_joint` is the yellow sphere located between both links. In the same way, there is the component of the gripper `robotiq_85_gripper`, it is connected to the arm of the UR10 (ur10 robot), where the sphere that represents the joint `robotiq_85_base_joint` that unites both components (purple color), uniting the link `robotiq_85_base_link` of the gripper with the link `ee_link` of the UR10 arm. 
 
 
-#### :computer: Creación del directorio para la solución
+#### :computer: Create solution directory
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot
 mkdir four_arm_moveit
-```
+``` 
 
-#### :computer: Configuración del directorio descripción
-Se crea un nuevo paquete y se copia los directorios del proyecto *one_arm_no_moveit* para su posterior modificación.
+#### :computer: directory configuration description
+A new package is created and the *one_arm_no_moveit* project directories are copied for later modification. 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit
 catkin_create_pkg four_arm_moveit_description rospy
-```
+``` 
 
-En el directorio creado para *description*, se copiará del directorio de *one_arm_no_moveit_description*, las carpetas *launch* y *urdf*.
+In the directory created for *description*, the *one_arm_no_moveit_description* directory, *launch* and *urdf* folders will be copied. 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/launch .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf .
-```
+``` 
 
-#### :computer: Modificación de los ficheros de *description*
+#### :computer: Modification of *description* files 
 
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/launch/ur10_upload.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/launch/ur10_upload.launch)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/launch/ur10_upload.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_description/launch/ur10_upload.launch) 
 
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot /one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro) 
 
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot /one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro) 
 
-Se compila:
+It compiles:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
-```
+``` 
 
 <a name="fase2">
-  <h3>
-Fase 2: Configuración de MoveIt!
-  </h3>
+<h3>
+Phase 2: Configuring MoveIt!
+</h3>
 </a>
 
-Antes de realizar la configuración con el `Setup Assitant` hay que tener el `URDF` bien definido previamente, con ese hecho se lanza el asistente de configuración con el siguiente comando en la terminal:
+Before configuring with the `Setup Assistant` you must have the `URDF` well defined previously, with this fact the configuration assistant is launched with the following command in the terminal: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/
 mkdir four_arm_moveit_config
 roslaunch moveit_setup_assistant setup_assistant.launch
-```
+``` 
 
-#### :computer:  `MoveIt!` Setup Assistant
-Se va a escoger como modelo del robot el fichero *URDF*: [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro) (podría ser perfectamente [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro)).
+#### :computer: `MoveIt!` Setup Assistant
+The *URDF* file will be chosen as the robot model: [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro](https://github.com/Serru/ MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro) (could be perfectly [ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot- UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro)). 
 
-- Comenzando la configuración del Setup Assistant, hay que decirle donde está el fichero `UR10_joint_limited_robot.urdf.xacro`, es decir, el modelo del robot que se quiere configurar:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_1.png  "Cargar el modelo URDF del robot UR10")
+- Starting the configuration of the Setup Assistant, you have to tell it where the `UR10_joint_limited_robot.urdf.xacro` file is, that is, the model of the robot that you want to configure:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_1.png "Load UR10 robot URDF model") 
 
-- Posteriormente, se le da al botón *Load Files*.
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_2.png  "Cargado el modelo URDF del robot UR10")
+- Subsequently, the *Load Files* button is given.
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_2.png "URDF model of UR10 robot loaded") 
 
-- En la pestaña *Self-Collisions*, darle al botón *Generate Collision Matrix*, lo que generará una matriz entre los diferentes componentes del robot que puedan generar autocolisiones durante la planificación de las trayectorias:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png  "Generación de matriz de colisiones")
+- In the *Self-Collisions* tab, click the *Generate Collision Matrix* button, which will generate a matrix between the different robot components that can generate self-collision during trajectory planning:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_3.png "Collision matrix generation") 
 
-- En la pestaña *Virtual Joints* está dirigida especialmente para brazos robóticos instalados sobre una base móvil, en este caso no afecta en la configuración, ya que la base es fija, pero se configurará igualmente para configuraciones futuras, hay que crear un joint entre el robot `base_link` y el *frame* `world`, siendo la configuración la siguiente:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_4.png  "Definiendo Virtual Joint")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_5.png  "Definido Virtual Joint")
+- In the *Virtual Joints* tab it is directed especially for robotic arms installed on a mobile base, in this case it does not affect the configuration, since the base is fixed, but it will be configured equally for future configurations, a joint must be created between the robot `base_link` and the *frame* `world`, with the following configuration:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_4.png "Defining Virtual Joint")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_5.png "Virtual Joint Defined") 
 
-- Una de las pestañas más importantes es definir bien los *Planning groups*, en este caso se tiene dos grupos, el grupo *manipulator* que controlará el brazo del robot y el grupo *gripper* que controlará la pinza:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_6.png  "Manipulator kdl")
+- One of the most important tabs is to define the *Planning groups* well, in this case there are two groups, the *manipulator* group that will control the robot arm and the *gripper* group that will control the gripper:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_6.png "Manipulator kdl") 
 
-- Después hay que darle al botón *Add Kin. Chain*:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_7.png  "Manipulator Kinetic Chain configuración")
+- Then you have to hit the *Add Kin button. Chain*:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_7.png "Manipulator Kinetic Chain setup") 
 
-- Finalmente, se guarda la configuración:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_8.png  "Grupo manipulator configurado")
+- Finally, the configuration is saved:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_8.png "Manipulator group set up") 
 
-- Ahora hay que hacerlo para el grupo *Gripper* que controlará la pinza, se pulsa el botón *Add Group*, se rellena con el nombre del grupo y se pone *kdl* como *Kinematic Solver*:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_9.png  "Gripper kdl")
+- Now you have to do it for the *Gripper* group that will control the gripper, press the *Add Group* button, fill in the name of the group and put *kdl* as *Kinematic Solver*:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_9.png "Gripper kdl") 
 
-- Tras darle al botón *Add Joints*, hay que buscar por *robotiq_85_left_knucle_joint* y añadirlo a con la flecha *->* y se guarda la configuración:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_10.png  "Gripper Joint configuración")
+- After clicking the *Add Joints* button, you have to search for *robotiq_85_left_knucle_joint* and add it to with the arrow *- &gt; * and the configuration is saved:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_10.png "Gripper Joint setup") 
 
-- Tras guardar, el resultado en la pestaña de *Planning Group* debería ser la siguiente:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_11.png  "Configuración final del Planning Group")
+- After saving, the result in the *Planning Group* tab should be the following:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_11.png "Planning Group Final Setup") 
 
-- En la pestaña *Robot Poses* es donde se configura poses fijas de antemano en el robot, se va a configurar la pose *home* el cual reflejará la posición inicial del cobot:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_12.png  "Configurando *home* 1/3")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_13.png  "Configurando *home* 2/3")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png  "Configurando *home* 3/3")
+- In the *Robot Poses* tab is where fixed poses are configured in advance in the robot, the *home* pose will be configured, which will reflect the initial position of the cobot:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_12.png "Setting up *home* 1/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_13.png "Setting up *home* 2/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_14.png "Setting up *home* 3/3") 
 
-- En la pestaña *Robot Poses* se va a configurar la pose *gripper_open*:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png  "Configurando *gripper open*")
+- In the *Robot Poses* tab, the *gripper_open* pose is going to be configured:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_24.png "Setting up *gripper open*") 
 
-- En la pestaña *Robot Poses* se va a configurar la pose *gripper_close*:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_25.png  "Configurando *gripper close*")
+- In the *Robot Poses* tab, the *gripper_close* pose is going to be configured:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_25.png "Setting *gripper close*") 
 
 
-- En la pestaña *End Effectors* se va a añadir la pinza:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_15.png  "Configurando end effector 1/3")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_16.png  "Configurando end effector 2/3")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_17.png  "Configurando end effector 3/3")
+- In the *End Effectors* tab the clamp will be added:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_15.png "Setting up end effector 1/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_16.png "Setting up end effector 2/3")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_17.png "Setting up end effector 3/3") 
 
-- En la pestaña *Passive Joints* representa las articulaciones que no se pueden mover activamente, en el caso del *gripper* definido en el su fichero *URDF* son los `joints` que imitan el movimiento de otro joint. Los `joints` definidos como pasivos no se tendrán en cuenta en la planificación, para este caso la configuración es la siguiente:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_18.png  "Configurando Passive Joints")
+- In the *Passive Joints* tab it represents the joints that cannot be moved actively, in the case of the *gripper* defined in your *URDF* file they are the `joints` that mimic the movement of another joint. The `joints` defined as passive will not be taken into account in the planning, in this case the configuration is as follows:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_18.png "Setting up Passive Joints") 
 
-- En la pestaña *ROS Control*, se añadirá de forma automática, los ficheros generados, serán posteriormente modificados manualmente.
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_19.png  "Configurando ROS Control")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_20.png  "Configurando ROS Control")
+- In the *ROS Control* tab, it will be added automatically, the generated files will be later manually modified.
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_19.png "Setting up ROS Control")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_20.png "Setting up ROS Control") 
 
-- Hay que rellenar la pestaña *Author Information* para que la configuración pueda terminar:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_21.png  "Configurando Author Information")
+- You have to fill in the *Author Information* tab so that the configuration can finish:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_21.png "Setting Author Information") 
 
-- La última pestaña *Configuration Files*, permite decidir dónde se guardará la configuración de `MoveIt!`, en este caso en `one_arm_moveit_config` creado previamente, se genera la configuración mediante el botón *Generate Package* y finalmente
- *Exit Setup Assistant* para terminar:
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_22.png  "Configurando Author Information")
-![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_23.png  "Configurando Author Information")
+- The last tab *Configuration Files*, allows you to decide where the `MoveIt!` configuration will be saved, in this case in `one_arm_moveit_config` previously created, the configuration is generated using the *Generate Package* button and finally
+*Exit Setup Assistant* to finish:
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_22.png "Setting Author Information")
+![ ](/doc/imgs_md/one_arm_moveit_setup_assistant_23.png "Setting Author Information") 
 
+
+</joint></joint></robot></joint></robot>
 
 <a name="fase3">
-  <h3>
-Fase 3: Simulación de un <i>pick & place</i> en Gazebo
-  </h3>
+<h3>
+Phase 3: Simulation of a <i> pick &amp; place </i> in Gazebo
+</h3>
 </a>
 
-Esta fase tiene se divide en dos etapas
+This phase is divided into two stages 
 
-#### :book: Conexión entre `Gazebo` y `MoveIt!`
+#### :book: Connection between `Gazebo` and `MoveIt!` 
 
-Lo primero que hay que hacer en esta fase es configurar `Gazebo` y los controladores para que pueda simular adecuadamente los movimientos del cobot. Se crea el paquete *four_arm_moveit_gazebo*, que contendrá toda la configuración relacionada con `Gazebo`, entre ellos los controladores. Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio *controller*, aunque todos los controladores pueden estar definidos en un único fichero por claridad se ha distribuido en tres ficheros.
+The first thing to do in this phase is to configure the `Gazebo` and the controllers so that it can properly simulate the movements of the cobot. The *four_arm_moveit_gazebo* package is created, which will contain all the configuration related to `Gazebo`, including controllers. Once the package is created, you have to configure the controllers that are stored in the *controller* directory, although all the controllers can be defined in a single file for clarity it has been distributed in three files. 
 
-Los controladores se definen en ficheros con extensión *yaml*, para definir estos controladores hay que darles un nombre y definir el tipo del controlador, los `joints` dinámicos que se quieren controlar, las restricciones que tiene, el ratio de publicación y otras opciones.
+The controllers are defined in files with *yaml* extension, to define these controllers you have to give them a name and define the type of the controller, the dynamic `joints` that you want to control, the restrictions that it has, the publication ratio and other options . 
 
-Se procede a explicar brevemente estos controladores:
+These controllers are briefly explained: 
 
-- Fichero [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/arm_controller_ur10.yaml): En este fichero se define el controlador para el cobot UR10, aquí se define el nombre del controlador `arm_controller`, el tipo de controlador posición `controllers/JointTrajectoryController`, lo que implica la definición del tipo de mensajes y el formateo adecuado de la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador, todos estos `joints` son dinámicos. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran.
+- File [arm_controller_ur10.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/arm_controller_ur10.yaml): The controller is defined in this file for the UR10 cobot, this defines the controller name `arm_controller`, the controller type position `controllers/JointTrajectoryController`, which implies the definition of the type of messages and the proper formatting of the information needed to communicate with it. Then there is the `joints` field, which is where it is indicated which `joints` of the cobot are part of the controller, all these `joints` are dynamic. The rest of the fields have not been touched, but consistency must be maintained in how they are named. 
 
-- Fichero [gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml): En este fichero se define el controlador para la pinza de *Robotiq*, aquí se define el nombre del controlador `gripper`, el tipo de controlador `position controllers/JointTrajectoryController` que define el tipo de mensajes y la información necesaria para comunicarse con este. Después está el campo `joints`, que es donde se indica qué `joints` del cobot forma parte del controlador en este caso un único `joint_robotiq_85_left_knuckle_joint` porque el resto de `joints` del controlador imitan los movimientos de este. El resto de campos no se han tocado, pero hay que mantener la consistencia en cómo se nombran como en el caso anterior.
+- File [gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml): The controller is defined in this file for the *Robotiq* gripper, here you define the controller name `gripper`, the controller type `position controllers/JointTrajectoryController` which defines the type of messages and the information needed to communicate with it. Then there is the `joints` field, which is where it is indicated which `joints` of the cobot are part of the controller, in this case a single `joint_robotiq_85_left_knuckle_joint` because the rest of the `joints` of the controller imitate the movements of this one. The rest of the fields have not been touched, but consistency must be maintained in how they are named as in the previous case. 
 
-- Fichero [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/joint_state_controller.yaml): Lo que define este fichero realmente no es un controlador como tal, su función es la de una interfaz que traduce la información de los `joints` que viene del cobot real y lo traduce a mensajes de tipo `JointState` para después publicarlo. Es fundamental para el correcto funcionamiento, tanto en simulación como con el robot real, forma parte del paquete de *ROS* *ros_control*.
+- File [joint_state_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/joint_state_controller.yaml): What this file defines is not really it is a controller as such, its function is that of an interface that translates the `joints` information that comes from the real cobot and translates it into `JointState` type messages to later publish it. It is essential for the correct operation, both in simulation and with the real robot, it is part of the *ROS* *ros_control* package. 
 
-##### :computer: Puesta en marcha de `Gazebo`
+##### :computer: Starting `Gazebo` 
 
-Se va a crear el paquete para `Gazebo`, y copiar el contenido de la solución partiendo de la solución *one_arm_no_moveit* para su posterior modificación:
+We are going to create the package for `Gazebo`, and copy the content of the solution starting from the *one_arm_no_moveit* solution for later modification:
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit
 catkin_create_pkg four_arm_moveit_gazebo rospy
 ```
-En el directorio creado para `Gazebo`, se copiará del directorio de *one_arm_no_moveit_gazebo*, las carpetas *controller*, *launch*, *models*, y *world*.
+In the directory created for `Gazebo`, it will copy the *one_arm_no_moveit_gazebo* directory, the *controller*, *launch*, *models*, and *world* folders.
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/models .
 cp -r ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world .
-```
+``` 
 
-##### :computer: Modificación de los ficheros de `Gazebo`
-Se crean los ficheros con el siguiente contenido:
+##### :computer: Modifying the `Gazebo` files
+Files with the following content are created: 
 
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10_joint_limited.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10_joint_limited.launch)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10_joint_limited.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_gazebo/launch/ur10_joint_limited.launch) 
 
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10.launch)
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_gazebo/launch/ur10.launch) 
 
-Se compila:
+It compiles:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
-```
+``` 
 
-Si se deja la configuración como está, no es posible la comunicación entre `Gazebo` y `MoveIt!`. Al lanzar el fichero *demo.launch* también lanza *Rviz*  lo que permite la visualización de los datos y se aprecia que funciona correctamente, pero con la configuración automatizada, no es posible observar su funcionamiento en el simulador de `Gazebo`.
+If the configuration is left as it is, communication between `Gazebo` and `MoveIt!` is not possible. When launching the *demo.launch* file it also launches *Rviz* which allows the visualization of the data and it can be seen that it works correctly, but with the automated configuration, it is not possible to observe its operation in the `Gazebo` simulator. 
 
-Esto es debido a que no hay comunicación entre `MoveIt!` y `Gazebo`, con lo que se procede a solucionar esta comunicación.
+This is because there is no communication between `MoveIt!` and `Gazebo`, so this communication is solved. 
 
-Por conveniencia, para su posible evaluación en el robot real, se mantendrá el lanzamiento `Gazebo` y `MoveIt!` separados.
+For convenience, for possible evaluation in the real robot, we will keep the launch `Gazebo` and `MoveIt!` separate. 
 
-Para comenzar y entender mejor el paquete de `MoveIt!`, se va a separar el contenido de los paquetes en `MoveIt!` y `Gazebo`:
+To get started and better understand the `MoveIt!` package, let's separate the contents of the packages into `MoveIt!` and `Gazebo`: 
 
 `Gazebo`:
-- launch:
-	- gazebo.launch
-	- ros_controllers.launch
-- config:
-	- **ros_controllers.yaml**
+-launch:
+- gazebo.launch
+- ros_controllers.launch
+-config:
+- **ros_controllers.yaml** 
 
-No es necesario el fichero *gazebo.launch* que provee `MoveIt!`, ya que se ha configurado previamente el paquete de `Gazebo` que se usará. La configuración es muy similar si se da una ojeada a los ficheros involucrados.
+The *gazebo.launch* file provided by `MoveIt!` is not necessary, since the `Gazebo` package to be used has already been configured. The configuration is very similar if you take a look at the files involved. 
 
 `MoveIt!`:
-- launch:
-	- **demo.launch**
-		- planning_context.launch
-			- config:
-				- ur10.srdf
-				- joint_limits.yaml
-				- kinematics.yaml
-		- **move_group.launch**
-			- planning_context.launch
-			- config:
-				- ur10.srdf
-				- joint_limits.yaml
-				- kinematics.yaml
-			- planning_pipeline.launch.xml
-				- ompl_planning_pipeline.launch.xml
-			- **trajectory_execution.launch.xml**
-				- **ur10_moveit_controller_manager.launch.xml**
-				- config:
-					- **ros_controllers.yaml**
-			- sensor_manager.launch.xml
-				- config:
-					- sensors_3d.yaml
-				- ur10_moveit_sensor_manager.launch.xml
-			- moveit_rviz.launch (Rviz)
-				- moveit.rviz
-				- config:
-					- kinematics.yaml
-		
-		
-Se puede apreciar en el esquema de los directorios cómo están relacionados los ficheros. Entre ellos los que se van a modificar manualmente están señalados en negrita.
+-launch:
+- **demo.launch**
+- planning_context.launch
+-config:
+- ur10.srdf
+- joint_limits.yaml
+- kinematics.yaml
+- **move_group.launch**
+- planning_context.launch
+-config:
+- ur10.srdf
+- joint_limits.yaml
+- kinematics.yaml
+- planning_pipeline.launch.xml
+- ompl_planning_pipeline.launch.xml
+- **trajectory_execution.launch.xml**
+- **ur10_moveit_controller_manager.launch.xml**
+-config:
+- **ros_controllers.yaml**
+- sensor_manager.launch.xml
+-config:
+-sensors_3d.yaml
+- ur10_moveit_sensor_manager.launch.xml
+- moveit_rviz.launch (Rviz)
+- moveit.rviz
+-config:
+- kinematics.yaml 
 
-El fichero de configuración de los controladores es el mismo tanto para `Gazebo` como para `MoveIt!`, esto implica que para conectar los controladores adecuadamente, su configuración debe ser la misma que la se ha realizado para `Gazebo` previamente y eso está configurado en la sección *Puesta en marcha en `Gazebo`*.
 
-Por tanto, se puede añadir los controladores (ficheros .yaml) de `Gazebo` en el paquete de `MoveIt!` para conectar correctamente los controladores del robot (manipulator y gripper).
+You can see in the directory scheme how the files are related. Among them, those that are going to be modified manually are indicated in bold. 
 
-Si se lanza `Gazebo` y `MoveIt!` sin realizar ninguna modificación, se obtiene la siguiente gráfica de nodos y *topic*s:
+The controllers configuration file is the same for both `Gazebo` and `MoveIt!`, this means that in order to connect the controllers properly, their configuration must be the same as what has been done for `Gazebo` previously and that is configured in the *Commissioning in `Gazebo`* section. 
+
+Therefore, you can add the `Gazebo` controllers (.yaml files) to the `MoveIt!` package to correctly connect the robot controllers (manipulator and gripper). 
+
+If you launch `Gazebo` and `MoveIt!` without making any changes, you get the following plot of nodes and *topic*s: 
 
 - terminal 1
 ```bash
 roslaunch four_arm_moveit_config demo.launch
-```
+``` 
 
 - terminal 2
 ```bash
 roslaunch four_arm_moveit_gazebo ur10_joint_limited.launch
-```
+``` 
 
-![ ](/doc/imgs_md/one_arm_moveit_graph_no_changes.png  "Esquema sin cambios")
-		
-Se ve que `Gazebo` carga correctamente los controladores `arm_controller` y `gripper`, pero no hay comunicación entre el nodo `move_group` y los controladores del nodo `gazebo`, el único punto en común es el *topic* `/joint_states`. Esto implica que si se planifica y ejecuta trayectorias con el plugin *Motion Planning* de `MoveIt!`, no serán representados en `Gazebo` pero sı́ en *Rviz*. Este no es el resultado que se busca, por ello se procede a modificar la configuración de `MoveIt!` para que pueda comunicarse con los controladores cargados en `Gazebo`.
+![ ](/doc/imgs_md/one_arm_moveit_graph_no_changes.png "Schematic without changes") 
 
-Por tanto, hay que modificar los siguientes ficheros. Los ficheros modificados estarán en un paquete diferente con la intención de facilitar la compresión de las modificaciones realizadas sobre la configuración.
+It is seen that `Gazebo` correctly loads the `arm_controller` and `gripper` controllers, but there is no communication between the `move_group` node and the controllers of the `gazebo` node, the only point in common is the *topic* `/joint_states `. This means that if trajectories are planned and executed with the `MoveIt!` plugin *Motion Planning*, they will not be rendered in `Gazebo` but in *Rviz*. This is not the desired result, so we proceed to modify the configuration of `MoveIt!` so that it can communicate with the controllers loaded in `Gazebo`. 
 
-Para ello se va a modificar los siguientes ficheros teniendo como base sus ficheros originales *demo.launch*, *move_group.launch*, *trajectory_execution.launch.xml*  y *ur10_moveit_controller_manager.launch.xml* y se añadirá los controladores creando dos ficheros *controllers.yaml* y *joint_names.yaml*:
+Therefore, the following files must be modified. The modified files will be in a different package with the intention of facilitating the compression of the modifications made to the configuration. 
+
+To do this, the following files will be modified based on their original files *demo.launch*, *move_group.launch*, *trajectory_execution.launch.xml* and *ur10_moveit_controller_manager.launch.xml* and the controllers will be added by creating two files *controllers.yaml* and *joint_names.yaml*: 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit
 catkin_create_pkg four_arm_moveit_manipulator rospy
 mkdir config
-touch config/controllers.yaml
+touchconfig/controllers.yaml
 touch config/joint_names.yaml
 mkdir launch
 touch launch/four_arm_moveit_execution.launch
@@ -313,516 +314,321 @@ touch launch/trajectory_execution.launch.xml
 touch launch/ur10_moveit_controller_manager.launch.xml
 mkdir scripts
 ```
-##### :computer: Se va a proceder a añadir los controladores para su interacción con `Gazebo`
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/controllers.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/controllers.yaml): La definición de los controladores de *ROS* en `MoveIt!` es similar al que se realizó para `Gazebo`, el nombre de los controladores debe coincidir con los nombres de los controladores descritos en `Gazebo`, se define el servidor de acciones `follow_joint_trajectory`, el tipo debe ser `FollowJointTrajectory` para que el tipo mensaje enviado entre ellos sean compatibles y finalmente los nombres de los `joints` involucrados deben ser idénticos también.
+##### :computer: We will proceed to add the controllers for its interaction with `Gazebo` 
 
-Otro fichero a modificar es [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/joint_names.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/joint_names.yaml): Este fichero define el nombre de los `joints` del controlador del cobot, se almacenará como parámetro del servidor y será utilizado como parte de la configuración de `MoveIt!`.
+File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/controllers.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_manipulator/config/controllers.yaml): The definition of the *ROS* controllers in `MoveIt!` is similar to that for `Gazebo`, the name of the controllers must match the names of the controllers described in `Gazebo`, the action server `follow_joint_trajectory` is defined, the type must be `FollowJointTrajectory` so that the message type sent between them are compatible and finally the names of the `joints` involved must be identical as well. 
 
-De los ficheros en el directorio *launch*, se va a modificar el fichero *four_arm_moveit_execution* que es el punto de entrada para usar el paquete de `MoveIt!` y *Rviz*  que tiene como base el fichero *demo.launch*
+Another file to modify is [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/joint_names.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src /multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/joint_names.yaml): This file defines the name of the `joints` of the cobot controller, it will be stored as a server parameter and will be used as part of the `MoveIt!` configuration. 
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch)
+Of the files in the *launch* directory, we are going to modify the *four_arm_moveit_execution* file which is the entry point for using the `MoveIt!` package and *Rviz* which is based on the *demo.launch* file. 
 
-
-Después retocar el lanzador de los controladores y `MoveIt!`:
-
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/move_group.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/move_group.launch)
+File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch) 
 
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/trajectory_execution.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/trajectory_execution.launch.xml): Configura la comunicación con un robot real, en este caso `Gazebo` es el que simula el robot, pero `MoveIt!` no es consciente de eso y lo trata como un robot real.
+Then tweak the controller launcher and `MoveIt!`: 
+
+File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/move_group.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_manipulator/launch/move_group.launch) 
 
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml): Carga los controladores definidos para `MoveIt!`
+File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/trajectory_execution.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot /one_arm_moveit/one_arm_moveit_manipulator/launch/trajectory_execution.launch.xml): Set up communication with a real robot, in this case `Gazebo` is the one that simulates the robot, but `MoveIt!` is not aware of that and treats it as a actual robots. 
 
 
-##### :computer: Finalmente, se realiza una prueba:
+File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot /one_arm_moveit/one_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml): Load controllers defined for `MoveIt!` 
+
+
+##### :computer: Finally, a test is performed:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
-```
+``` 
 
-- Terminal 1
+-Terminal 1
 ```bash
 roslaunch four_arm_moveit_gazebo ur10_joint_limited.launch
-```
+``` 
 
-- Terminal 2
+-Terminal 2
 ```bash
 roslaunch four_arm_moveit_manipulator four_arm_moveit_execution.launch
-```
+``` 
 
-![ ](/doc/imgs_md/one_arm_moveit_26.png  "Example gazebo+rviz+moveit! (1/2)")
-		
-![ ](/doc/imgs_md/one_arm_moveit_27.png  "Example gazebo+rviz+moveit! (2/2)")
+![ ](/doc/imgs_md/one_arm_moveit_26.png "Example gazebo+rviz+moveit! (1/2)") 
 
-Y la gráfica de los nodos y los *topic*s, después de las modificaciones, se puede apreciar cómo ahora el nodo *move_group* tiene comunicación con los controladores y es *Gazebo* el que está a la escucha de lo que se publica para ejecutar los movimientos deseados. Estos movimientos modifican el estado actual del robot que es publicado al *topic* `/jont_states` y esa información es transmitida al nodo `robot_state_publisher` y al nodo `move_group`. El nodo `move_group` puede volver a calcular una nueva trayectoria con la información que le llega de los *topic*s `/tf` y `/jont_states`.
+![ ](/doc/imgs_md/one_arm_moveit_27.png "Example gazebo+rviz+moveit! (2/2)") 
 
-![ ](/doc/imgs_md/one_arm_moveit_graph_changes.png  "rqt_graph representación de los nodos y los topics")
+And the graph of the nodes and the *topic*s, after the modifications, you can see how now the *move_group* node has communication with the controllers and it is *Gazebo* that listens to what is published for perform the desired movements. These moves modify the current state of the robot which is published to the *topic* `/jont_states` and that information is passed to the `robot_state_publisher` node and the `move_group` node. The `move_group` node can recalculate a new path with the information it gets from the *topic*s `/tf` and `/jont_states`. 
 
-##### :computer: Pick and Place
+![ ](/doc/imgs_md/one_arm_moveit_graph_changes.png "rqt_graph representation of nodes and topics") 
 
-Para realizar el script de *pick & place* en Python, se utiliza la interfaz de Python `moveit_commander` para comunicarse con el nodo `move_group` y sus servicios y acciones. No se va a entrar en detalle porque para el control de un único robot no es muy problemático y hay una buena documentación, por ello se describirá el script en detalle para la solución con dos o más cobots.
+##### :computer: Pick and Place 
 
-Se procede a realizar unas pruebas muy sencillas. Para ello primero hay que crear los scripts necesarios para controlar el brazo del robot y la pinza correctamente y después se realizará los movimientos para que el robot coja un cubo de la mesa y lo deje en la cesta.
+To script *pick &amp; place* in Python, the Python `moveit_commander` interface is used to communicate with the `move_group` node and its services and actions. It will not go into detail because for the control of a single robot it is not very problematic and there is good documentation, therefore the script will be described in detail for the solution with two or more cobots. 
+
+Very simple tests are carried out. To do this, first you have to create the necessary scripts to control the robot arm and the gripper correctly and then the movements will be made so that the robot picks up a cube from the table and leaves it in the basket. 
 
 ```bash
 cd scripts
 touch four_arm_moveit.py
-```
+``` 
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/scripts/one_arm_moveit.py)
+File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit /one_arm_moveit_manipulator/scripts/one_arm_moveit.py) 
 
 <a name="pruebas">
-  <h2>
-Ejecución de las pruebas
-  </h2>
+<h2>
+Execution of the tests
+</h2>
 </a>
 
 ```bash
-# Terminal 1
-roslaunch four_arm_moveit_gazebo ur10_joint_limited.launch
+#Terminal 1
+roslaunch four_arm_moveit_gazebo ur10_joint_limited.launch 
 
-# Terminal 2
-roslaunch four_arm_moveit_manipulator four_arm_moveit_execution.launch
+#Terminal 2
+roslaunch four_arm_moveit_manipulator four_arm_moveit_execution.launch 
 
-# Terminal 3
-rosrun four_arm_moveit_manipulator four_arm_moveit.py 
+#Terminal 3
+rosrun four_arm_moveit_manipulator four_arm_moveit.py
 ```
 <a name="modificaciones">
-  <h2>
-Modificaciones: Sistema multirobot compuesto de cuatro robots
-  </h2>
+<h2>
+Modifications: Multirobot system composed of four robots
+</h2>
 </a>
 
-Para poder controlador cuatro cobots simultáneamente y con diferentes controladores, lo que implica que pueden ser cobots de diferentes marcas y modelos, se realiza mediante la replicación del nodo de `MoveIt!` y del robot simulado en `Gazebo`.
+To be able to control four cobots simultaneously and with different controllers, which implies that they can be cobots of different makes and models, is done by replicating the `MoveIt!` node and the simulated robot in `Gazebo`. 
 
-Si se quiere realizar una replicación correcta hay que aplicar el concepto de *namespace*, se puede ver como si fuese un *directorio* que contiene nodos, *topic*s o incluso otros directorios (*namespace*s) lo que permite también una organización jerarquizada y *ROS* permite ejecutar instancias del mismo nodo, siempre y cuando estén dentro de diferentes *namespace*s. Partiendo de lo realizado hasta ahora, se realizará cambios en los paquetes de `four_arm_moveit_gazebo` y `four_arm_moveit_manipulator` que contendrán las modificaciones realizadas sobre el paquete de `MoveIt!` (`four_arm_moveit_config)`, el cual fue previamente configurado por el setup assistant. 
+If you want to carry out a correct replication, you have to apply the concept of *namespace*, it can be seen as if it were a *directory* that contains nodes, *topic*s or even other directories (*namespace*s) which also allows an organization nested and *ROS* allows running instances of the same node, as long as they are inside different *namespace*s. Building on what has been done so far, changes will be made to the `four_arm_moveit_gazebo` and `four_arm_moveit_manipulator` packages that will contain the changes made to the `MoveIt!` (`four_arm_moveit_config)` package, which was previously configured by the setup assistant. 
 
-Se va a dividir el proceso de la configuración en dos; configuración realizada en `Gazebo` para dos cobots y configuración en `MoveIt!` para dos cobots.
+The configuration process will be divided into two; configuration done in `Gazebo` for two cobots and configuration in `MoveIt!` for two cobots. 
 
 <a name="modificaciones1">
-  <h3>
-Configuración realizada en Gazebo para dos cobots
-  </h3>
+<h3>
+Configuration made in Gazebo for two cobots
+</h3>
 </a>
 
-Para tener cuatro cobots en simulación, se va a explicar qué cambios hay que realizar en los ficheros *launch* para permitir la adicción de más cobots en la simulación correctamente.
+In order to have four cobots in the simulation, it will be explained what changes must be made in the *launch* files to allow the addition of more cobots in the simulation correctly. 
 
-La idea es crear un fichero externo que replique (lance instancias) de tantos cobots como se quieran añadir en la simulación. Por ello primero se preparan los ficheros de `Gazebo` del paquete `four_arm_moveit_gazebo`.
+The idea is to create an external file that replicates (launches instances) of as many cobots as you want to add to the simulation. Therefore, the `Gazebo` files from the `four_arm_moveit_gazebo` package are prepared first. 
 
-- Fichero [ur10_joint_limited.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10_joint_limited.launch): Respecto al fichero original se le ha añadido dos argumentos, el nombre del robot (`robot_name`) y la posición inicial (`init_pose`). Estos dos argumentos serán obtenidos del fichero que incluirá este *launch*.
+- File [ur10_joint_limited.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10_joint_limited.launch): Regarding the original file, it has been added two arguments, the robot name (`robot_name`) and the initial position (`init_pose`). These two arguments will be obtained from the file that will include this *launch*. 
 
-- Fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10.launch): De forma similar al fichero *launch* anterior (`ur10_joint_limited.launch`), a este fichero se le ha añadido los dos argumentos, el nombre del robot (`robot_name`) y la posición inicial (`init_pose`), que se definirán del fichero que lo incluya. Aparte de la adicción de los argumentos, se ha eliminado la instanciación del mundo virtual de `Gazebo` y la carga del modelo del cobot en el servidor de parámetros (`robot_description`).
+- File [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10.launch): Similar to the file *launch * above (`ur10_joint_limited.launch`), the two arguments have been added to this file, the robot name (`robot_name`) and the initial position (`init_pose`), which will be defined in the file that includes it. Apart from the addition of the arguments, the instantiation of the `Gazebo` virtual world and the loading of the cobot model in the parameter server (`robot_description`) have been removed. 
 
-- Fichero [controller_utils.launch]https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/controller_utils.launch): En este fichero simplemente hay que comentar el parámetro `tf_prefix`, su valor por defecto es una cadena vacía, pero eso interfiere a la hora de modificar su valor por defecto.
+- File [controller_utils.launch]https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/controller_utils.launch): In this file you simply have to comment the `tf_prefix` parameter, its default value is an empty string, but that interferes when changing its default value. 
 
-Se compila:
+It compiles:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ```
 
+##### :computer: Replication of Cobots in `Gazebo` 
 
-##### :computer: Replicación de Cobots en `Gazebo`
-
-Una vez configurado los ficheros del paquete de `Gazebo` `four_arm_moveit_gazebo`, se procede a instanciar varios cobots en este, para ello se crea dentro del paquete `four_arm_moveit_manipulator` (puede ser cualquier otro paquete) un fichero *launch* llamado `four_arm_moveit_gazebo.launch` que contiene lo siguiente:
+Once the files of the `Gazebo` package `four_arm_moveit_gazebo` have been configured, several cobots are instantiated in it, for this a *launch* file called `four_arm_moveit_gazebo is created within the `four_arm_moveit_manipulator` package (it can be any other package). launch` which contains the following: 
 
 ```xml
-<launch>
-    <param name="/use_sim_time" value="true"/>
-    <arg name="robot_name"/>
-    <arg name="init_pose"/>
-    <arg name="paused" default="false"/>
-    <arg name="gui" default="true"/>
-    <arg name="limited" default="true"  doc="If true, limits joint range [-PI, PI] on all joints." />
-
-    <!-- send robot urdf to param server -->
-    <include file="$(find four_arm_moveit_description)/launch/ur10_upload.launch">
-      <arg name="limited" value="$(arg limited)"/>
-    </include>
-
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <!--arg name="world_name" default="worlds/empty.world"/-->
-        <arg name="verbose" value="true"/>
-        <arg name="world_name" default="$(find four_arm_moveit_gazebo)/world/multiarm_bot.world"/>
-        <arg name="paused" value="$(arg paused)"/>
-        <!--arg name="gui" value="$(arg gui)"/-->
-        <arg name="gui" value="$(arg gui)"/>
-    </include>
-
-    <group ns="ur10_1">
-        <param name="tf_prefix" value="ur10_1_tf" />
-        <include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch">
-            <arg name="init_pose" value="-x 0.6 -y -0.6 -z 1.1"/>
-            <arg name="robot_name" value="ur10_1"/>
-        </include>
-    </group>
-
-    <group ns="ur10_2">
-        <param name="tf_prefix" value="ur10_2_tf" />
-        <include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch">
-            <arg name="robot_name" value="ur10_2"/>
-            <arg name="init_pose" value="-x 0.6 -y 1.38 -z 1.1"/>
-        </include>
-    </group>
-
-    <group ns="ur10_3">
-        <param name="tf_prefix" value="ur10_3_tf" />
-        <include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch">
-            <arg name="robot_name" value="ur10_3"/>
-            <arg name="init_pose" value="-x 0.6 -y 3.36 -z 1.1"/>
-        </include>
-    </group>
-
-    <group ns="ur10_4">
-        <param name="tf_prefix" value="ur10_4_tf" />
-        <include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch">
-            <arg name="robot_name" value="ur10_4"/>
-            <arg name="init_pose" value="-x 0.6 -y 5.34 -z 1.1"/>
-        </include>
-    </group>
-
-    <node pkg="tf" type="static_transform_publisher" name="world_frames_connection_1" args="0 0 0 0 0 0 /world /ur10_1_tf/world 100"/>
-
-    <node pkg="tf" type="static_transform_publisher" name="world_frames_connection_2" args="0 0 0 0 0 0 /world /ur10_2_tf/world 100"/>
-
-    <node pkg="tf" type="static_transform_publisher" name="world_frames_connection_3" args="0 0 0 0 0 0 /world /ur10_3_tf/world 100"/>
-
-    <node pkg="tf" type="static_transform_publisher" name="world_frames_connection_4" args="0 0 0 0 0 0 /world /ur10_4_tf/world 100"/>
-
-</launch>
+<launch><param name="/use_sim_time" value="true"><arg name="robot_name"></arg><arg name="init_pose"></arg><arg name="paused" default="false"></arg><arg name="gui" default="true"></arg><arg name="limited" default="true" doc="If true, limits joint range [-PI, PI] on all joints."></arg><!-- send robot urdf to param server --><include file="$(find four_arm_moveit_description)/launch/ur10_upload.launch"><arg name="limited" value="$(arg limited)"></arg></include><include file="$(find gazebo_ros)/launch/empty_world.launch"><arg name="verbose" value="true"></arg><arg name="world_name" default="$(find four_arm_moveit_gazebo)/world/multiarm_bot.world"></arg><arg name="paused" value="$(arg paused)"></arg><arg name="gui" value="$(arg gui)"></arg></include><group ns="ur10_1"><param name="tf_prefix" value="ur10_1_tf"><include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch"><arg name="init_pose" value="-x 0.6 -y -0.6 -z 1.1"></arg><arg name="robot_name" value="ur10_1"></arg></include></group><group ns="ur10_2"><param name="tf_prefix" value="ur10_2_tf"><include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch"><arg name="robot_name" value="ur10_2"></arg><arg name="init_pose" value="-x 0.6 -y 1.38 -z 1.1"></arg></include></group><group ns="ur10_3"><param name="tf_prefix" value="ur10_3_tf"><include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch"><arg name="robot_name" value="ur10_3"></arg><arg name="init_pose" value="-x 0.6 -y 3.36 -z 1.1"></arg></include></group><group ns="ur10_4"><param name="tf_prefix" value="ur10_4_tf"><include file="$(find four_arm_moveit_gazebo)/launch/ur10_joint_limited.launch"><arg name="robot_name" value="ur10_4"></arg><arg name="init_pose" value="-x 0.6 -y 5.34 -z 1.1"></arg></include></group><node pkg="tf" type="static_transform_publisher" name="world_frames_connection_1" args="0 0 0 0 0 0 /world /ur10_1_tf/world 100"></node><node pkg="tf" type="static_transform_publisher" name="world_frames_connection_2" args="0 0 0 0 0 0 /world /ur10_2_tf/world 100"></node><node pkg="tf" type="static_transform_publisher" name="world_frames_connection_3" args="0 0 0 0 0 0 /world /ur10_3_tf/world 100"></node><node pkg="tf" type="static_transform_publisher" name="world_frames_connection_4" args="0 0 0 0 0 0 /world /ur10_4_tf/world 100"></node></launch>
 ```
-Lo primero que se aprecia en el contenido del fichero ([four_arm_moveit_gazebo.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_gazebo.launch)) es que carga el modelo del robot en el servidor de parámetros e instancia el mundo virtual de `Gazebo`, lo que se eliminó del fichero [ur10.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10.launch), esto debe estar aquí porque solo se quiere instanciar una vez el mundo de `Gazebo`.
+The first thing you see in the content of the file ([four_arm_moveit_gazebo.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_gazebo.launch )) is that it loads the robot model into the parameter server and instantiates the virtual world of `Gazebo`, which was removed from the file [ur10.launch](https://github.com/Serru/MultiCobot-UR10- Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_gazebo/launch/ur10.launch), this needs to be here because you only want to instantiate the `Gazebo` world once. 
 
-Después aparecen cuatro grupos, `ur10_1`, `ur10_2`, `ur10_3` y `ur10_4`, esta es la forma de definir los *namespace*s, la configuración de estos cobots es idéntica excepto por tres cosas, el valor del parámetro `tf_prefix` que será el prefijo que irá en las transformadas, es importante que coincida con el nombre del grupo (*namespace*), el nombre (`robot_name`) y su posición inicial (`init_pose`).
+Then four groups appear, `ur10_1`, `ur10_2`, `ur10_3` and `ur10_4`, this is the way to define the *namespace*s, the configuration of these cobots is identical except for three things, the value of the parameter ` tf_prefix` which will be the prefix that will go in the transforms, it is important that it matches the name of the group (*namespace*), the name (`robot_name`) and its initial position (`init_pose`). 
 
-Si se quiere añadir más cobots al sistema, simplemente hay que copiar el contenido de *grupo* y modificar el contenido adecuadamente. Y tener en cuenta las últimas cuatro líneas de código unen la base de los cobots con el frame `world`.
+If you want to add more cobots to the system, simply copy the content of *group* and modify the content accordingly. And note the last four lines of code bind the cobot base to the `world` frame. 
 
 <a name="modificaciones2">
-  <h3>
-Configuración realizada en MoveIt! para dos cobots
-  </h3>
+<h3>
+Configuration made in MoveIt! for two cobots
+</h3>
 </a>
 
-Los cambios realizados para la configuración de `MoveIt!` son muy pequeñas, básicamente hay que agrupar el código de lo que se había implementado para un *único cobot* bajo un *namespace*, adecuar el *remap* con el namespacing y posteriormente replicar el proceso tantas veces como cobots se esté simulando. El contenido del fichero [one_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch) implementado para un único cobot y el contenido del fichero [four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch), si se comparan, esencialmente se ha agrupado todo en un *namespace* y se ha añadido el nombre del *namespace* como prefijo en los nombres de los *topic*s del remap para la correcta comunicación con los controladores.
+The changes made to the `MoveIt!` configuration are very small, basically you have to group the code of what had been implemented for a *single cobot* under a *namespace*, adapt the *remap* with the namespace and then replicate the process as many times as cobots are being simulated. The content of the file [one_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch) implemented for a single cobot and the contents of the file [four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch), if compared, essentially everything has been grouped in a *namespace* and the name of the *namespace* has been added as a prefix in the names of the *topic*s of the remap for the correct communication with the controllers. 
 
-Contenido del fichero `four_arm_moveit_execution.launch`:
+Content of the `four_arm_moveit_execution.launch` file:
 ```xml
-<launch>
-    <arg name="sim" default="false" />
-    <arg name="debug" default="false" />
-    <!-- By default, we do not start a database (it can be large) -->
-    <arg name="demo" default="false" />
+<launch><arg name="sim" default="false"></arg><arg name="debug" default="false"></arg><!-- By default, we do not start a database (it can be large) --><arg name="demo" default="false"></arg><group ns="ur10_1"><rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"></rosparam><include file="$(find four_arm_moveit_config)/launch/planning_context.launch"><arg name="load_robot_description" value="true"></arg></include><!-- We do not have a robot connected, so publish fake joint states --><node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"><param name="/use_gui" value="false"><rosparam param="/source_list"> [/joint_states] </rosparam></node><include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch"><arg name="debug" default="$(arg debug)"></arg><arg name="publish_monitored_planning_scene" value="true"></arg></include><!-- If database loading was enabled, start mongodb as well --><include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"></include><!-- Remap follow_joint_trajectory --><remap from="/ur10_1/follow_joint_trajectory" to="/ur10_1/arm_controller/follow_joint_trajectory"></remap><include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch"><arg name="config" value="true"></arg><arg name="debug" default="false"></arg></include></group><group ns="ur10_2"><rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"></rosparam><include file="$(find four_arm_moveit_config)/launch/planning_context.launch"><arg name="load_robot_description" value="true"></arg></include><!-- We do not have a robot connected, so publish fake joint states --><node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"><param name="/use_gui" value="false"><rosparam param="/source_list"> [/joint_states] </rosparam></node><include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch"><arg name="debug" default="$(arg debug)"></arg><arg name="publish_monitored_planning_scene" value="true"></arg></include><!-- If database loading was enabled, start mongodb as well --><include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"></include><!-- Remap follow_joint_trajectory --><remap from="/ur10_2/follow_joint_trajectory" to="/ur10_2/arm_controller/follow_joint_trajectory"></remap><include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch"><arg name="config" value="true"></arg><arg name="debug" default="false"></arg></include></group><group ns="ur10_3"><rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"></rosparam><include file="$(find four_arm_moveit_config)/launch/planning_context.launch"><arg name="load_robot_description" value="true"></arg></include><!-- We do not have a robot connected, so publish fake joint states --><node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"><param name="/use_gui" value="false"><rosparam param="/source_list"> [/joint_states] </rosparam></node><include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch"><arg name="debug" default="$(arg debug)"></arg><arg name="publish_monitored_planning_scene" value="true"></arg></include><!-- If database loading was enabled, start mongodb as well --><include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"></include><!-- Remap follow_joint_trajectory --><remap from="/ur10_3/follow_joint_trajectory" to="/ur10_3/arm_controller/follow_joint_trajectory"></remap><include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch"><arg name="config" value="true"></arg><arg name="debug" default="false"></arg></include></group><group ns="ur10_4"><rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"></rosparam><include file="$(find four_arm_moveit_config)/launch/planning_context.launch"><arg name="load_robot_description" value="true"></arg></include><!-- We do not have a robot connected, so publish fake joint states --><node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"><param name="/use_gui" value="false"><rosparam param="/source_list"> [/joint_states] </rosparam></node><include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch"><arg name="debug" default="$(arg debug)"></arg><arg name="publish_monitored_planning_scene" value="true"></arg></include><!-- If database loading was enabled, start mongodb as well --><include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"></include><!-- Remap follow_joint_trajectory --><remap from="/ur10_4/follow_joint_trajectory" to="/ur10_4/arm_controller/follow_joint_trajectory"></remap><include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch"><arg name="config" value="true"></arg><arg name="debug" default="false"></arg></include></group></launch>
+``` 
 
-    <group ns="ur10_1">
-      <rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/planning_context.launch">
-        <arg name="load_robot_description" value="true"/>
-      </include>
-
-      <!-- We do not have a robot connected, so publish fake joint states -->
-      <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-        <param name="/use_gui" value="false"/>
-        <rosparam param="/source_list">[/joint_states]</rosparam>
-      </node>
-
-      <include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch">
-        <arg name="debug" default="$(arg debug)" />
-        <arg name="publish_monitored_planning_scene" value="true"/>
-        <!--arg name="info" value="true"/-->
-      </include>
-
-      <!-- If database loading was enabled, start mongodb as well -->
-      <include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"/>
-
-      <!-- Remap follow_joint_trajectory -->
-      <remap from="/ur10_1/follow_joint_trajectory" to="/ur10_1/arm_controller/follow_joint_trajectory"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch">
-        <arg name="config" value="true"/>
-        <arg name="debug" default="false"/>
-      </include>
-    </group>
-
-    <group ns="ur10_2">
-      <rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/planning_context.launch">
-        <arg name="load_robot_description" value="true"/>
-      </include>
-
-      <!-- We do not have a robot connected, so publish fake joint states -->
-      <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-        <param name="/use_gui" value="false"/>
-        <rosparam param="/source_list">[/joint_states]</rosparam>
-      </node>
-
-      <include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch">
-        <arg name="debug" default="$(arg debug)" />
-        <arg name="publish_monitored_planning_scene" value="true"/>
-        <!--arg name="info" value="true"/-->
-      </include>
-
-      <!-- If database loading was enabled, start mongodb as well -->
-      <include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"/>
-
-      <!-- Remap follow_joint_trajectory -->
-      <remap from="/ur10_2/follow_joint_trajectory" to="/ur10_2/arm_controller/follow_joint_trajectory"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch">
-        <arg name="config" value="true"/>
-        <arg name="debug" default="false"/>
-      </include>
-    </group>
-
-    <group ns="ur10_3">
-      <rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/planning_context.launch">
-        <arg name="load_robot_description" value="true"/>
-      </include>
-
-      <!-- We do not have a robot connected, so publish fake joint states -->
-      <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-        <param name="/use_gui" value="false"/>
-        <rosparam param="/source_list">[/joint_states]</rosparam>
-      </node>
-
-      <include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch">
-        <arg name="debug" default="$(arg debug)" />
-        <arg name="publish_monitored_planning_scene" value="true"/>
-        <!--arg name="info" value="true"/-->
-      </include>
-
-      <!-- If database loading was enabled, start mongodb as well -->
-      <include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"/>
-
-      <!-- Remap follow_joint_trajectory -->
-      <remap from="/ur10_3/follow_joint_trajectory" to="/ur10_3/arm_controller/follow_joint_trajectory"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch">
-        <arg name="config" value="true"/>
-        <arg name="debug" default="false"/>
-      </include>
-    </group>
-
-    <group ns="ur10_4">
-      <rosparam command="load" file="$(find four_arm_moveit_manipulator)/config/joint_names.yaml"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/planning_context.launch">
-        <arg name="load_robot_description" value="true"/>
-      </include>
-
-      <!-- We do not have a robot connected, so publish fake joint states -->
-      <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-        <param name="/use_gui" value="false"/>
-        <rosparam param="/source_list">[/joint_states]</rosparam>
-      </node>
-
-      <include file="$(find four_arm_moveit_manipulator)/launch/move_group.launch">
-        <arg name="debug" default="$(arg debug)" />
-        <arg name="publish_monitored_planning_scene" value="true"/>
-        <!--arg name="info" value="true"/-->
-      </include>
-
-      <!-- If database loading was enabled, start mongodb as well -->
-      <include file="$(find four_arm_moveit_config)/launch/default_warehouse_db.launch" if="$(arg demo)"/>
-
-      <!-- Remap follow_joint_trajectory -->
-      <remap from="/ur10_4/follow_joint_trajectory" to="/ur10_4/arm_controller/follow_joint_trajectory"/>
-
-      <include file="$(find four_arm_moveit_config)/launch/moveit_rviz.launch">
-        <arg name="config" value="true"/>
-        <arg name="debug" default="false"/>
-      </include>
-    </group>
-</launch>
-```
-
-Se realiza una prueba de lo implementado hasta el momento:
+A test of what has been implemented so far is carried out:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make clean
 catkin_make
-rospack profile 
-```
+rospack profile
+``` 
 
-- Terminal 1
+-Terminal 1
 ```bash
 roslaunch four_arm_moveit_manipulator four_arm_moveit_gazebo.launch
-```
+``` 
 
-- Terminal 2
+-Terminal 2
 ```bash
 roslaunch four_arm_moveit_manipulator four_arm_moveit_execution.launch
 ```
 
-##### :computer: Pick & Place
-Como en las soluciones anteriores, se procederá realizar una prueba muy sencilla. Para ello primero hay que crear los scripts necesarios para controlar los brazos de los robots y las pinzas correctamente y después, se realizará los mismos movimientos que en las soluciones anteriormente propuestas.
+##### :computer: Pick &amp; Place
+As in the previous solutions, a very simple test will be carried out. To do this, you must first create the necessary scripts to control the robot arms and the grippers correctly and then, the same movements will be made as in the previously proposed solutions. 
 
-El siguiente trozo de código, corresponde a la configuración para poder comunicarse con la API del nodo `move_group`cuando este está en un *namespace*:
+The following piece of code corresponds to the configuration to be able to communicate with the API of the `move_group` node when it is in a *namespace*: 
 
 ```python
-[...]
+[...] 
 
 1 def main():
-2     moveit_commander.roscpp_initializer.roscpp_initialize(sys.argv)
-3     rospy.init_node('ur10_1_arm_moveit',
-4                   anonymous=True)
+2 moveit_commander.roscpp_initializer.roscpp_initialize(sys.argv)
+3 rospy.init_node('ur10_1_arm_moveit',
+4 anonymous=True)
 5
-6     PLANNING_GROUP_GRIPPER = "gripper"
-7     PLANNING_GROUP_ARM = "manipulator"
-8     PLANNING_NS = "/ur10_1/"
-9     REFERENCE_FRAME = "/ur10_1/world"
-10 
-11     ## Instantiate a RobotCommander object.  This object is an interface to
-12     ## the robot as a whole.
-13     robot = moveit_commander.RobotCommander(
-14 		"%srobot_description"%PLANNING_NS, 
-15 		ns="/ur10_1/"
-16 	 )
-17 
-18     arm = moveit_commander.move_group.MoveGroupCommander(
-19 		PLANNING_GROUP_ARM,
-20 		"%srobot_description"%PLANNING_NS, 
-21 		ns="/ur10_1/"
-22 	 )
+6 PLANNING_GROUP_GRIPPER = "gripper"
+7 PLANNING_GROUP_ARM = "handler"
+8 PLANNING_NS = "/ur10_1/"
+9 REFERENCE_FRAME = "/ur10_1/world"
+10
+11 ## Instantiate a RobotCommander object. This object is an interface to
+12 ## the robot as a whole.
+13 robot = moveit_commander.RobotCommander(
+14 " %s robot_description"%PLANNING_NS,
+15 ns="/ur10_1/"
+16)
+17
+18 arm = moveit_commander.move_group.MoveGroupCommander(
+19 PLANNING_GROUP_ARM,
+20 " %s robot_description"%PLANNING_NS,
+21 ns="/ur10_1/"
+22)
 23
-24     gripper = moveit_commander.move_group.MoveGroupCommander(
-25 		PLANNING_GROUP_GRIPPER, 
-26 		"%srobot_description"%PLANNING_NS, 
-27 		ns="/ur10_1/"
-28 	)
+24 gripper = moveit_commander.move_group.MoveGroupCommander(
+25 PLANNING_GROUP_GRIPPER,
+26 " %s robot_description"%PLANNING_NS,
+27 ns="/ur10_1/"
+28)
 29
-30     ## We create this DisplayTrajectory publisher which is used below to publish
-31     ## trajectories for RVIZ to visualize.
-32     display_trajectory_publisher = rospy.Publisher(
-33 		'/move_group/display_planned_path',
-34 		moveit_msgs.msg.DisplayTrajectory, 
-35		queue_size=10
-36 	 )
+30 ## We create this DisplayTrajectory publisher which is used below to publish
+31 ## trajectories for RVIZ to visualize.
+32 display_trajectory_publisher = rospy.Publisher(
+33 '/move_group/display_planned_path',
+34 moveit_msgs.msg.DisplayTrajectory,
+35 queue_size=10
+36)
 37
-38     rospy.sleep(2)
-39 
-40     arm.set_num_planning_attempts(15)
-41     arm.set_planning_time(5)
-42     arm.allow_looking(True)
-43     arm.allow_replanning(True)
-44     arm.set_pose_reference_frame(REFERENCE_FRAME)
-45     arm.set_goal_position_tolerance(0.001)
-46     arm.set_goal_orientation_tolerance(0.001)
-47 
-48     gripper.set_num_planning_attempts(15)
-49     gripper.allow_replanning(True)
-50     gripper.allow_looking(True)
+38 rospy.sleep(2)
+39
+40 arm.set_num_planning_attempts(15)
+41 arm.set_planning_time(5)
+42 arm.allow_looking(True)
+43 arm.allow_replanning(True)
+44 arm.set_pose_reference_frame(REFERENCE_FRAME)
+45 arm.set_goal_position_tolerance(0.001)
+46 arm.set_goal_orientation_tolerance(0.001)
+47
+48 gripper.set_num_planning_attempts(15)
+49 gripper.allow_replanning(True)
+50 gripper.allow_looking(True)
 51
-52     pick_place(arm, gripper)
+52 pick_place(arm, gripper)
 53
-54     ## When finished shut down moveit_commander.
-55     moveit_commander.roscpp_shutdown()
-```
+54 ## When finished shut down moveit_commander.
+55 moveit_commander.roscpp_shutdown()
+``` 
 
-Se ha definido la configuración en la función `main`, pero no es necesario que sea aquí, es más es preferible modularlo y pasarle la configuración por parámetros, pero para esta explicación es suficiente.
+The configuration has been defined in the `main` function, but it is not necessary that it be here, it is more preferable to modulate it and pass the configuration by parameters, but for this explanation it is enough. 
 
-- **Línea 2:** Lo primero es inicializar `moveit_commander` que es una API sobre la interfaz desarrollada en `C++`, lo que es definido como *Wrappers*, este provee la mayoría de las funcionalidades que provee la interfaz de la versión para `C++`, pero no están todas las funcionalidades de *`MoveIt!`*. Es necesario porque entre sus funcionalidades permite calcular trayectorias cartesianas que es la funcionalidad que principalmente se requiere.
-- **Línea 3:** Inicializa el nodo al que se le ha nombrado `ur10_1_arm` moveit.
-- **Líneas 6-9:** Se definen las constantes para facilitar la configuración, las dos primeras líneas (6 y 7) definen los nombres que se pusieron a los grupos de planificación, en este caso se les llamó `gripper` para la pinza y `manipulator` para el brazo del cobot UR10. Las líneas 8 y 9 definen la información necesaria para configurar el planificador, `PLANNING_NS` contiene el nombre del *namespace* donde está el nodo `move_group` con el que se quiere comunicar y `REFERENCE_FRAME` es el link que se tomará como referencia para realizar los cálculos de trayectoria con respecto al *end-effector* (`ee_link`), en este caso daría igual que sea `/ur10_1/world`, pero lo correcto sería tomar el link `/ur10_1/base_link` como referencia.
-- **Línea 13:** Inicializa el `RobotCommander`, como en el código indica, se utiliza para controlar el robot, hay que pasarle como parámetros el *namespace* y qué  `robot_description` debe utilizar para definir el robot, porque en el momento hay tres descripciones, que son el de `Gazebo` (`robot_description`) y los otros dos definidos en el fichero `planning_context.launch` que son instanciadas dentro de sus correspondientes *namespaces* por ello se tiene `/ur10_1/robot_description` y `/ur10_2/robot_description`.
-- **Líneas 18 y 24:** Se crea una interfaz para un conjunto de Joints, en este caso la interfaz `arm` para el conjunto de `joints` dinámicos del brazo del cobot UR10 y la interfaz `gripper` para el joint que controla la pinza. A través de estas interfaces se realizarán las planificaciones de las trayectorias y su ejecución (es posible realizarlo con la interfaz de robot, ya que contiene a estas dos interfaces, pero es más claro y cómodo realizarlo de esta manera.
-- **Línea 32:** Como dice en el comentario, `display_trajectory_publisher` realiza publicaciones al *topic* `/move_group/display_planned_path`, el cual *Rviz*  está suscrito para visualizar las trayectorias, no es necesario, pero para depuración es recomendable.
-- **Línea 38:** Simplemente espera dos segundos, se asegura que las instancias anteriores se han cargado correctamente en el sistema, hay que tener en cuenta alguno de ellos instancian nodos y si el ordenador sobre el que se está lazando es lento puede provocar una situación de no deseada.
-- **Líneas 40-50:** Aquí se está configurando algunas opciones del planificador que se va a utilizar, por defecto es RTT, pero se puede modificar. Los más importantes son los últimos en las líneas 44, 45 y 46. En la línea 44 se define el link de referencia que se utilizará para realizar las planificaciones, la línea 45 y 45 definen el margen de error aceptable del resultado obtenido del planificador para la posición y la orientación, hay que tener cuidado porque cuanto más pequeño es el error que se defina más tiempo tardará el planificador en dar una respuesta, está definidos para permitir errores de milímetros. El mismo proceso para la interfaz de la pinza (`gripper`).
-- **Línea 52:** Aquí se lanza la tarea de *pick & place*.
-- **Línea 55:** Una vez que termine la tarea *pick & place* finaliza.
+- **Line 2:** The first thing is to initialize `moveit_commander` which is an API on the interface developed in `C++`, which is defined as *Wrappers*, it provides most of the functionality provided by the interface of the version for `C++`, but not all the features of *`MoveIt!`*. It is necessary because among its functionalities it allows to calculate Cartesian trajectories, which is the functionality that is mainly required.
+- **Line 3:** Initialize the node named `ur10_1_arm` moveit.
+- **Lines 6-9:** The constants are defined to facilitate the configuration, the first two lines (6 and 7) define the names that were given to the planning groups, in this case they were called `gripper` to the gripper and `manipulator` for the UR10 cobot arm. Lines 8 and 9 define the necessary information to configure the planner, `PLANNING_NS` contains the name of the *namespace* where the `move_group` node with which you want to communicate is located and `REFERENCE_FRAME` is the link that will be taken as reference for perform the trajectory calculations with respect to the *end-effector* (`ee_link`), in this case it would be the same as `/ur10_1/world`, but the correct thing to do would be to take the link `/ur10_1/base_link` as a reference.
+- **Line 13:** Initializes the `RobotCommander`, as indicated in the code, it is used to control the robot, you have to pass the *namespace* as parameters and what `robot_description` should be used to define the robot, because in At the moment there are three descriptions, which are the one for `Gazebo` (`robot_description`) and the other two defined in the file `planning_context.launch` which are instantiated within their corresponding *namespaces* so we have `/ur10_1/robot_description ` and `/ur10_2/robot_description`.
+- **Lines 18 and 24:** An interface is created for a set of Joints, in this case the `arm` interface for the set of dynamic `joints` of the UR10 cobot arm and the `gripper` interface for the joint that controls the gripper. Through these interfaces, the planning of the trajectories and their execution will be carried out (it is possible to do it with the robot interface, since it contains these two interfaces, but it is clearer and more comfortable to do it this way.
+- **Line 32:** As it says in the comment, `display_trajectory_publisher` publishes to *topic* `/move_group/display_planned_path`, which *Rviz* is subscribed to display trajectories, it is not necessary, but for debugging it is recommendable.
+- **Line 38:** Simply wait two seconds, make sure that the previous instances have been loaded correctly in the system, you have to take into account some of them instantiate nodes and if the computer on which you are launching is slow you can cause an unwanted situation.
+- **Lines 40-50:** Here you are configuring some options of the scheduler to be used, by default it is RTT, but it can be modified. The most important ones are the last ones in lines 44, 45 and 46. In line 44 the reference link that will be used to carry out the planning is defined, line 45 and 45 define the acceptable margin of error of the result obtained from the planner for position and orientation, you have to be careful because the smaller the error you define, the longer the planner will take to give an answer, they are defined to allow millimeter errors. Same process for the `gripper` interface.
+- **Line 52:** Here the *pick &amp; place*.
+- **Line 55:** Once the task is finished *pick &amp; place* ends. 
 
-Tras la descripción detallada del código, para que el script controlase otro cobot que esté en otro *namespace* es tan sencillo como cambiarle el valor de la variable `PLANNING_NS` por la del nombre del *namespace* donde esté definido el cobot objetivo. Si se ejecuta el *pick & place* con ambos brazos, se aprecia que realizan la tarea simultáneamente y con un poco de retraso entre ellos debido a que uno empieza un poco más tarde que otro, se puede realizar pruebas a lanzar los scripts a destiempo y comprobar que efectivamente se mueven simultáneamente.
+After the detailed description of the code, for the script to control another cobot that is in another *namespace* it is as simple as changing the value of the `PLANNING_NS` variable to the name of the *namespace* where the target cobot is defined. If *pick &amp; place* with both arms, it can be seen that they perform the task simultaneously and with a little delay between them because one starts a little later than the other, tests can be carried out by launching the scripts at the wrong time and verifying that they actually move simultaneously . 
 
-##### :computer: Creación de los scripts que realizarán la tarea de *Pick & place*
+##### :computer: Creation of the scripts that will carry out the *Pick &amp; place*
 ```bash
 cd scripts
 touch four_arm_moveit_1.py
 touch four_arm_moveit_2.py
 touch four_arm_moveit_3.py
 touch four_arm_moveit_4.py
-```
+``` 
 
-- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_1.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_1.py)
+- File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_1.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/ four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_1.py) 
 
-- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_2.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_2.py)
+- File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_2.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/ four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_2.py) 
 
-- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_3.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_3.py)
+- File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_3.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/ four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_3.py) 
 
-- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_4.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_4.py)
+- File [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_4.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/ four_arm_moveit/four_arm_moveit_manipulator/scripts/four_arm_moveit_4.py) 
 
 
 <a name="pruebas2">
-  <h2>
-Ejecución de las pruebas
-  </h2>
+<h2>
+Execution of the tests
+</h2>
 </a>
 
-Para ejecutar la prueba:
+To run the test: 
 
-- Terminal 1
+-Terminal 1
 ```bash
 roslaunch four_arm_moveit_manipulator four_arm_moveit_gazebo.launch
-```
+``` 
 
-- Terminal 2
+-Terminal 2
 ```bash
 roslaunch four_arm_moveit_manipulator four_arm_moveit_execution.launch
-```
+``` 
 
-- Terminal 3
+-Terminal 3
 ```bash
-rosrun four_arm_moveit_manipulator four_arm_moveit_1.py 
-```
+rosrun four_arm_moveit_manipulator four_arm_moveit_1.py
+``` 
 
-- Terminal 4
+-Terminal 4
 ```bash
 rosrun four_arm_moveit_manipulator four_arm_moveit_2.py
-```
+``` 
 
-- Terminal 5
+-Terminal 5
 ```bash
 rosrun four_arm_moveit_manipulator four_arm_moveit_3.py
-```
+``` 
 
-- Terminal 6
+-Terminal 6
 ```bash
 rosrun four_arm_moveit_manipulator four_arm_moveit_4.py
 ```
-----
+---- 
 
-En la terminal de `Gazebo`, al lanzar todos los comandos para realizar las pruebas se obtiene el siguiente warning:
+In the `Gazebo` terminal, when launching all the commands to perform the tests, the following warning is obtained: 
 
-![ ](/doc/imgs_md/four_arm_move_it_gazebo_warning.png  "Warning por falta de recursos")
+![ ](/doc/imgs_md/four_arm_move_it_gazebo_warning.png "Warning due to lack of resources") 
 
-Esto es debido a que el sistema avisa de que los recursos son insuficientes para realizar la simulación fluidamente, lo que puede acarrear problemas en su velocidad de simulación que puede afectar al resultado de este.
+This is due to the fact that the system warns that the resources are insufficient to perform the simulation smoothly, which can lead to problems in its simulation speed that can affect its result. 
 
-#### :book: Información del resultado final
+#### :book: End result information 
 
-- Resultado visual en `Gazebo`
-![image](/doc/imgs_md/four-arm-moveit-gazebo.png  "Resultado en Gazebo")
+- Visual result in `Gazebo`
+![image](/doc/imgs_md/four-arm-moveit-gazebo.png "Result in Gazebo") 
 
-- Esquema de los nodos y *topic*s del sistema
-![image](/doc/imgs_md/four-arm-moveit-graph.png  "Nodos y topics del sistema")
+- Scheme of the nodes and *topic*s of the system
+![image](/doc/imgs_md/four-arm-moveit-graph.png "System nodes and topics") 
 
-Se procede a comprobar si la comunicación entre `Gazebo` y las réplicas de `MoveIt!` se comunican correctamente. Se puede ver cuatro grandes agrupaciones, en donde cada cobot se está comunicando con su `move_group` asignado, la comunicación con los controladores y el camino de las transformadas y valores de los `joints` tiene un único origen que es el nodo de `Gazebo`, esto es muy importante para evitar movimientos extraños dependiendo de la frecuencia en que se produzcan esas interferencias.
+It proceeds to check if the communication between `Gazebo` and the replicas of `MoveIt!` communicate correctly. You can see four large groups, where each cobot is communicating with its assigned `move_group`, the communication with the controllers and the path of the transforms and values of the `joints` has a single origin that is the `Gazebo` node `, this is very important to avoid strange movements depending on the frequency in which these interferences occur. 
 
-El camino parte del nodo de `Gazebo` es el único que publica a los *topic*s
-`/joint_states` de ambos *namespaces*, el nodo `move_group` está suscrito a este *topic* también, después llega al nodo `robot_state_publisher` que realiza las transformadas y se las envía por el *topic* `/tf` el cual el nodo `move_group` también está suscrito, esto es importante porque `move_group` utiliza la información que proviene de ambos para realizar la planificación de las trayectorias.
+The path part of the `Gazebo` node is the only one that publishes to the *topic*s
+`/joint_states` of both *namespaces*, the `move_group` node is subscribed to this *topic* as well, then it gets to the `robot_state_publisher` node which performs the transforms and sends them over the *topic* `/tf` which the `move_group` node is also subscribed, this is important because `move_group` uses the information that comes from both to do path planning. 
 
-- Árbol de las transformadas del modelo del robot
-![image](/doc/imgs_md/four-arm-moveit-tree.png  "Árbol de transformadas")
+- Tree of transformations of the robot model
+![image](/doc/imgs_md/four-arm-moveit-tree.png "Transform Tree") 
 
 ---
 
-<div>
-  <p align="left">
-    <button name="button">
-                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md">Anterior</a>
-    </button>
-  </p>
-</div>
+ <p align="left">
+   <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md"> Previous </a></button>
+ </p>

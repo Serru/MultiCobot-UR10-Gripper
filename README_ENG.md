@@ -57,7 +57,7 @@ The Leap Motion device is also integrated into the system. It is capable of dete
 ## Documentation
 - [Basic System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md)
 
-### Configuration in the 'Gazebo' simulator
+### Configuration in the `Gazebo` simulator
 - [Design and development for one, two and four robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md)
 - [Design and integration of the Leap Motion device into the system to control one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm-eng.md)
 
@@ -65,7 +65,7 @@ The Leap Motion device is also integrated into the system. It is capable of dete
 - [Configuration for a UR10 with gripper using its motion planning on the physical robot](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
 ## Video with the results
-Here is a video with the results of the simulations performed in 'Gazebo'. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots with Leap Motion, and finally the developed result was tested with the physical Campero robot.
+Here is a video with the results of the simulations performed in `Gazebo`. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots with Leap Motion, and finally the developed result was tested with the physical Campero robot.
 
 <p>
 <a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
@@ -104,7 +104,7 @@ This work is part of the [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigaci
 
 ---
 
-The developed work has been experimentally evaluated and validated, showing a correct operation of the physical robot [Campero] (http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg). For this reason, this work is part of the activities of the project [COMMANDIA (2019)](http://commandia.unizar.es/), co-funded by the [Interreg Sudoe Program](https://www.interreg-sudoe.eu/inicio) and the [European Regional Development Fund (ERDF)](https://ec.europa.eu/regional_policy/es/funding/erdf/).
+The developed work has been experimentally evaluated and validated, showing a correct operation of the physical robot [Campero](http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg). For this reason, this work is part of the activities of the project [COMMANDIA (2019)](http://commandia.unizar.es/), co-funded by the [Interreg Sudoe Program](https://www.interreg-sudoe.eu/inicio) and the [European Regional Development Fund (ERDF)](https://ec.europa.eu/regional_policy/es/funding/erdf/).
 
 ![image](http://commandia.unizar.es/wp-content/uploads/cropped-logoCommandia-1.png)
 

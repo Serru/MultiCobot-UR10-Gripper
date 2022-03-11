@@ -1,27 +1,24 @@
-<!--- Para dos robots opción A--->
-# Instalación y configuración para dos robots UR10 sin MoveIt! y Leap Motion
+# Two UR10s with grippers using their own motion planner and *Leap Motion*
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/two_arm_no_moveit_lm.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit_lm.md) | **English** 
 
+![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png "Loads the URDF model of the UR10 robot") 
 
-![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png  "Cargado el modelo URDF del robot UR10")
+This section is the continuation of phases 1, 2 and 3, where the integration of *Leap Motion* into the system takes place, i.e. phases 4 and 5. In the previous phases, the robots were controlled by sending the previously defined trajectories to perform the *pick & place*. Now this is done by Leap Motion, which is controlled by a person who sends the commands to the two robots. 
 
-Esta sección la continuación de las etapas 1, 2 y 3, en donde se realiza la integración de *Leap Motion* en el sistema, es decir las fases 4 y 5. En las fases anteriores se controlaba los robots enviando las trayectorias previamente definidas para efectuar el *pick & place*, pero ahora será mediante Leap Motion el cual es controlado por una persona el que envíe los comandos a los dos robots.
+For this purpose, part of the *Leap Motion* repository is directly modified and adapted to properly control the simulated robots. The idea is identical to what was presented above, but the data input is the information provided by *Leap Motion*. This information needs to be properly processed and adapted for use with the API that provides it. 
 
-Para ello se va a modificar parte del repositorio de *Leap Motion* directamente y adaptarlo para que controle adecuadamente los robots simulados. La idea es idéntica a lo presentado anteriormente, pero tiene como entrada de datos la información que *Leap Motion* provee. Hay que tratar esta información adecuadamente con la API que provee y adecuarlo para su uso.
+## :book: Implementing the manipulator with *Leap Motion*
 
+There are a few things to keep in mind when implementing this function: 
 
-## :book: Implementación del manipulador con Leap Motion
+- The robot's pose references, which you get from the *ur10_robot_pose.py* script.
+- The working environment of the *robot*.
+- The working environment of *Leap Motion*. 
 
-Para realizar la implementación hay que tener varias cosas en cuenta:
+Since we want the robot to follow the movements of *Leap Motion*, we will implement a controller whose workspace is contained in the robot's workspace. 
 
-- Las referencias de la posición del robot que se obtiene de script *ur10_robot_pose.py*
-- El entorno de trabajo del *robot*
-- El entorno de trabajo de *Leap Motion*
-
-Como se desea que el robot siga los movimientos que hace *Leap Motion*, se va a implementar un controlador que su espacio de trabajo viene contenido dentro del espacio de trabajo del robot.
-
-### :computer: Creación del paquete
+### :computer: Create package 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit
@@ -36,21 +33,22 @@ touch sender.py
 touch leap_interface.py
 ```
 
-- Contenido del fichero [ur10_1_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/ur10_1_lm_robot_manipulator.py).
+- Contents of the file [ur10_1_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/ur10_1_lm_robot_manipulator.py). 
 
-- Contenido del fichero [ur10_2_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/ur10_2_lm_robot_manipulator.py).
+- Contents of file [ur10_2_lm_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/ur10_2_lm_robot_manipulator.py). 
 
-- Contenido del fichero [sender.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/sender.py).
+- Contents of file [sender.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/sender.py). 
 
-### :computer: Se ha modificado del repositorio original
+### :computer: Modified from the original repository. 
 
-Se han creado los ficheros: *leapcobotright.msg* y *leapcobotleft.msg* en el directorio *msg* del repositorio [Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/leap_motion):
+The following files were created: *leapcobotright.msg* and *leapcobotleft.msg* in the *msg* directory of the [Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/leap_motion) repository: 
 
-- Contenido del fichero [leapcobotright.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg).
+- Contents of [leapcobotright.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg). 
 
-- Contenido del fichero [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg).
+- Contents of [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg). 
 
-- Y el fichero [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt) añadiendo los ficheros de mensajes recién creados para su compilación:
+- And the file [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt), where the newly created message files are added for compilation:
+
 ```bash
 [...]
 ## Generate messages in the 'msg' folder
@@ -71,9 +69,10 @@ add_message_files(
   leapcobotleft.msg
 )
 [...]
+```
 
-## :computer: Pruebas en el simulador Gazebo
-Para realizar las pruebas, se necesitarán al menos 4 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero para visualizar mejor la información que se envía y para su depuración se ha dejado así.
+## :computer: Tests with the *Gazebo* simulator
+At least 4 terminals are needed to run the tests, although they can be reduced in the startup files to run them automatically. But to better visualize the information sent and for debugging, it was left like this. 
 
 - Terminal 1:
 ```bash
@@ -104,7 +103,7 @@ source devel/setup.bash
 rosrun two_arm_no_moveit_leap_motion ur10_2_lm_robot_manipulator.py 
 ```
 
-- Terminal 5 (en caso de fallo en el dispositivo de *Leap Motion*):
+- Terminal 5 (in case the *Leap Motion* device fails):
 ```bash
 sudo service leapd restart
 ```
@@ -112,9 +111,7 @@ sudo service leapd restart
 ---
 
 <div>
-  <p align="left">
-    <button name="button">
-                <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md">Anterior</a>
-    </button>
-  </p>
+ <p align="left">
+   <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md"> Back </a></button>
+ </p>
 </div>

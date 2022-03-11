@@ -1,6 +1,6 @@
 # Performing tests on the finished installation
 
-[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ ESP /tests.md) | **English**
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/tests.md) | **English**
 
 ## If there are *warnings* during the build 
 
@@ -26,21 +26,21 @@ Call Stack (most recent call first):
 
 ```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
-catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
-'gazebo_LIBRARIES' is defined.
+  catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
+  'gazebo_LIBRARIES' is defined.
 Call Stack (most recent call first):
-/opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
-gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
+  /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
 ```
 
-Modify the file ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, starting at line 26 as follows:
+Modify the file `~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt`, starting at line 26 as follows:
 
 ```bash
 catkin_package(
-INCLUDE_DIRS include
-LIBRARIES gazebo_version_helpers
-CATKIN_DEPENDS gazebo_ros roscpp
-DEPENDS GAZEBO
+  INCLUDE_DIRS include
+  LIBRARIES gazebo_version_helpers
+  CATKIN_DEPENDS gazebo_ros roscpp
+  DEPENDS GAZEBO 
 )
 ``` 
 
@@ -48,56 +48,58 @@ DEPENDS GAZEBO
 
 ```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
-catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
-'gazebo_LIBRARIES' is defined.
+  catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
+  'gazebo_LIBRARIES' is defined.
 Call Stack (most recent call first):
-/opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
-gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
+  /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
 [...]
 ```
 
-Modify the file ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, starting at line 31 as follows:
+Modify the file `~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt`, starting at line 31 as follows:
 
 ```bash
 catkin_package(
-# Binary directory required for proto headers inclusion to work, because install commands don't
-# get executed in devel space. The directory above is required so that an include of
-# <gazebo_grasp_plugin>
-# also works in devel space like it needs to be in install space.
-# Probably we can find a better solution for this, but until then this
-# fix will be OK.
-INCLUDE_DIRS include $ {CMAKE_CURRENT_BINARY_DIR} /..
-LIBRARIES gazebo_grasp_fix gazebo_grasp_msgs
-CATKIN_DEPENDS gazebo_ros geometry_msgs roscpp std_msgs gazebo_version_helpers
-DEPENDS GAZEBO
+  # Binary directory required for proto headers inclusion to work, because install commands don't
+  # get executed in devel space. The directory above is required so that an include of
+  # <gazebo_grasp_plugin/msgs/grasp_event.pb.h> 
+  # also works in devel space like it needs to be in install space.
+  # Probably we can find a better solution for this, but until then this
+  # fix will be OK.
+  INCLUDE_DIRS include ${CMAKE_CURRENT_BINARY_DIR}/..
+  LIBRARIES gazebo_grasp_fix gazebo_grasp_msgs
+  CATKIN_DEPENDS gazebo_ros geometry_msgs roscpp std_msgs gazebo_version_helpers
+  DEPENDS GAZEBO
 )
 ``` 
 
 **gazebo_grasp_plugin_ros warning:**
+
 ```bash
 CMake Warning at /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:166 (message):
-catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
-'gazebo_LIBRARIES' is defined.
+  catkin_package() DEPENDS on 'gazebo' but neither 'gazebo_INCLUDE_DIRS' nor
+  'gazebo_LIBRARIES' is defined.
 Call Stack (most recent call first):
-/opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
-gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt:34 (catkin_package)
+  /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt:34 (catkin_package)
 [...]
 ```
 
-Modify the file ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, starting at line 34 as follows:
+Modify the file `~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt`, starting at line 34 as follows:
 
 ```bash
 catkin_package(
-# INCLUDE_DIRS include
-# LIBRARIES gazebo_grasp_plugin_ros
-CATKIN_DEPENDS gazebo_grasp_plugin message_runtime roscpp
-DEPENDS GAZEBO
+#  INCLUDE_DIRS include
+#  LIBRARIES gazebo_grasp_plugin_ros
+ CATKIN_DEPENDS gazebo_grasp_plugin message_runtime roscpp
+ DEPENDS GAZEBO
 )
 ``` 
 
 ## Small check of the system installation 
 
 ### Activation of the current working environment
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 source ~/MultiCobot-UR10-Gripper/devel/setup.bash
@@ -110,14 +112,15 @@ The working environment should look like the following after installing all the 
 
 ```bash
 miguel@Omen:~/MultiCobot-UR10-Gripper/src$ ls
-CMakeLists.txt geometry ros_control
-gazebo-pkgs leap_motion roslint
-gazebo_ros_pkgs object_recognition_msgs universal_robot
-general-message-pkgs robotiq_2finger_grippers ur_modern_driver
+CMakeLists.txt        geometry                  ros_control
+gazebo-pkgs           leap_motion               roslint
+gazebo_ros_pkgs       object_recognition_msgs   universal_robot
+general-message-pkgs  robotiq_2finger_grippers  ur_modern_driver
 ``` 
 
 <details>
-	<summary> Structure and detailed content of the directories </summary> 
+	<summary> Structure and detailed content of the directories </summary>
+
 ```text
 src/
 ├── CMakeLists.txt -> /opt/ros/kinetic/share/catkin/cmake/toplevel.cmake
@@ -1987,6 +1990,7 @@ Add that the changes that are frequently made to all the solutions will be chang
 
 --- 
 
+<div>
 <p align="left">
 <button name="button">
 <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a>
@@ -2002,3 +2006,4 @@ Add that the changes that are frequently made to all the solutions will be chang
 </button>
 </span>
 </p>
+</div>

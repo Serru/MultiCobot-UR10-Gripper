@@ -23,7 +23,7 @@ Es necesaria la descripci처n de todos los cobots que se quiera controlar simult�
 - Hay que implementar la funcionalidad para realizar movimientos cartesianos, es un requisito dada la futura incorporaci처n de *Leap Motion* al sistema.
 - La configuraci처n puede ser tediosa (controladores, *topic*s, tratamiento de los mensajes, interacci처n entre lo que se ha creado con lo creado por terceros, etc.), es necesario cierta familiaridad con el entorno.
 
-#### Desarrollo e implementaci처n de la soluci처n y sus pruebas paso a paso (Fases 1, 2 y 3)
+#### Desarrollo e implementaci처n de la soluci처n y sus pruebas paso a paso (fases 1, 2 y 3)
 - [Un UR10 con pinza mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md)
 - [Dos UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/two_arm_no_moveit.md)
 - [Cuatro UR10s con pinzas mediante un planificador propio](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/four_arm_no_moveit.md)

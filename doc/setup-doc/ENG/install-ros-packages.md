@@ -1,4 +1,5 @@
 # Installation of *ROS* packages
+
 [Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENP/install-ros-packages.md) | **English**
 
 ## Create working directory 
@@ -8,7 +9,7 @@ mkdir -p ~/ MultiCobot-UR10-Gripper/src
 cd ~/MultiCobot-UR10-Gripper/src
 ``` 
 
-## Warning: * ROS * Third-party packages.
+## Warning: *ROS* Third-party packages.
 
 No direct changes were made to the contents of *ROS* packages during the installation process. Any changes made to these packages were to accommodate *ROS Kinetic* during compilation. 
 
@@ -83,7 +84,7 @@ rosdep install --rosdistro kinetic --ignore-src --from-paths src
 
 ### [ros_control](https://github.com/ros-controls/ros_control)
 
-This repository contains: *A set of packages containing controller interfaces, controller managers, transmissions and hardware_interfaces*.
+This repository contains: "*A set of packages that include controller interfaces, controller managers, transmissions and hardware_interfaces*".
 
 Clone the repository:
 ```bash
@@ -128,7 +129,7 @@ cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ``` 
 
-A compilation error may occur with * ROS Kinetic Kame*. To fix this, you must modify the *ur_hardware_interface.cpp* file. Replace the contents of the file with the contents located [here] (https://github. com/iron-ox/ur_modern_driver/blob/883070d0b6c0c32b78bb1ca7155b8f3a1ead416c/src/ur_hardware_interface.cpp) and recompile it.
+A compilation error may occur with * ROS Kinetic Kame*. To fix this, you must modify the *ur_hardware_interface.cpp* file. Replace the contents of the file with the contents located [here](https://github.com/iron-ox/ur_modern_driver/blob/883070d0b6c0c32b78bb1ca7155b8f3a1ead416c/src/ur_hardware_interface.cpp) and recompile it.
 
 ### [gazebo-pkgs](https://github.com/JenniferBuehler/gazebo-pkgs)
 This is a collection of plugins for `Gazebo`. We are mostly interested in the plugin that allows grabbing objects.
@@ -234,7 +235,7 @@ During compilation you may get an **error message** asking you to compile to the
 
 To fix this, you need to change the `make` of *catkin* when building the project:
 
-- Simply modify the ~/MultiCobot-UR10-Gripper/src/CMakeLists.txt file and add *add_compile_options(-std=c++11)* to the beginning of the file as shown below.
+- Simply modify the `~/MultiCobot-UR10-Gripper/src/CMakeLists.txt` file and add *add_compile_options(-std=c++11)* to the beginning of the file as shown below.
 
 ```bash
 # toplevel CMakeLists.txt for a catkin workspace
@@ -251,6 +252,7 @@ add_compile_options(-std=c++11)
 
 ---
 
+<div>
 <p align="left">
 <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a></button>
 </p>
@@ -266,4 +268,6 @@ add_compile_options(-std=c++11)
 <button name="button">
 <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md"> Next </a>
 </button>
-</span></p>
+</span>
+</p>
+</div>

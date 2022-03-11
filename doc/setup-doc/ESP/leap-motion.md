@@ -8,6 +8,7 @@ Driver de *ROS* para el controlador de *Leap Motion*
 Para la correcta instalación y configuración del controlador de *Leap Motion* en *ROS Kinetic Kame*, hay que realizar un poco más de trabajo que en los repositorios previos.
 
 Lo primero es reemplazar o crear el fichero que da servicio al controlador: ***/lib/systemd/system/leapd.service***
+
 ```bash
 # Found by Kevin Cole 2014.11.22 at
 # https://github.com/atejeda/leap-fedora-rpm
@@ -31,11 +32,12 @@ WantedBy=multi-user.target
 ```
 
 Se crea el acceso directo al fichero creado, que se guardará en */etc/systemd/system/* como *leapd.service*:
+
 ```bash
 sudo ln -s /lib/systemd/system/leapd.service /etc/systemd/system/leapd.service
 sudo systemctl daemon-reload
 ```
-## Instalación de Leap Motion
+## Instalación de *Leap Motion*
 
 Clonar el repositorio:
 ```bash

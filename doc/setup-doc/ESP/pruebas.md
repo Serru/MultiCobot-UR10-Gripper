@@ -30,7 +30,8 @@ Call Stack (most recent call first):
   /opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
   gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt:26 (catkin_package)
 ```
-Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt, a partir de la línea 26 por lo siguiente:
+Modificar el fichero `~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_version_helpers/CMakeLists.txt`, a partir de la línea 26 por lo siguiente:
+
 ```bash
 catkin_package(
   INCLUDE_DIRS include
@@ -51,7 +52,8 @@ Call Stack (most recent call first):
   gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt:31 (catkin_package)
 [...]
 ```
-Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt, a partir de la línea 31 por lo siguiente:
+Modificar el fichero `~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin/CMakeLists.txt`, a partir de la línea 31 por lo siguiente:
+
 ```bash
 catkin_package(
   # Binary directory required for proto headers inclusion to work, because install commands don't
@@ -77,7 +79,8 @@ Call Stack (most recent call first):
   gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt:34 (catkin_package)
 [...]
 ```
-Modificar el fichero ~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt, a partir de la línea 34 por lo siguiente:
+Modificar el fichero `~/MultiCobot-UR10-Gripper/src/gazebo-pkgs/gazebo_grasp_plugin_ros/CMakeLists.txt`, a partir de la línea 34 por lo siguiente:
+
 ```bash
 catkin_package(
 #  INCLUDE_DIRS include
@@ -90,6 +93,7 @@ catkin_package(
 ## Pequeña comprobación de la instalación del sistema
 
 ### Activación del entorno de trabajo actual
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 source ~/MultiCobot-UR10-Gripper/devel/setup.bash
@@ -99,6 +103,7 @@ source ~/MultiCobot-UR10-Gripper/devel/setup.bash
 Tras realizar previamente toda la instalación y configuración del sistema se puede proceder a realizar pruebas para comprobar su funcionamiento antes de proceder a realizar otras modificaciones. No se va a indicar que pruebas se puede efectuar porque los repositorios de origen tiene indicaciones para ejecutar pequeñas demostraciones que son muy útiles para comprender lo que pueden hacer.
 
 El entorno de trabajo debería quedar de la siguiente manera tras la instalación de todos los repositorios:
+
 ```bash
 miguel@Omen:~/MultiCobot-UR10-Gripper/src$ ls
 CMakeLists.txt        geometry                  ros_control
@@ -1967,6 +1972,7 @@ Una vez que se tiene todos los recursos necesarios para el sistema, instalados c
 Se ha decidido organizarlo de esta manera para que los recursos comunes estén compartidos entre las diferentes implementaciones, y las modificaciones específicas que se tengan que hacer se guardarán en sus respectivos directorios. Lo que permitirá ejecutar los ficheros modificados en vez de los ficheros originales de los que parten modificando simplemente el fichero a incluir en los ficheros con extensión *launch*.
 
 Por ello se procede primero a crear el directorio que contendrá todas las soluciones propuestas:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src
 mkdir multirobot

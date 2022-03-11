@@ -1,5 +1,5 @@
 <!--- Para dos robots opción A--->
-# Instalación y configuración para dos robots UR10 sin MoveIt! y Leap Motion
+# Dos UR10s con pinzas mediante un planificador propio y Leap Motion
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/two_arm_no_moveit_lm.md)
 
@@ -51,6 +51,7 @@ Se han creado los ficheros: *leapcobotright.msg* y *leapcobotleft.msg* en el dir
 - Contenido del fichero [leapcobotleft.msg](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg).
 
 - Y el fichero [CMakeLists.txt](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt) añadiendo los ficheros de mensajes recién creados para su compilación:
+
 ```bash
 [...]
 ## Generate messages in the 'msg' folder
@@ -71,6 +72,7 @@ add_message_files(
   leapcobotleft.msg
 )
 [...]
+```
 
 ## :computer: Pruebas en el simulador Gazebo
 Para realizar las pruebas, se necesitarán al menos 4 terminales, aunque se pueden reducir para lanzarlos automáticamente en los ficheros launch, pero para visualizar mejor la información que se envía y para su depuración se ha dejado así.

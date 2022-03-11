@@ -4,11 +4,11 @@
 
 ## Index
 - [Modeling of multiple robots in the *URDF* file](#modeling )
-- [Replicating the 'MoveIt!' node](#replication) 
+- [Replicating the `MoveIt!` node](#replication) 
 
 <a name="modelado">
 <h2>
-Modeling of multiple robots in the URDF file
+Modeling of multiple robots in the <i>URDF</i> file
 </h2>
 </a>
 
@@ -38,7 +38,7 @@ To work around this problem, the `move_group` node would need to be set to assum
 
 Once you have this configuration, you need to create the trajectory of each arm without executing it and properly enter the values of the joints of each robot for this trajectory into the group with both robots to be executed later. 
 
-This proposal has already been implemented by [* TEAM O2AC for the World Robot Summit 2020 Assembly Challenge*](https://github.com/o2ac/o2ac-ur/).
+This proposal has already been implemented by [*TEAM O2AC for the World Robot Summit 2020 Assembly Challenge*](https://github.com/o2ac/o2ac-ur/).
 
 
 <a name="replicacion">
@@ -49,9 +49,9 @@ Replicating the <a href="https://github.com/ros-planning/moveit"><i> MoveIt!</i>
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png "Multirobot system through node replication") 
 
-In the schematic design, the main component that performs the motion planning functions is the `MoveIt!` package. This design is based on replication of the components that motion planning needs for its operation (the main node is `move_group`). Each replication is a motion planning assigned to each of the cobots, which are delimited in their own space or `namespace`.
+In the schematic design, the main component that performs the motion planning functions is the `MoveIt!` package. This design is based on replication of the components that motion planner needs for its operation (the main node is `move_group`). Each replication is a motion planner assigned to each of the cobots, which are delimited in their own space or `namespace`.
 
-In the robot description, only one cobot description is needed and the number of robots it can control simultaneously is directly related to the number of motion planning replications with different `namespaces`. The numbers in the figure indicate the order of the phases during development. 
+In the robot description, only one cobot description is needed and the number of robots it can control simultaneously is directly related to the number of motion planner replications with different `namespaces`. The numbers in the figure indicate the order of the phases during development. 
 
 **The advantages of this proposal are:** 
 
@@ -70,12 +70,14 @@ In the robot description, only one cobot description is needed and the number of
 - It is difficult to make changes to the source code of the `MoveIt!` package functions.
 
 ### Development and implementation of the solution and its tests (phases 1, 2 and 3)
-- [One UR10 with gripper via the 'MoveIt!' package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md)
-- [Two UR10s with grippers via the 'MoveIt!' package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/two_arm_moveit.md)
-- [Four UR10 with grippers via the 'MoveIt!' package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md) 
+- [One UR10 with gripper via the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md)
+- [Two UR10s with grippers via the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/two_arm_moveit.md)
+- [Four UR10 with grippers via the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md) 
 
 ---
 
+<div>
 <p align="left">
 <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md"> Menu </a></button>
 </p>
+</div>

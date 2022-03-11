@@ -1,4 +1,4 @@
-# Instalación y configuración para un único robot UR10 sin MoveIt! y Leap Motion
+# Un UR10 con pinza mediante un planificador propio y Leap Motion
 
 **Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit_lm.md)
 

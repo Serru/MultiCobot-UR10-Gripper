@@ -8,7 +8,7 @@
 
 <a name="modelado">
   <h2>
-  Modelando varios robots en el fichero URDF
+  Modelando varios robots en el fichero <i>URDF</i>
   </h2>
 </a>
 
