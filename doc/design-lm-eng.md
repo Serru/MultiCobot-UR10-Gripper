@@ -46,7 +46,7 @@ Coordinate systems
  </h3>
 </a>
 
-![image](/doc/imgs_md/different-reference-systems.png "Different reference coordinate systems") 
+![image](/doc/imgs_md/distintintos-sistemas-referencia.png "Different reference coordinate systems") 
 
 When designing, note that the reference coordinates of *ROS* and the coordinates used by *Leap Motion* are different (as shown in the figure), so you will need to adjust them accordingly during implementation.
 
@@ -186,7 +186,7 @@ The integration of *Leap Motion* into the *ROS* system and as part of the develo
 
 The picture shows the architecture of the system with nodes and *topic*s. You can see the integration of *Leap Motion* into the system. At the bottom of the image, you can see the *sender* node (`one_arm_no_moveit_lm_pub`), the *topic* that publishes the data received from the *Leap Motion* device (`/leapmotion/data`), and the * script* that processes the information to send commands to the robot is the node `ur10_dual_moveit`.
 
-![image](/doc/imgs_md/one-arm-moveit-rqt-graph-gazebo-moveit-phase-4-detail.png "Integrating Leap Motion into the system") 
+![image](/doc/imgs_md/one-arm-moveit-rqt-graph-gazebo-moveit-fase-4-detalle.png "Integrating Leap Motion into the system") 
 
 
 
