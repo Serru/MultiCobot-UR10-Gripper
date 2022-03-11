@@ -1,6 +1,6 @@
 # Installation of *ROS Kinetic and dependencies* 
 
-[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENP/install-ROS.md)  | **English**
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ROS.md)  | **English**
 
 ## Installation of *ROS Kinetic Kame*
 
