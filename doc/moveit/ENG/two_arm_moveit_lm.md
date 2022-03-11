@@ -117,6 +117,6 @@ sudo service leapd restart
 
 <div>
  <p align="left">
-   <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md"> Back </a></button>
+   <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm-eng.md"> Back </a></button>
  </p>
 </div>

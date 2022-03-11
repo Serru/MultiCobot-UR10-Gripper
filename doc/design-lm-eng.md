@@ -203,6 +203,6 @@ The picture shows the architecture of the system with nodes and *topic*s. You ca
 
 <div> 
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md"> Home </a></button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md"> Home </a></button>
 </p>
 </div>
