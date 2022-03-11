@@ -31,6 +31,6 @@ You must describe all the cobots you want to control at the same time in the *UR
 
 <div>
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md"> Menu </a></button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md"> Main Menu </a></button>
 </p>
 </div>

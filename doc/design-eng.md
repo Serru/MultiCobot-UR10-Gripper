@@ -4,7 +4,7 @@
 
 After running numerous tests in the *ROS* environment to create a multi-robot system, it turns out that the solutions must come from the combinations between the *URDF* file that defines the robot model and the *ROS* packages included in the schema which are represented by the `MoveIt!` package, whose main function is motion planning.
 
-![image](/doc/imgs_md/Design-General-focus.png "ROS Tools and Drivers in Design") 
+![image](/doc/imgs_md/Diseno-General-focus.png "ROS Tools and Drivers in Design") 
 
 Possible variants are: 
 
@@ -21,6 +21,6 @@ The proposed solutions revolve around the changes and combinations between the r
 
 <div>
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md"> Home </a></button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md"> Main Menu </a></button>
 </p>
 </div>

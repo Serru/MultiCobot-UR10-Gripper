@@ -78,6 +78,6 @@ In the robot description, only one cobot description is needed and the number of
 
 <div>
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md"> Menu </a></button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md"> Main Menu </a></button>
 </p>
 </div>
