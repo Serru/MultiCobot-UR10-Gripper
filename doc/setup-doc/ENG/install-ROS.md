@@ -58,14 +58,14 @@ sudo apt-get install ros-kinetic-moveit-ros-planning
  ---
 <div>
 <p align="left">
-    <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a></button>
+    <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md"> Menu </a></button>
 </p>
 
 
 
 <p><span style="float:right;">
  <button name="button">
- <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/install-ros-packages.md"> Next </a>
+ <a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/install-ros-packages.md"> Next </a>
  </button>
  </span>
 </p>
