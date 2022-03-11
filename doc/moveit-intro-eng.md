@@ -1,4 +1,4 @@
-# Proposed solutions with the package [`MoveIt!`] (https://github.com/ros-planning/moveit) 
+# Proposed solutions with the package [`MoveIt!`](https://github.com/ros-planning/moveit) 
 
 [Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit-intro.md) | **English**
 

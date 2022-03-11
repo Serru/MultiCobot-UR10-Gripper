@@ -1,6 +1,6 @@
 # Proposed solutions using a proprietary or third-party scheduler (without the `MoveIt!` package) 
 
-[Español]](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md) | **English**
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md) | **English**
 
 ![image](/doc/imgs_md/Diseno-no-moveit-general-dos-cobots-leap-motion.png "Loaded the URDF model of the UR10 robot") 
 
@@ -31,6 +31,6 @@ You must describe all the cobots you want to control at the same time in the *UR
 
 <div>
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md"> Main Menu </a></button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md"> Main Menu </a></button>
 </p>
 </div>
