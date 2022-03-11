@@ -129,7 +129,7 @@ cd ~/MultiCobot-UR10-Gripper
 catkin_make
 ``` 
 
-A compilation error may occur with * ROS Kinetic Kame*. To fix this, you must modify the *ur_hardware_interface.cpp* file. Replace the contents of the file with the contents located [here](https://github.com/iron-ox/ur_modern_driver/blob/883070d0b6c0c32b78bb1ca7155b8f3a1ead416c/src/ur_hardware_interface.cpp) and recompile it.
+A compilation error may occur with *ROS Kinetic Kame*. To fix this, you must modify the *ur_hardware_interface.cpp* file. Replace the contents of the file with the contents located [here](https://github.com/iron-ox/ur_modern_driver/blob/883070d0b6c0c32b78bb1ca7155b8f3a1ead416c/src/ur_hardware_interface.cpp) and recompile it.
 
 ### [gazebo-pkgs](https://github.com/JenniferBuehler/gazebo-pkgs)
 This is a collection of plugins for `Gazebo`. We are mostly interested in the plugin that allows grabbing objects.
