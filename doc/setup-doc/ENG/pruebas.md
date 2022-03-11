@@ -1,6 +1,6 @@
 # Performing tests on the finished installation
 
-[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/tests.md) | **English**
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/pruebas.md) | **English**
 
 ## If there are *warnings* during the build 
 
@@ -1993,7 +1993,7 @@ Add that the changes that are frequently made to all the solutions will be chang
 <div>
 <p align="left">
 <button name="button">
-<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md"> Menu </a>
+<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md"> Menu </a>
 </button>
 </p>
 
@@ -2002,7 +2002,7 @@ Add that the changes that are frequently made to all the solutions will be chang
 <p>
 <span style="float:left;">
 <button name="button">
-<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ESP/leap-motion.md"> Previous </a>
+<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/leap-motion.md"> Previous </a>
 </button>
 </span>
 </p>
