@@ -31,7 +31,7 @@ Configuración inicial: Configuración para un robot
   </h2>
 </a>
 
-En esta sección se realiza una replicación de la configuración para un único robot, del cual se toma como base y así explicar posteriormente las modificaciones realizadas para poder controlar dos robots.
+En esta sección se realiza una replicación de la configuración para un único robot, del cual se toma como base y así explicar posteriormente las modificaciones realizadas para poder controlar cuatro robots.
 
 ### :warning: Contenido de los ficheros
 No copiar y pegar el contenido de los ficheros ciegamente en esta sección. Durante la explicación para la configuración para un robot, la información es idéntica a lo que se obtiene del paquete **one_arm_no_moveit**, pero hay que modificar el contenido para se ajuste al nuevo paquete, en este caso **four_arm_no_moveit**.
@@ -50,7 +50,7 @@ Fase 1: Configuración del simulador de Gazebo
 
 #### :book: Configuración de `Gazebo`
 
-Lo primero que hay que hacer es configurar `Gazebo` y los controladores para que pueda simular adecuadamente los movimientos del cobot. Se crea el paquete `one_arm_no_ moveit_gazebo`, que contendrá toda la configuración relacionada con `Gazebo`, entre ellos los controladores. 
+Lo primero que hay que hacer es configurar `Gazebo` y los controladores para que pueda simular adecuadamente los movimientos del cobot. Se crea el paquete `four_arm_no_moveit_gazebo`, que contendrá toda la configuración relacionada con `Gazebo`, entre ellos los controladores. 
 
 Una vez creada el paquete, hay que configurar los controladores que están almacenados en el directorio `controller`. Los controladores se definen en ficheros con extensión *yaml*, para definir estos controladores hay que darles un nombre y definir el tipo del controlador, los `joints` dinámicos que se quieren controlar, las restricciones que tiene, el ratio de publicación y otras opciones.
 
@@ -650,6 +650,7 @@ Primero, hay que decidir en el *namespace* para cada robot, es decir el nombre d
 Se comenzará con los controladores:
 
 - Fichero *ur10_1_arm_controller.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 mv arm_controller_ur10.yaml ur10_1_arm_controller.yaml
@@ -662,6 +663,7 @@ Se puede apreciar, que simplemente se ha añadido el prefijo *ur10_1_*, esto per
 Por ahora se procede a modificar el resto de ficheros así como la adicción del segundo grupo de controladores para el segundo robot que se llevará el prefijo *ur10_2_*.
 
 - Fichero *ur10_1_gripper_controller_robotiq.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 mv gripper_controller_robotiq.yaml ur10_1_gripper_controller_robotiq.yaml
@@ -670,6 +672,7 @@ mv gripper_controller_robotiq.yaml ur10_1_gripper_controller_robotiq.yaml
 Ver el contenido del fichero [ur10_1_gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_1_gripper_controller_robotiq.yaml) con las modificaciones hechas.
 
 - Fichero *ur10_2_arm_controller.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 cp ur10_1_arm_controller.yaml ur10_2_arm_controller.yaml
@@ -678,6 +681,7 @@ cp ur10_1_arm_controller.yaml ur10_2_arm_controller.yaml
 Ver el contenido del fichero [ur10_2_arm_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_2_arm_controller.yaml) con las modificaciones llevadas a cabo.
 
 - Fichero *ur10_2_gripper_controller_robotiq.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 mv ur10_1_gripper_controller_robotiq.yaml ur10_2_gripper_controller_robotiq.yaml
@@ -686,6 +690,7 @@ mv ur10_1_gripper_controller_robotiq.yaml ur10_2_gripper_controller_robotiq.yaml
 Ver el contenido del fichero [ur10_2_gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_2_gripper_controller_robotiq.yaml) con las modificaciones efectuadas.
 
 - Fichero *ur10_3_arm_controller.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 cp ur10_1_arm_controller.yaml ur10_3_arm_controller.yaml
@@ -694,6 +699,7 @@ cp ur10_1_arm_controller.yaml ur10_3_arm_controller.yaml
 Ver el contenido del fichero [ur10_3_arm_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_3_arm_controller.yaml) con las modificaciones realizadas.
 
 - Fichero *ur10_3_gripper_controller_robotiq.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 mv ur10_1_gripper_controller_robotiq.yaml ur10_3_gripper_controller_robotiq.yaml
@@ -703,6 +709,7 @@ Ver el contenido del fichero [ur10_3_gripper_controller_robotiq.yaml](https://gi
 
 
 - Fichero *ur10_4_arm_controller.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 cp ur10_1_arm_controller.yaml ur10_4_arm_controller.yaml
@@ -711,6 +718,7 @@ cp ur10_1_arm_controller.yaml ur10_4_arm_controller.yaml
 Ver el contenido del fichero [ur10_4_arm_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_4_arm_controller.yaml) con las modificaciones realizadas.
 
 - Fichero *ur10_4_gripper_controller_robotiq.yaml*
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controllers
 mv ur10_1_gripper_controller_robotiq.yaml ur10_4_gripper_controller_robotiq.yaml
@@ -721,7 +729,7 @@ Ver el contenido del fichero [ur10_4_gripper_controller_robotiq.yaml](https://gi
 ##### :computer: Modificación del fichero *launch* de `Gazebo`
 Hay que modificar ahora el fichero *launch* para lanzar los controladores de ambos robots en `Gazebo`.
 
-```{bash}
+```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/launch
 nano ur10.launch
 ```
@@ -765,7 +773,7 @@ Falta modificar el fichero que lanza los scripts que se crearon, previamente as�
 
 <a name="modificaciones2">
   <h3>
-Fase 2: Configuración del *URDF*
+Fase 2: Configuración del URDF
   </h3>
 </a>
 
@@ -868,6 +876,7 @@ Hay que modificar los ficheros *.urdf*, *ur10_joint_limited_robot.urdf.xacro* y 
  
  
  - Modificando el fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) con:
+
 ```xml
 [...]
   <!-- arm -->
@@ -951,16 +960,22 @@ El cual realizará la tarea de *pick & place*, se implementarán cuatro scripts 
 
 ##### :computer: Modificación del pick and place
 En el directorio *four_arm_no_moveit_manipulator* se modificará los siguientes ficheros:
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_1_robot_manipulator.py*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_1_robot_manipulator.py).
+
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_1_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_1_robot_manipulator.py).
+
 - [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_2_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_2_robot_manipulator.py).
-- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_3_robot_manipulator.py*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_3_robot_manipulator.py).
+
+- [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_3_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_3_robot_manipulator.py).
+
 - [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_4_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_4_robot_manipulator.py).
 
 Falta arreglar el plugin de `Gazebo` para que pueda agarrar objetos con ambas pinzas:
+
 - Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro).
 
- Y finalmente, adecuar el fichero `world`para que realice las simulaciones en un entorno adecuado:
- - Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/world/multiarm_bot.world).
+Y finalmente, adecuar el fichero `world`para que realice las simulaciones en un entorno adecuado:
+
+- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/world/multiarm_bot.world).
  
 
 

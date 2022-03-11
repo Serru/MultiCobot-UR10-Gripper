@@ -23,9 +23,9 @@ You must describe all the cobots you want to control at the same time in the *UR
 - Configuration can be tedious (controllers, *topic*s, message handling, interaction between what was created and what was created by third parties, etc.), some familiarity with the environment is required. 
 
 #### Development and implementation of the solution and its tests (phases 1, 2 and 3)
-- [One UR10 with gripper and its own motion planner](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md)
+- [One UR10 with gripper using its own motion planner](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md)
 - [Two UR10s with grippers using their own motion planner](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/two_arm_no_moveit.md)
-- [Four UR10s with grippers via their own motion planner](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/four_arm_no_moveit.md)
+- [Four UR10s with grippers using their own motion planner](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/four_arm_no_moveit.md)
 
 ---
 
