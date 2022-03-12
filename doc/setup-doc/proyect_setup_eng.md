@@ -17,7 +17,7 @@ Dependencies and packages that serve as `common resources` for all developed sol
 - [Installation of *ROS Kinetic and dependencies*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/install-ROS.md)
 - [Installing *ROS* packages](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/install-ros-packages.md)
 - [Installing and configuring Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/leap-motion.md)
-- [Tests for the performed installation](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/tests.md)
+- [Tests for the performed installation](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/ENG/pruebas.md)
 
  ---
  
