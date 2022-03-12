@@ -196,7 +196,7 @@ The picture shows the architecture of the system with nodes and *topic*s. You ca
 
 
 ### Adding the Leap Motion device to the system `with` the `MoveIt!` package
-- [One UR10 with gripper using the `MoveIt!` package and Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit_lm.md)
+- [One UR10 with gripper `with` the `MoveIt!` package and Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit_lm.md)
 - [Two UR10s with grippers `with` the `MoveIt!` package and Leap Motion](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/two_arm_moveit_lm.md)
 
 ---
