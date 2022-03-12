@@ -23,7 +23,7 @@ Se instalan las dependencias y los paquetes que harán la función de `recursos 
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md">Menú principal</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ESP.md">Menú principal</a>
 </button>
 </p>
 

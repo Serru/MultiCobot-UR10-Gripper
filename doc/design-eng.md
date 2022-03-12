@@ -21,6 +21,6 @@ The proposed solutions revolve around the changes and combinations between the r
 
 <div>
 <p align="left">
-<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md"> Main Menu </a></button>
+<button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md"> Main Menu </a></button>
 </p>
 </div>

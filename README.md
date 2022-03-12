@@ -6,7 +6,8 @@
 # MultiCobot-UR10-Gripper
 
 <p align="center">
-Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> con pinzas de Robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
+Multi-robot system of collaborative robots (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> with grippers from Robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) that allows simultaneous execution of tasks with different types of controllers and brands of cobots, as well as direct control of the cobot by a person via the Leap Motion device.
+</p>
 
 <p align="center">
   <img alt="Doc" style="border-width:0" src="https://img.shields.io/badge/doc-incomplete-red?logo=markdown&style=plastic" />
@@ -30,89 +31,86 @@ Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https:/
   </a>
 </p>
 
-**Español** | [English](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md)
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ESP.md) | **English**
 
+## About this project
+This thesis project focuses on developing a multi-robot system that can cooperatively perform tasks such as transporting objects. There is not much documentation on how to develop a system where multiple robots can be controlled simultaneously in the environment of ROS, which is widely used in research and prototyped for testing before going into production.
 
+Two solutions have been designed, developed, implemented and experimentally evaluated: the first is the *ROS* package called `MoveIt!`, where the work is mainly focused on the configuration to allow the simultaneous control of different cobots; the second is the creation or use of a third-party planner that sends the commands directly to the controllers in charge of executing the movements of the cobots, and each of them has a built-in gripper that allows them to perform different tasks.
 
-## Sobre este proyecto
-Este Trabajo Fin de Grado se enfoca en el desarrollo de un sistema multirobot que pueda realizar tareas de forma cooperativa como es el transporte de objetos. No hay mucha documentación en cómo desarrollar un sistema en donde se controle varios robots simultáneamente en el entorno de ROS, el cual es ampliamente utilizado en la investigación y prototipado para efectuar pruebas antes de su puesta en producción.
+The Leap Motion device is also integrated into the system. It is capable of detecting, tracking and recognizing the user's hand gestures and serves as an interface for the simultaneous control of up to two cobots, enabling the manipulation of objects.
 
-Se han diseñado, desarrollado, implementado y evaluado experimentalmente dos soluciones: la primera es mediante el paquete de *ROS* `MoveIt!`,  en donde el trabajo se centra sobre todo en su configuración para permitir el control simultáneo de varios cobots; y la segunda es la creación o utilización de un planificador de terceros que envía las órdenes directamente a los controladores encargados de ejecutar los movimientos de los cobots y cada uno de ellos tienen incorporado una pinza que les permiten hacer diferentes tareas.
+[Read more...](https://deposita.unizar.es/record/66296?ln=es)
 
-También está incorporado al sistema el dispositivo Leap Motion que es capaz de detectar, rastrear y reconocer gestos de las manos del usuario como interfaz para el control simultáneo de hasta dos cobots, permitiendo la manipulación de objetos.
-
-[Leer más...](https://deposita.unizar.es/record/66296?ln=es)
-
-
-
-## Requisitos del sistema
+## System requirements
 - Ubuntu 16.04
 - Python 2.7
 - ROS Kinetic Kame
 
-## 🚀 Quickstart
+## Quick start
 
 1. **paso 1**
 2. **paso 2**
 3. **paso 3**
 4. **paso 4**
 
+## Documentation
+- [Basic System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md)
 
-## Documentación
-- [Configuración del sistema base](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md)
+### Configuration in the `Gazebo` simulator
+- [Design and development for one, two and four robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md)
+- [Design and integration of the Leap Motion device into the system to control one and two robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm-eng.md)
 
-### Configuración en el simulador de `Gazebo`
-- [Diseño y desarrollo para uno, dos y cuatro robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design.md)
-- [Diseño e integración del dispositivo Leap Motion en el sistema para el control de uno y dos robots](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-lm.md)
+### Configuration of the physical robot
+- [Configuration for a UR10 with gripper using its motion planning on the physical robot](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
 
-### Configuración en el robot físico
-- [Configuración para un UR10 con pinza mediante un planificador propio en el robot físico](https://github.com/Serru/MultiCobot-UR10-Gripper-Campero)
-
-## Video con los resultados 
-Aquí se deja un video con los resultados obtenidos de las simulaciones efectuadas en `Gazebo`. El vídeo contiene dos y cuatro robots haciendo un *pick & place* sin intervención humana, después mediante el dispositivo Leap Motion se muestra el control de dos cobots por una persona y finalmente el resultado desarrollado se ha probado en el robot físico Campero.
+## Video with the results
+Here is a video with the results of the simulations performed in `Gazebo`. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots with Leap Motion, and finally the developed result was tested with the physical Campero robot.
 
 <p>
 <a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
-	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Resultados del proyecto." />
+	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Results of the project." />
 </a>
 </p>
 
 
-## Ayuda y asistencia
-Desgraciadamente, este repositorio no está mantenido activamente. El objetivo principal es la divulgación de lo aprendido a la comunidad, que puedan necesitar del conocimiento y contenido de este repositorio para el desarrollo de su proyecto o investigación.
+## Help & Support
+Unfortunately, this repository is not actively maintained. The main goal is to publish what has been learned for the community who might need the knowledge and content of this repository to develop their project or research.
 
-No se garantiza una respuesta, pero puedes contactar con los autores con la información contenida en la sección de [Autores](#autores).
+A response is not guaranteed, but you can contact the authors using the information in the [Authors](#autores) section.
 
-## Licencia
+## License
 
 <p align="left">
   <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">
-    <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="Este repositorio está publicado bajo la licencia de Creative Commons Attribution 4.0 International." />
+    <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="This repository is published under the Creative Commons Attribution 4.0 International license." />
   </a>
   </br>
   </br>
-Este repositorio está publicado bajo la licencia de <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">Creative Commons Attribution 4.0 International</a>.
+This repository is published under the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/LICENSE">Creative Commons Attribution 4.0 International</a> license.
 </p>
 
-## Autores
-* [Burgh Oliván, Miguel](https://github.com/Serru) - *Autor del Trabajo de Fin de Grado titulado **Sistema multirobot para el transporte colaborativo de objetos**.*
-* [López Nicolás, Gonzalo](https://i3a.unizar.es/es/investigadores/gonzalo-lopez-nicolas) - *Director del Trabajo de Fin de Grado titulado **Sistema multirobot para el transporte colaborativo de objetos**.*
+## Authors
+- [Burgh Oliván, Miguel](https://github.com/Serru) - *Author of the Final Degree Project entitled **Multirobot system for the collaborative transport of objects**.*
+- [López Nicolás, Gonzalo](https://i3a.unizar.es/es/investigadores/gonzalo-lopez-nicolas) - *Director of the Final Degree Project entitled **Multirobot system for the collaborative transport of objects**.*
 
-La memoria del Trabajo Fin de Grado, se puede encontrar en el [repositorio](https://deposita.unizar.es/record/66296?ln=es) de TFGs de la [Universidad de Zaragoza](http://www.unizar.es/).
+The memory of the Final Degree Project can be found in the [Repository](https://deposita.unizar.es/record/66296?ln=es) of TFGs of the [University of Zaragoza](http://www.unizar.es/).
 
-## Agradecimientos
+## Acknowledgement
 
-Este trabajo está enmarcado en el grupo de investigación de [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigacion/ropert) del [i3A](https://i3a.unizar.es), de la [Universidad de Zaragoza](http://www.unizar.es/).
+This work is part of the [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigacion/ropert) research group of the [i3A](https://i3a.unizar.es), the [University of Zaragoza](http://www.unizar.es/).
 
 ![image](https://www.unizar.es/sites/default/files/i3a.png)
+
 ---
-El trabajo desarrollado ha sido evaluado y validado experimentalmente, mostrando un correcto funcionamiento en el robot físico [Campero](http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg). Por ello este Trabajo Fin de Grado entra dentro de las actividades del proyecto [COMMANDIA (2019)](http://commandia.unizar.es/), cofinanciado por el [Programa Interreg Sudoe](https://www.interreg-sudoe.eu/inicio) y por el [Fondo Europeo de Desarrollo Regional (FEDER)](https://ec.europa.eu/regional_policy/es/funding/erdf/).
+
+The developed work has been experimentally evaluated and validated, showing a correct operation of the physical robot [Campero](http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg). For this reason, this work is part of the activities of the project [COMMANDIA (2019)](http://commandia.unizar.es/), co-funded by the [Interreg Sudoe Program](https://www.interreg-sudoe.eu/inicio) and the [European Regional Development Fund (ERDF)](https://ec.europa.eu/regional_policy/es/funding/erdf/).
 
 ![image](http://commandia.unizar.es/wp-content/uploads/cropped-logoCommandia-1.png)
 
-## Reconocimiento
+## Recognition
 
-Por favor, cita esta publicación si el contenido de este repositorio te ha sido útil:
+Please cite this work if the content of this repository has been useful to you:
 
 BibTeX: 
 ```

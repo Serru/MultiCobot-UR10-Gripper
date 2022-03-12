@@ -22,7 +22,7 @@ Las soluciones que se proponen giran en torno a las modificaciones y combinacion
 <div>
 <p align="left">
 <button name="button">
-            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md">Inicio</a>
+            	<a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ESP.md">Inicio</a>
 </button>
 </p>
 </div>

@@ -23,7 +23,7 @@ Dependencies and packages that serve as `common resources` for all developed sol
  
 <div>
 <p align="left">
-    <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README_ENG.md"> Main Menu </a></button>
+    <button name="button"><a rel="license" href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/README.md"> Main Menu </a></button>
 </p>
 
 
