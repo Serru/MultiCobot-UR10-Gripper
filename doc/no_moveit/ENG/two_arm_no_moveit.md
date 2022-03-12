@@ -12,18 +12,19 @@ The phases you see in the diagram are for orientation. They can be executed in t
 - Successfully install the [Basic System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md). 
 
 ## Index
-- [Initial setup: setup for one robot](#setup-initial)
-      - [Phase 1: `Gazebo` simulator configuration](#phase1)
-      - [Phase 2: *URDF* configuration](#phase2)
-      - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#phase3)
-      - [Implementation of tests](#tests)
-- [Modifications: Multirobot system consisting of two robots](#modifications)
-      - [Phase 1: `Gazebo` simulator configuration](#modifications1)
-      - [Phase 2: *URDF* configuration](#modifications2)
-      - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#modifications3)
-      - [Execution of tests](#tests2)
 
-<a name="#setup-initial">
+- [Initial setup: setup for one robot](#setup-initial)
+  - [Phase 1: `Gazebo` simulator configuration](#phase1)
+  - [Phase 2: *URDF* configuration](#phase2)      
+  - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#phase3)
+  - [Implementation of tests](#tests)
+- [Modifications: Multirobot system consisting of two robots](#modifications)
+  - [Phase 1: `Gazebo` simulator configuration](#modifications1)
+  - [Phase 2: *URDF* configuration](#modifications2)
+  - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#modifications3)
+  - [Execution of tests](#tests2)
+
+<a name="setup-initial">
 <h2>
 Initial setup: setup for one robot
 </h2>
