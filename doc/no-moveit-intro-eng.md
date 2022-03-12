@@ -1,4 +1,4 @@
-# Proposed solutions using a proprietary or third-party scheduler (without the `MoveIt!` package) 
+# Proposed solutions using a proprietary or third-party motion planning (without the `MoveIt!` package) 
 
 [Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no-moveit-intro.md) | **English**
 
