@@ -70,9 +70,9 @@ In the robot description, only one cobot description is needed and the number of
 - It is difficult to make changes to the source code of the `MoveIt!` package functions.
 
 ### Development and implementation of the solution and its tests (phases 1, 2 and 3)
-- [One UR10 with gripper via the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md)
-- [Two UR10s with grippers via the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/two_arm_moveit.md)
-- [Four UR10 with grippers via the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md) 
+- [One UR10 with gripper using the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md)
+- [Two UR10s with grippers using the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/two_arm_moveit.md)
+- [Four UR10 with grippers using the `MoveIt!` package](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/four_arm_moveit.md) 
 
 ---
 
