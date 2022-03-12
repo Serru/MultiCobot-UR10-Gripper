@@ -13,15 +13,15 @@ The phases you see in the diagram are for orientation. They can be executed in t
 
 ## Index
 - [Initial setup: setup for one robot](#setup-initial)
-      - [Phase 1: `Gazebo` simulator configuration](#phase1)
-      - [Phase 2: *URDF* configuration](#phase2)
-      - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#phase3)
-      - [Implementation of tests](#tests)
+  - [Phase 1: `Gazebo` simulator configuration](#phase1)
+  - [Phase 2: *URDF* configuration](#phase2)
+  - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#phase3)
+  - [Implementation of tests](#tests)
 - [Modifications: Multirobot system consisting of four robots](#modifications)
-      - [Phase 1: `Gazebo` simulator configuration](#modifications1)
-      - [Phase 2: *URDF* configuration](#modifications2)
-      - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#modifications3)
-      - [Execution of tests](#tests2)
+  - [Phase 1: `Gazebo` simulator configuration](#modifications1)
+  - [Phase 2: *URDF* configuration](#modifications2)
+  - [Phase 3: Implementation of a custom motion planner that performs a `pick & place`](#modifications3)
+  - [Execution of tests](#tests2)
 
 
 <a name="setup-initial">
