@@ -71,9 +71,9 @@ rosdep install -r --rosdistro kinetic --ignore-src --from-paths src
 
 - Build the repository
 ```bash
-  - catkin_make
-  - rospack profile
-  - source devel/setup.bash
+catkin_make
+rospack profile
+source devel/setup.bash
 ```
 - Launch Gazebo with two robots doing a simple Pick & Place
 
