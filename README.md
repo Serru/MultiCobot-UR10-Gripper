@@ -49,10 +49,48 @@ The Leap Motion device is also integrated into the system. It is capable of dete
 
 ## Quick start
 
-1. **paso 1**
-2. **paso 2**
-3. **paso 3**
-4. **paso 4**
+- Clone this repository:
+```bash
+git clone https://github.com/Serru/MultiCobot-UR10-Gripper
+```
+
+- Set the catkin Workspace:
+```bash
+cd ~/MultiCobot-UR10-Gripper/src
+catkin_init_workspace
+```
+
+- Install all the dependecies:
+```bash
+source /opt/ros/kinetic/setup.bash
+cd ~/MultiCobot-UR10-Gripper
+rospack profile
+rosdep update
+rosdep install -r --rosdistro kinetic --ignore-src --from-paths src
+```
+
+- Build the repository
+```bash
+  - catkin_make
+  - rospack profile
+  - source devel/setup.bash
+```
+- Launch Gazebo with two robots doing a simple Pick & Place
+
+Terminal 1:
+```bash
+roslaunch two_arm_no_moveit_gazebo ur10_joint_limited.launch
+``` 
+
+Terminal 2:
+```bash
+rosrun two_arm_no_moveit_manipulator ur10_1_robot_manipulator.py
+``` 
+
+Terminal 3:
+```bash
+rosrun two_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
+```
 
 ## Documentation
 - [Basic System Configuration](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md)
