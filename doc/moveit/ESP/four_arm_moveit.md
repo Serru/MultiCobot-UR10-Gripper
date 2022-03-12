@@ -28,7 +28,7 @@ Configuración inicial: Configuración para un robot
   </h2>
 </a>
 
-En esta sección se realiza una replicación de la configuración para un único robot, del cual se toma como base y así explicar posteriormente las modificaciones realizadas para poder controlar dos robots.
+En esta sección se realiza una replicación de la configuración para un único robot, del cual se toma como base y así explicar posteriormente las modificaciones realizadas para poder controlar cuatro robots.
 
 ### :warning: Contenido de los ficheros
 No copiar y pegar el contenido de los ficheros ciegamente en esta sección. Durante la explicación para la configuración para un robot, la información es idéntica a lo que se obtiene del paquete **one_arm_moveit**, pero hay que modificar el contenido para se ajuste al nuevo paquete, en este caso **four_arm_moveit**.
@@ -56,7 +56,7 @@ Dicho esto, se realiza una representación de los componentes del robot:
  
  ![image](/doc/imgs_md/urdf-robot.png  "Representación del fichero URDF")
 
-En la imagen se representa el contenido del [fichero *URDF*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando `world`(color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera, se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (ur10 robot), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
+En la imagen se representa el contenido del [fichero *URDF*](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro) que modela el robot junto a la pinza, se puede ver cómo se conecta el componente del brazo UR10 robot con el link `world`, representando `world`(color amarillo) y la base del brazo del UR10 `base_link` (color verde) situado justo encima, además el joint `world_joint` es la esfera de color amarillo situado entre ambos links. De la misma manera, se tiene el componente de la pinza `robotiq_85_gripper`, está conectado al brazo del UR10 (`ur10_robot`), en donde la esfera que representa el joint `robotiq_85_base_joint` que une ambos componentes (color morado), uniendo el link `robotiq_85_base_link` de la pinza con el link `ee_link` del brazo de UR10.
 
 
 #### :computer: Creación del directorio para la solución
@@ -276,18 +276,18 @@ No es necesario el fichero *gazebo.launch* que provee `MoveIt!`, ya que se ha co
 		
 Se puede apreciar en el esquema de los directorios cómo están relacionados los ficheros. Entre ellos los que se van a modificar manualmente están señalados en negrita.
 
-El fichero de configuración de los controladores es el mismo tanto para `Gazebo` como para `MoveIt!`, esto implica que para conectar los controladores adecuadamente, su configuración debe ser la misma que la se ha realizado para `Gazebo` previamente y eso está configurado en la sección *Puesta en marcha en `Gazebo`*.
+El fichero de configuración de los controladores es el mismo tanto para `Gazebo` como para `MoveIt!`, esto implica que para conectar los controladores adecuadamente, su configuración debe ser la misma que la se ha realizado para `Gazebo` previamente y eso está configurado en la sección [Puesta en marcha en `Gazebo`](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ESP/one_arm_no_moveit.md).
 
 Por tanto, se puede añadir los controladores (ficheros .yaml) de `Gazebo` en el paquete de `MoveIt!` para conectar correctamente los controladores del robot (manipulator y gripper).
 
 Si se lanza `Gazebo` y `MoveIt!` sin realizar ninguna modificación, se obtiene la siguiente gráfica de nodos y *topic*s:
 
-- terminal 1
+- Terminal 1
 ```bash
 roslaunch four_arm_moveit_config demo.launch
 ```
 
-- terminal 2
+- Terminal 2
 ```bash
 roslaunch four_arm_moveit_gazebo ur10_joint_limited.launch
 ```
@@ -315,24 +315,24 @@ mkdir scripts
 ```
 ##### :computer: Se va a proceder a añadir los controladores para su interacción con `Gazebo`
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/controllers.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/controllers.yaml): La definición de los controladores de *ROS* en `MoveIt!` es similar al que se realizó para `Gazebo`, el nombre de los controladores debe coincidir con los nombres de los controladores descritos en `Gazebo`, se define el servidor de acciones `follow_joint_trajectory`, el tipo debe ser `FollowJointTrajectory` para que el tipo mensaje enviado entre ellos sean compatibles y finalmente los nombres de los `joints` involucrados deben ser idénticos también.
+- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/controllers.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/controllers.yaml): La definición de los controladores de *ROS* en `MoveIt!` es similar al que se realizó para `Gazebo`, el nombre de los controladores debe coincidir con los nombres de los controladores descritos en `Gazebo`, se define el servidor de acciones `follow_joint_trajectory`, el tipo debe ser `FollowJointTrajectory` para que el tipo mensaje enviado entre ellos sean compatibles y finalmente los nombres de los `joints` involucrados deben ser idénticos también.
 
-Otro fichero a modificar es [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/joint_names.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/joint_names.yaml): Este fichero define el nombre de los `joints` del controlador del cobot, se almacenará como parámetro del servidor y será utilizado como parte de la configuración de `MoveIt!`.
+- Otro fichero a modificar es [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/config/joint_names.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/joint_names.yaml): Este fichero define el nombre de los `joints` del controlador del cobot, se almacenará como parámetro del servidor y será utilizado como parte de la configuración de `MoveIt!`.
 
-De los ficheros en el directorio *launch*, se va a modificar el fichero *four_arm_moveit_execution* que es el punto de entrada para usar el paquete de `MoveIt!` y *Rviz*  que tiene como base el fichero *demo.launch*
+De los ficheros en el directorio *launch*, se va a modificar el fichero *four_arm_moveit_execution* que es el punto de entrada para usar el paquete de `MoveIt!` y *Rviz*  que tiene como base el fichero *demo.launch*:
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch)
+- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch).
 
 
 Después retocar el lanzador de los controladores y `MoveIt!`:
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/move_group.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/move_group.launch)
+- Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/move_group.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/move_group.launch).
 
 
 Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/trajectory_execution.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/trajectory_execution.launch.xml): Configura la comunicación con un robot real, en este caso `Gazebo` es el que simula el robot, pero `MoveIt!` no es consciente de eso y lo trata como un robot real.
 
 
-Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml): Carga los controladores definidos para `MoveIt!`
+Fichero [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml): Carga los controladores definidos para `MoveIt!`.
 
 
 ##### :computer: Finalmente, se realiza una prueba:
@@ -402,7 +402,7 @@ Se va a dividir el proceso de la configuración en dos; configuración realizada
 
 <a name="modificaciones1">
   <h3>
-Configuración realizada en Gazebo para dos cobots
+Configuración realizada en Gazebo para cuatro cobots
   </h3>
 </a>
 
@@ -507,6 +507,7 @@ Configuración realizada en MoveIt! para dos cobots
 Los cambios realizados para la configuración de `MoveIt!` son muy pequeñas, básicamente hay que agrupar el código de lo que se había implementado para un *único cobot* bajo un *namespace*, adecuar el *remap* con el namespacing y posteriormente replicar el proceso tantas veces como cobots se esté simulando. El contenido del fichero [one_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch) implementado para un único cobot y el contenido del fichero [four_arm_moveit_execution.launch](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_moveit/four_arm_moveit_manipulator/launch/four_arm_moveit_execution.launch), si se comparan, esencialmente se ha agrupado todo en un *namespace* y se ha añadido el nombre del *namespace* como prefijo en los nombres de los *topic*s del remap para la correcta comunicación con los controladores.
 
 Contenido del fichero `four_arm_moveit_execution.launch`:
+
 ```xml
 <launch>
     <arg name="sim" default="false" />
@@ -641,6 +642,7 @@ Contenido del fichero `four_arm_moveit_execution.launch`:
 ```
 
 Se realiza una prueba de lo implementado hasta el momento:
+
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 catkin_make clean
@@ -739,6 +741,7 @@ Se ha definido la configuración en la función `main`, pero no es necesario que
 Tras la descripción detallada del código, para que el script controlase otro cobot que esté en otro *namespace* es tan sencillo como cambiarle el valor de la variable `PLANNING_NS` por la del nombre del *namespace* donde esté definido el cobot objetivo. Si se ejecuta el *pick & place* con ambos brazos, se aprecia que realizan la tarea simultáneamente y con un poco de retraso entre ellos debido a que uno empieza un poco más tarde que otro, se puede realizar pruebas a lanzar los scripts a destiempo y comprobar que efectivamente se mueven simultáneamente.
 
 ##### :computer: Creación de los scripts que realizarán la tarea de *Pick & place*
+
 ```bash
 cd scripts
 touch four_arm_moveit_1.py
@@ -793,6 +796,7 @@ rosrun four_arm_moveit_manipulator four_arm_moveit_3.py
 ```bash
 rosrun four_arm_moveit_manipulator four_arm_moveit_4.py
 ```
+
 ----
 
 En la terminal de `Gazebo`, al lanzar todos los comandos para realizar las pruebas se obtiene el siguiente warning:

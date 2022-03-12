@@ -634,9 +634,9 @@ Modifications: Multirobot system consisting of four robots
 
 ![image](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/imgs_md/Diseno-planificador-fase-2-cuatro.png "Own planner design scheme") 
 
-Before making changes to add four robots to the system, the picture shows how the nodes and communication between 'Gazebo', the controllers and the planner are set up for four robots. There are 16 blue nodes (4 planners) and 8 controllers (4 for UR10 arms and 4 for Robotiq grippers). 
+Before making changes to add four robots to the system, the picture shows how the nodes and communication between `Gazebo`, the controllers and the planner are set up for four robots. There are 16 blue nodes (4 planners) and 8 controllers (4 for UR10 arms and 4 for Robotiq grippers). 
 
-This is a replication of what was previously developed in [Phase 3](#phase3) for a single robot. Therefore, note that changes are made to the 'Gazebo' controllers and their scripts that enable communication between them and the planner, changes are made to the robot modeling (URDF), and changes are made to the script that performs the *pick & place* task. 
+This is a replication of what was previously developed in [Phase 3](#phase3) for a single robot. Therefore, note that changes are made to the `Gazebo` controllers and their scripts that enable communication between them and the planner, changes are made to the robot modeling (URDF), and changes are made to the script that performs the *pick & place* task. 
 
 Be careful with the scaling in this solution, the name of the joints must be unique, this is due to the configuration of the robot model. Since you are not in a *namespace* that automatically generates unique names for the joints, you will have to make the changes manually, which will also affect the *subject names*. You will also need to modify the scripts to publish and subscribe to the correct *subjects*. 
 
@@ -649,9 +649,9 @@ Phase 1: Gazebo simulator configuration
 </a>
 
 #### :book: `Gazebo` configuration
-In this configuration, we need to redefine the files that configure the 'Gazebo' controllers. Essentially, we need to duplicate them and add the prefix 'ur10_1', 'ur10_2', 'ur10_3' and 'ur10_4' to the names of the joints, both for the clamp and for the arm of UR10. 
+In this configuration, we need to redefine the files that configure the `Gazebo` controllers. Essentially, we need to duplicate them and add the prefix `ur10_1`, `ur10_2`, `ur10_3` and `ur10_4` to the names of the joints, both for the clamp and for the arm of UR10. 
 
-Likewise, the replicated and customised nodes for communication with the cobot controllers must be added to 'Gazebo' and the nodes that obtain the current positions of each cobot from the *topic* '/tf' must also be added to the 'controller_utils.launch' file.
+Likewise, the replicated and customised nodes for communication with the cobot controllers must be added to `Gazebo` and the nodes that obtain the current positions of each cobot from the *topic* `/tf` must also be added to the `controller_utils.launch` file.
 
 ##### :computer: Modifications to be made to simulate four robots in `Gazebo`
 First we need to decide on the *namespace* for each robot, i.e. the group name under which we will group the configurations for each of the robots. 
@@ -667,7 +667,7 @@ mv arm_controller_ur10.yaml ur10_1_arm_controller.yaml
 
 View the contents of the [ur10_1_arm_controller.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_1_arm_controller.yaml) file with the changes made. 
 
-You can see that the prefix*ur10_1_* was simply added. This allows to distinguish to which 'joints' the commands should be sent, which also requires a change of the *URDF* file. 
+You can see that the prefix*ur10_1_* was simply added. This allows to distinguish to which `joints` the commands should be sent, which also requires a change of the *URDF* file. 
 
 We now proceed to modify the rest of the files and add the second set of controllers for the second robot, which get the prefix *ur10_2_*. 
 
@@ -735,7 +735,7 @@ mv ur10_1_gripper_controller_robotiq.yaml ur10_4_gripper_controller_robotiq.yaml
 View the contents of the [ur10_4_gripper_controller_robotiq.yaml](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/controller/ur10_4_gripper_controller_robotiq.yaml) file with the changes made.
 
 ##### :computer: Modification of the `Gazebo` *launch* file
-Now we have to change the *Launch* file to start the control of both robots in 'Gazebo'. 
+Now we have to change the *Launch* file to start the control of both robots in `Gazebo`. 
 
 ```bash
 cd ~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/launch
@@ -790,7 +790,7 @@ Phase 2: URDF configuration
 
 It's similar to [Phase 1](#phase1) of the *Initial Configuration*, except this time there are four UR10 cobots, not just one. There are only two cobots in the picture, but it is very easy to add cobots to the model. 
 
-In the file [URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) you can see how to connect the components of the 'ur10_robot' arms to the 'world' link, as you can see in the picture. It is not explained for four robots, because what was explained for modeling two robots is also valid for modeling N robots. 
+In the file [URDF](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/ur10_robot.urdf.xacro) you can see how to connect the components of the `ur10_robot` arms to the `world` link, as you can see in the picture. It is not explained for four robots, because what was explained for modeling two robots is also valid for modeling N robots. 
 
 ##### :computer: directory configuration description 
 
@@ -977,11 +977,11 @@ In the directory *four_arm_no_moveit_manipulator* the following files are change
 
 - [~/MultiCobot-UR10-Gripper/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/ur10_4_robot_manipulator.py](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_manipulator/scripts/ur10_4_robot_manipulator.py). 
 
-The 'Gazebo' plugin needs to be fixed so it can grab objects with both grippers:
+The `Gazebo` plugin needs to be fixed so it can grab objects with both grippers:
 
 - File [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_description/urdf/gzplugin_grasp_fix.urdf.xacro). 
 
-And finally, customise the 'world' file to run the simulations in a suitable environment:
+And finally, customise the `world` file to run the simulations in a suitable environment:
 
 - File [~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world/multiarm_bot.world](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/four_arm_no_moveit/four_arm_no_moveit_gazebo/world/multiarm_bot.world).
 
