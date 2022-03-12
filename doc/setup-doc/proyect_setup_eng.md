@@ -2,7 +2,7 @@
 
 [Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup.md) | **English**
 
-Here is a step by step explanation of how to install * ROS Kinetic Kame* and all the necessary tools and packages. 
+Here is a step by step explanation of how to install *ROS Kinetic Kame* and all the necessary tools and packages. 
 
 ***It is not guaranteed to work after reproducing the project. This is because the installed packages may have been updated and therefore need to be adjusted to the updated content.***
 
