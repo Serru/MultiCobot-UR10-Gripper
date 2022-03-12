@@ -9,7 +9,7 @@
 Sistema multirobot de robots colaborativos (cobots) <a rel="UR10s" href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> con pinzas de Robotiq (<a rel="robotiq_85_gripper" href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) que permite la realización de tareas simultáneamente con diferentes tipos de controladores y marcas de cobots, así como el control directo mediante el dispositivo Leap Motion del cobot por una persona.</p>
 
 <p align="center">
-  <img alt="Doc" style="border-width:0" src="https://img.shields.io/badge/doc-incomplete-red?logo=markdown&style=plastic" />
+  <img alt="Doc" style="border-width:0" src="https://img.shields.io/badge/doc-complete-green?logo=markdown&style=plastic" />
   <a rel="Build Status" href="https://app.travis-ci.com/github/Serru/MultiCobot-UR10-Gripper"><img alt="Build Status" style="border-width:0" src="https://img.shields.io/travis/com/Serru/MultiCobot-UR10-Gripper?logo=travis&style=plastic" />
     </a>
   <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://img.shields.io/github/license/Serru/MultiCobot-UR10-Gripper?style=plastic" />
@@ -67,7 +67,6 @@ catkin_init_workspace
 ```bash
 source /opt/ros/kinetic/setup.bash
 cd ~/MultiCobot-UR10-Gripper
-rospack profile
 rosdep update
 rosdep install -r --rosdistro kinetic --ignore-src --from-paths src
 ```
