@@ -72,21 +72,21 @@ leapcobotleft.msg
 ## :computer: Tests with the *Gazebo* simulator
 At least 3 terminals are needed to run the tests, although they can be reduced in the *launch* files to start them automatically. But to better visualize and debug the information sent, it was left that way. 
 
--Terminal 1:
+- Terminal 1:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 roslaunch one_arm_no_moveit_gazebo ur10_joint_limited.launch
 ``` 
 
--Terminal 2:
+- Terminal 2:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
 rosrun one_arm_no_moveit_leap_motion sender.py
 ``` 
 
--Terminal 3:
+- Terminal 3:
 ```bash
 cd ~/MultiCobot-UR10-Gripper
 source devel/setup.bash
