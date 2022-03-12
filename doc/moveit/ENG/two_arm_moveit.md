@@ -1,6 +1,6 @@
 # Two UR10s with grippers using the `MoveIt!` package
 
-[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/one_arm_moveit.md) | **English**
+[Español](https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ESP/two_arm_moveit.md) | **English**
 
 ![image](/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png "Loaded the URDF model of the UR10 robot") 
 
