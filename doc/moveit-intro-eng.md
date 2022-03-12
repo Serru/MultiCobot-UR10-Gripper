@@ -6,7 +6,7 @@
 - [Modeling of multiple robots in the *URDF* file](#modeling )
 - [Replicating the `MoveIt!` node](#replication) 
 
-<a name="modelado">
+<a name="modeling">
 <h2>
 Modeling of multiple robots in the <i>URDF</i> file
 </h2>
@@ -41,7 +41,7 @@ Once you have this configuration, you need to create the trajectory of each arm 
 This proposal has already been implemented by [*TEAM O2AC for the World Robot Summit 2020 Assembly Challenge*](https://github.com/o2ac/o2ac-ur/).
 
 
-<a name="replicacion">
+<a name="replication">
 <h2>
 Replicating the <a href="https://github.com/ros-planning/moveit"><i> MoveIt!</i></a> node
 </h2>
