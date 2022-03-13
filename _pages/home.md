@@ -2,6 +2,7 @@
 layout: splash
 permalink: /
 hidden: true
+sitemap: false
 header:
   overlay_color: "#2e2322"
   overlay_image: /assets/images/proyect-logo.png

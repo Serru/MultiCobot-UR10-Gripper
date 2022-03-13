@@ -3,6 +3,7 @@ title: "Splash Page"
 layout: splash
 permalink: /splash-page/
 date: 2022-03-13T14:46:59+01:00
+sitemap: false
 header:
   overlay_color: "#000"
   overlay_filter: "0.5"

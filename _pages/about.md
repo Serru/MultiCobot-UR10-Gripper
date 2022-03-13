@@ -14,6 +14,7 @@ layouts_gallery:
     image_path: /assets/images/four-arm-moveit-gazebo.png
     alt: "archive layout example"
 toc: true
+sitemap: false
 ---
 
 {% include gallery id="layouts_gallery" caption="Simulations in Gazebo for one, two and four UR10s working simultaneously." %}

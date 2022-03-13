@@ -1,6 +1,7 @@
 ---
 title: "Page B"
 permalink: /page-b/
+sitemap: false
 date: 2022-03-13T14:46:59+01:00
 ---
 

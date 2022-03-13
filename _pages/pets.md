@@ -5,6 +5,7 @@ permalink: /pets/
 collection: pets
 entries_layout: grid
 classes: wide
+sitemap: false
 date: 2022-03-13T14:46:59+01:00
 ---
 
