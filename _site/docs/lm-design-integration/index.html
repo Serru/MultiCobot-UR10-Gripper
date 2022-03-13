@@ -1,0 +1,672 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Design &amp; Integration - Colaborative Multicobot System</title>
+<meta name="description" content="Here we explain how Leap Motion is integrated into the system developed so far to control up to two robots simultaneously for the different solutions proposed in this repository.">
+
+
+  <meta name="author" content="Miguel Burgh">
+  
+  <meta property="article:author" content="Miguel Burgh">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Colaborative Multicobot System">
+<meta property="og:title" content="Design &amp; Integration">
+<meta property="og:url" content="http://localhost:4000/MultiCobot-UR10-Gripper/docs/lm-design-integration/">
+
+
+  <meta property="og:description" content="Here we explain how Leap Motion is integrated into the system developed so far to control up to two robots simultaneously for the different solutions proposed in this repository.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/MultiCobot-UR10-Gripper/assets/images/site-logo.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-03-13T01:19:56+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/MultiCobot-UR10-Gripper/docs/lm-design-integration/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Miguel Burgh",
+      "url": "http://localhost:4000/MultiCobot-UR10-Gripper/"
+    
+  }
+</script>
+
+
+  <meta name="google-site-verification" content="UQj93ERU9zgECodaaXgVpkjrFn9UrDMEzVamacSoQ8Y" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/MultiCobot-UR10-Gripper/feed.xml" type="application/atom+xml" rel="alternate" title="Colaborative Multicobot System Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/MultiCobot-UR10-Gripper/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/MultiCobot-UR10-Gripper/">
+          Colaborative Multicobot System
+          <span class="site-subtitle">Developed with ROS Kinetic Kame</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/docs/introduction/">Documentation</a>
+            </li><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Getting Started</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/introduction/">Introduction</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Basic System Setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/requirements/">Requirements</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-dependencies/">ROS Kinetic &amp; dependencies</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-packages/">ROS packages</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup/">Leap Motion's setup</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup-testing/">Testing the setup</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Design &amp; development</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/design-multi-robot-system/">Design of a multi-robot system</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-planner-solution/">Solution with our motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-motion-planning/">Solution with MoveIt's motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Integration of Leap Motion</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-design-integration/" class="active">Design &amp; Integration</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; our own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Physical robot's setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/robot-campero/">Robot Campero</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Others</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/help-support/">Help &amp; Support</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/authors/">Authors</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/acknowledgement/">Acknowledgement</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/recognition/">Recognition</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/license/">License</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Design &amp; Integration">
+    <meta itemprop="description" content="Here we explain how Leap Motion is integrated into the system developed so far to control up to two robots simultaneously for the different solutions proposed in this repository.">
+    <meta itemprop="datePublished" content="2022-03-13T01:19:56+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Design &amp; Integration
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#prerequisite">Prerequisite</a></li><li><a href="#index">Index</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/Diseno-moveit-general-un-cobot-leap-motion.png" alt="image" title="Leap Motion Design and Integration" /></p>
+
+<p>Here we explain how <em>Leap Motion</em> is integrated into the system developed so far to control up to two robots simultaneously for the different solutions proposed in this repository. In the schematic representation of the design, this section represents stages 4 and 5.</p>
+
+<h2 id="prerequisite">Prerequisite</h2>
+<ul>
+  <li>Successful installation of <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md">Basic System Configuration</a>.</li>
+  <li><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/design-eng.md">Implementation of one of the proposed solutions</a> (corresponds to phases 1, 2 and 3 of the scheme) .</li>
+</ul>
+
+<h2 id="index">Index</h2>
+<ul>
+  <li><a href="#phase4">Phase 4: <em>Leap Motion</em> interface design</a>
+    <ul>
+      <li><a href="#lm1">General operation</a></li>
+      <li><a href="#lm2">Coordinate systems</a></li>
+      <li><a href="#lm3">Workspace of <em>Leap Motion</em></a></li>
+      <li><a href="#lm4">Control modes</a></li>
+      <li><a href="#lm5">Gesture recognition</a></li>
+      <li><a href="#lm6">Calibration of motion speed</a></li>
+      <li><a href="#lm7">Creation of the <code class="language-plaintext highlighter-rouge">msgs</code> that convey the information</a></li>
+      <li><a href="#lm8">Obtaining and publishing data by <em>topic</em></a></li>
+    </ul>
+  </li>
+  <li><a href="#phase5">Phase 5: Integration of <em>Leap Motion</em> into the system</a></li>
+</ul>
+
+<h2>
+<a name="fase4">
+ Phase 4: <i>Leap Motion</i> interface design
+</a>
+ </h2>
+
+<h3>
+<a name="lm1">
+ General operation
+</a>
+ </h3>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/Diseno-leap-motion.png" alt="image" title="Scheme of how Leap Motion works" /></p>
+
+<p>The <em>Leap Motion</em> libraries are used to identify the gestures and obtain the data needed to control the gripper, the movements of the cobot, and the orientations of the <em>end- effector</em>. The figure shows a schematic representation of the general flow. The file <code class="language-plaintext highlighter-rouge">leap_interface.py</code> is created using the <code class="language-plaintext highlighter-rouge">Leap</code> library of <em>Leap Motion</em>, which waits for events (<code class="language-plaintext highlighter-rouge">frames</code> from <em>Leap Motion</em>) and on each event retrieves the required data and stores it in an <code class="language-plaintext highlighter-rouge">object</code>, which is then accessed by the <code class="language-plaintext highlighter-rouge">sender</code> node using the interface created to access that object. The <code class="language-plaintext highlighter-rouge">sender</code> node receives the information, stores it in a message and publishes it via the <em>topic</em> <code class="language-plaintext highlighter-rouge">leapmotion/data1</code>. The <code class="language-plaintext highlighter-rouge">UR10_lm_arm_1</code> node is subscribed to this <em>topic</em> and sends the commands to the cobot with the information received from the <em>topic</em>. Finally, the <code class="language-plaintext highlighter-rouge">UR10_lm_arm_1</code> node is basically the <em>script</em> that executes the <em>pick &amp; place</em>, but the inputs are taken from the <em>topic</em> <code class="language-plaintext highlighter-rouge">leapmotion/data_1</code> instead of being entered manually.</p>
+
+<p>In the schematic representation of the image, you can see that two <em>topic</em>s originate from the <code class="language-plaintext highlighter-rouge">sender</code> node. This is because it was taken into account during development that <em>Leap Motion</em> can recognize up to two hands. Therefore, the data of the right hand (<code class="language-plaintext highlighter-rouge">right.msg</code>) and the left hand (<code class="language-plaintext highlighter-rouge">left.msg</code>) were separated in the schema, because the information is sent via different <em>topic</em>s and not all information was entered in a single message, because this way you can play with the ratio of the releases, get more clarity and debugging is easier.</p>
+
+<h3>
+<a name="lm2">
+Coordinate systems
+</a>
+ </h3>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/distintintos-sistemas-referencia.png" alt="image" title="Different reference coordinate systems" /></p>
+
+<p>When designing, note that the reference coordinates of <em>ROS</em> and the coordinates used by <em>Leap Motion</em> are different (as shown in the figure), so you will need to adjust them accordingly during implementation.</p>
+
+<h3>
+<a name="lm3">
+ Workspace of <i>Leap Motion</i>
+</a>
+ </h3>
+
+<p>It must also be taken into account that the workspace of <em>Leap Motion</em> is quite small compared to that of the UR10 cobot. So depending on what tasks you want to perform, you have to take this into account, but a simple <em>pick &amp; place</em> as in this case is not a problem.</p>
+
+<h3>
+<a name="lm4">
+Control modes
+</a>
+ </h3>
+
+<p>With the data obtained by <em>Leap Motion</em> two forms of control can be realised in a simple way:</p>
+
+<ul>
+  <li>
+    <p><strong>Joystick:</strong> This type of control has a dead zone (<em>dead zone</em>) that takes an origin as a reference, and no motion is performed in this dead zone. The moment it leaves this dead zone, the value in this coordinate is increased/decreased depending on how far it is from the reference origin. This must be calibrated so that no sudden movements are executed.</p>
+  </li>
+  <li>
+    <p><strong>Imitation:</strong> This solution was chosen because it is more intuitive when executing movements. It consists in matching the reference origin of <em>Leap Motion</em> and the reference origin of the <em>end-effector</em> of the mapped robot, i.e. the coordinates taken as reference for <em>Leap Motion</em> refer to the initial position of the UR10 robot. In this way, the robot can imitate the movements of the hand. It must also be calibrated correctly to avoid sudden movements.</p>
+  </li>
+</ul>
+
+<h3>
+<a name="lm5">
+Gesture recognition
+</a>
+ </h3>
+
+<p>When identifying gestures, note that <em>Leap Motion</em> may give false positives for very similar gestures. Also, obscured parts of the hand during movement may lead you to believe you have recognized a gesture that was not performed.</p>
+
+<p>Four types of gestures have been implemented, which you can see in the image. The <em>fist</em> gesture indicates to stop sending instructions, the <em>pincer</em> gesture is used to control the cobot’s gripper, the <em>thumbs up</em> gesture indicates that it is ready, and the <em>rock</em> gesture indicates that it takes the current position of the hand as a reference source. It was prepared for implementation to control the orientation of the <em>end-effector</em>, but since this causes identification problems with some of the gestures, it was decided that it would be better to have a fixed orientation.</p>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/gestos-leap-motion.png" alt="image" title="Definition of gestures for Leap Motion" /></p>
+
+<p>In the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/leap_interface.py">leap_interface.py</a> file where the gestures are defined, we will analyze the part of the code that identifies a gesture as an example. The source code shown below attempts to verify that the <em>thumbs up</em> gesture has been executed each time <em>Leap Motion</em> sends a <code class="language-plaintext highlighter-rouge">frame</code>. Each time a <code class="language-plaintext highlighter-rouge">frame</code> is received, it checks whether it is from the <em>right</em> or <em>left</em> hand. Then it checks how closed the hand is by checking if the value of the <code class="language-plaintext highlighter-rouge">grab_strength</code> attribute, if greater than the defined value, indicates that the hand is closed. Since we know that the hand is closed, we want to know if the thumb is extended or not. This is determined by checking if the attribute <code class="language-plaintext highlighter-rouge">thumb_finger.extended()</code> is equal to <code class="language-plaintext highlighter-rouge">1</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">on_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controller</span><span class="p">):</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">controller</span><span class="p">.</span><span class="n">frame</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">hand</span> <span class="ow">in</span> <span class="n">frame</span><span class="p">.</span><span class="n">hands</span><span class="p">:</span>
+            <span class="n">handType</span> <span class="o">=</span> <span class="s">"Left hand"</span> <span class="k">if</span> <span class="n">hand</span><span class="p">.</span><span class="n">is_left</span> <span class="k">else</span> <span class="s">"Right hand"</span>
+
+            <span class="k">if</span> <span class="n">handType</span> <span class="o">==</span> <span class="s">"Right hand"</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">hand</span><span class="p">.</span><span class="n">grab_strength</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">GRAB_STRENGTH_THRESHOLD</span><span class="p">:</span>
+                    <span class="n">thumb_finger</span> <span class="o">=</span> <span class="n">hand</span><span class="p">.</span><span class="n">fingers</span><span class="p">.</span><span class="n">finger_type</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">thumb_finger</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thumb_finger</span><span class="p">.</span><span class="n">extended</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">right_hand_fist</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">right_hand_thumb_up</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">thumb_finger</span><span class="p">.</span><span class="n">extended</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">right_hand_thumb_up</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">right_hand_fist</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">hand</span><span class="p">.</span><span class="n">grab_strength</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">GRAB_STRENGTH_THRESHOLD</span><span class="p">:</span>
+                    <span class="n">thumb_finger</span> <span class="o">=</span> <span class="n">hand</span><span class="p">.</span><span class="n">fingers</span><span class="p">.</span><span class="n">finger_type</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">thumb_finger</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thumb_finger</span><span class="p">.</span><span class="n">extended</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">left_hand_fist</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">left_hand_thumb_up</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">thumb_finger</span><span class="p">.</span><span class="n">extended</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">left_hand_fist</span> <span class="o">=</span> <span class="bp">False</span>
+                            <span class="bp">self</span><span class="p">.</span><span class="n">left_hand_thumb_up</span> <span class="o">=</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<h3>
+<a name="lm6">
+Calibration of motion speed
+</a>
+ </h3>
+
+<p>To avoid sudden movements, the velocity of the <em>end-effector</em> was used as a limiting factor, for which a maximum velocity of <em>0.05 rad/s</em> was assumed. The distance is based on the largest error between the values of the <em>joints</em> of the current position and the <em>joints</em> of the future position, with a division indicating the time this movement should take.</p>
+
+<h3>
+<a name="lm7">
+Creation of the <i>msgs</i> that convey the information
+</a>
+ </h3>
+
+<p>Two types of messages were created for the implementation, one to identify the movements and gestures of the right hand and the other for the left hand, which also serves to define the type of data transmitted by this <em>topic</em>. These files, with the extension <code class="language-plaintext highlighter-rouge">msg</code>, must be compiled into a directory named <em>msg</em> so that they can be integrated into the system <em>ROS</em>, otherwise it will not find them. Specifically, the content of the following source code is for the right hand, for the left hand it would be the same, except that you replace <code class="language-plaintext highlighter-rouge">right</code> with <code class="language-plaintext highlighter-rouge">left</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Header header
+
+<span class="c"># Right hand information</span>
+bool is_right_hand                      <span class="c"># Right hand detected</span>
+geometry_msgs/Point right_hand_palmpos  <span class="c"># Palm's position</span>
+bool right_hand_fist                    <span class="c"># Fist gesture recognize</span>
+bool right_hand_thumb_up                <span class="c"># Thumb up gesture recognize</span>
+bool right_hand_pinch                   <span class="c"># Pinch gesture recognize</span>
+float32 right_hand_pinch_value         <span class="c"># Pinch gesture value</span>
+bool right_hand_origin_frame            <span class="c"># Reference frame set</span>
+bool right_hand_set_origin_frame_detected <span class="c"># Detect gesture</span>
+float32 right_hand_rotate_value         <span class="c"># Values between [-1..0..1] rads</span>
+float32 right_hand_turn_value           <span class="c"># Values between [-1..0..1] rads</span>
+float32 right_hand_swing_value
+</code></pre></div></div>
+
+<h3>
+<a name="lm8">
+Obtaining and publishing data by topic
+</a>
+ </h3>
+
+<p>To get <em>Leap Motion</em> data, the interface defined in the <code class="language-plaintext highlighter-rouge">leap_interface.py</code> file (e.g. <code class="language-plaintext highlighter-rouge">li.get_is_right_hand()</code>) is used to access the <em>object</em> that stores the desired data, as shown below in the source code. Once the message is created, it is sent via the <em>topic</em> <code class="language-plaintext highlighter-rouge">leapmotion/data</code> with the message type <code class="language-plaintext highlighter-rouge">leapcobotright</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pub_ros_right</span>   <span class="o">=</span> <span class="n">rospy</span><span class="p">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s">'leapmotion/data'</span><span class="p">,</span> <span class="n">leapcobotright</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="p">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+        <span class="n">right_hand_palm_pos_</span>    <span class="o">=</span> <span class="n">li</span><span class="p">.</span><span class="n">get_right_hand_palmpos</span><span class="p">()</span>   <span class="c1"># Palm's position
+</span>
+        <span class="c1"># Right hand information
+</span>        <span class="n">msg_right</span> <span class="o">=</span> <span class="n">leapcobotright</span><span class="p">()</span>
+        <span class="n">msg_right</span><span class="p">.</span><span class="n">is_right_hand</span> <span class="o">=</span> <span class="n">li</span><span class="p">.</span><span class="n">get_is_right_hand</span><span class="p">()</span>                     <span class="c1"># Right hand detected
+</span>        <span class="n">msg_right</span><span class="p">.</span><span class="n">right_hand_palmpos</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">right_hand_palm_pos_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">msg_right</span><span class="p">.</span><span class="n">right_hand_palmpos</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">right_hand_palm_pos_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">msg_right</span><span class="p">.</span><span class="n">right_hand_palmpos</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">right_hand_palm_pos_</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">msg_right</span><span class="p">.</span><span class="n">right_hand_fist</span> <span class="o">=</span> <span class="n">li</span><span class="p">.</span><span class="n">get_right_hand_fist</span><span class="p">()</span>                 <span class="c1"># Fist gesture recognize
+</span>        <span class="n">msg_right</span><span class="p">.</span><span class="n">right_hand_thumb_up</span> <span class="o">=</span> <span class="n">li</span><span class="p">.</span><span class="n">get_right_hand_thumb_up</span><span class="p">()</span>         <span class="c1"># Thumb up gesture recognize
+</span><span class="p">[...]</span>
+        <span class="n">pub_ros_right</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg_right</span><span class="p">)</span>
+        <span class="n">rospy</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">rospy</span><span class="p">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">PARAMNAME_FREQ_ENTIRE</span><span class="p">,</span> <span class="n">FREQUENCY_ROSTOPIC_DEFAULT</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2>
+<a name="fase5">
+ Phase 5: Integration of <i> Leap Motion </i> into the system
+</a>
+ </h2>
+
+<p>The integration of <em>Leap Motion</em> into the <em>ROS</em> system and as part of the developed solution is very simple. The <em>script</em> that controls the cobot’s movements only needs to subscribe to the <em>topic</em> <code class="language-plaintext highlighter-rouge">leapmotion/data</code> (for two cobots, one of the scripts will subscribe to the <em>topic</em> that sends information from the right hand and the other from the left hand) and use this data input accordingly to control the cobot’s movements.</p>
+
+<p>The picture shows the architecture of the system with nodes and <em>topic</em>s. You can see the integration of <em>Leap Motion</em> into the system. At the bottom of the image, you can see the <em>sender</em> node (<code class="language-plaintext highlighter-rouge">one_arm_no_moveit_lm_pub</code>), the <em>topic</em> that publishes the data received from the <em>Leap Motion</em> device (<code class="language-plaintext highlighter-rouge">/leapmotion/data</code>), and the * script* that processes the information to send commands to the robot is the node <code class="language-plaintext highlighter-rouge">ur10_dual_moveit</code>.</p>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one-arm-moveit-rqt-graph-gazebo-moveit-fase-4-detalle.png" alt="image" title="Integrating Leap Motion into the system" /></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-13T01:19:56+01:00">March 13, 2022</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/moveit-four/" class="pagination--pager" title="Four UR10s with grippers
+">Previous</a>
+    
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/lm-own-one/" class="pagination--pager" title="One UR10 with gripper &amp; Leap Motion
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      <div align="center" style="margin: 1em 0;">
+        <ins class="adsbygoogle"
+             style="display:block; border-bottom: initial;"
+             data-ad-client="ca-pub-7328585512091257"
+             data-ad-slot="3049671934"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/Serru/MultiCobot-UR10-Gripper" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    
+      <li><a href="/MultiCobot-UR10-Gripper/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 Miguel Burgh. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/MultiCobot-UR10-Gripper/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+    <style>
+      .google-auto-placed {
+        margin: 2em auto;
+      }
+    </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  </body>
+</html>

@@ -1,0 +1,1375 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Two UR10s with grippers - Colaborative Multicobot System</title>
+<meta name="description" content="The solution for two robots is created in the same way as for one robot. However, the content of the files is changed to adapt them to the simulation with two robots.">
+
+
+  <meta name="author" content="Miguel Burgh">
+  
+  <meta property="article:author" content="Miguel Burgh">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Colaborative Multicobot System">
+<meta property="og:title" content="Two UR10s with grippers">
+<meta property="og:url" content="http://localhost:4000/MultiCobot-UR10-Gripper/docs/moveit-two/">
+
+
+  <meta property="og:description" content="The solution for two robots is created in the same way as for one robot. However, the content of the files is changed to adapt them to the simulation with two robots.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/MultiCobot-UR10-Gripper/assets/images/site-logo.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-03-13T01:19:56+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/MultiCobot-UR10-Gripper/docs/moveit-two/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Miguel Burgh",
+      "url": "http://localhost:4000/MultiCobot-UR10-Gripper/"
+    
+  }
+</script>
+
+
+  <meta name="google-site-verification" content="UQj93ERU9zgECodaaXgVpkjrFn9UrDMEzVamacSoQ8Y" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/MultiCobot-UR10-Gripper/feed.xml" type="application/atom+xml" rel="alternate" title="Colaborative Multicobot System Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/MultiCobot-UR10-Gripper/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/MultiCobot-UR10-Gripper/">
+          Colaborative Multicobot System
+          <span class="site-subtitle">Developed with ROS Kinetic Kame</span>
+        </a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/docs/introduction/">Documentation</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/about/">About</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox">
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Getting Started</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/introduction/">Introduction</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Basic System Setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/requirements/">Requirements</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-dependencies/">ROS Kinetic &amp; dependencies</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-packages/">ROS packages</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup/">Leap Motion's setup</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup-testing/">Testing the setup</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Design &amp; development</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/design-multi-robot-system/">Design of a multi-robot system</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-planner-solution/">Solution with our motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-motion-planning/">Solution with MoveIt's motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-two/" class="active">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Integration of Leap Motion</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-design-integration/">Design &amp; Integration</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; our own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Physical robot's setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/robot-campero/">Robot Campero</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Others</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/help-support/">Help &amp; Support</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/authors/">Authors</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/acknowledgement/">Acknowledgement</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/recognition/">Recognition</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/license/">License</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Two UR10s with grippers">
+    <meta itemprop="description" content="The solution for two robots is created in the same way as for one robot. However, the content of the files is changed to adapt them to the simulation with two robots.">
+    <meta itemprop="datePublished" content="2022-03-13T01:19:56+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Two UR10s with grippers
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title">
+<i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+<li><a href="#prerequisite">Prerequisite</a></li>
+<li>
+<a href="#index">Index</a><ul>
+<li><a href="#warning-contents-of-the-file"><img class="emoji" title=":warning:" alt=":warning:" src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png" height="20" width="20"> Contents of the file</a></li>
+<li>
+<a href="#book-description-of-the-file-urdf"><img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Description of the file URDF</a><ul>
+<li><a href="#computer-create-solution-directory"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Create solution directory</a></li>
+<li><a href="#computer-description-of-the-directory-configuration"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Description of the directory configuration</a></li>
+<li><a href="#computer-modification-of-the-description-files"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Modification of the description files</a></li>
+</ul>
+</li>
+<li>
+<a href="#configuration-of-moveit">Configuration of MoveIt!</a><ul>
+<li><a href="#computer-moveit-setup-assistant"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> MoveIt! Setup Assistant</a></li>
+<li><a href="#book-connection-between-gazebo-and-moveit"><img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Connection between Gazebo and MoveIt!</a></li>
+<li><a href="#computer-starting-gazebo"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Starting Gazebo</a></li>
+<li><a href="#computer-modification-of-gazebo-files"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Modification of Gazebo files</a></li>
+<li><a href="#computer-adding-the-controllers-to-interact-with-gazebo"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Adding the controllers to interact with Gazebo</a></li>
+<li><a href="#computer-finally-a-test-is-performed"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Finally, a test is performed:</a></li>
+<li>
+<a href="#computer-pick-and-place"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Pick and Place</a><ul>
+<li><a href="#computer-replication-of-cobots-in-gazebo"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Replication of Cobots in Gazebo</a></li>
+<li><a href="#computer-pick-and-place-1"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Pick and Place</a></li>
+<li><a href="#computer-creation-of-the-scripts-that-will-carry-out-the-pick--place"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Creation of the scripts that will carry out the Pick &amp; Place</a></li>
+</ul>
+</li>
+<li><a href="#book-final-results-information"><img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Final results information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png" alt="image" title="Loaded the URDF model of the UR10 robot"></p>
+
+<p>This time, the solution for two robots is created in the same way as for one robot. However, the content of the files is changed to adapt them to the simulation with two robots.</p>
+
+<h2 id="prerequisite">Prerequisite</h2>
+<ul>
+  <li>Successfully install the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/setup-doc/proyect_setup_eng.md">Basic System Configuration</a>.</li>
+  <li>Implement the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md">Solution for one robot without the <code class="language-plaintext highlighter-rouge">MoveIt!</code> motion planner</a>.</li>
+</ul>
+
+<h2 id="index">Index</h2>
+<ul>
+  <li>
+<a href="#setup-initial">Initial setup: setup for a robot</a>.
+    <ul>
+      <li><a href="#phase1">Phase 1: <em>URDF</em> configuration</a></li>
+      <li><a href="#phase2">Phase 2: Configuration of <code class="language-plaintext highlighter-rouge">MoveIt!</code></a></li>
+      <li><a href="#phase3">Phase 3: Simulation of a <code class="language-plaintext highlighter-rouge">Pick &amp; Place</code> in <code class="language-plaintext highlighter-rouge">Gazebo</code></a></li>
+      <li><a href="#tests">Execution of tests</a></li>
+    </ul>
+  </li>
+  <li>
+<a href="#modifications">Modifications: Multirobot system consisting of two robots</a>
+    <ul>
+      <li><a href="#modifications1">Configuration in <code class="language-plaintext highlighter-rouge">Gazebo</code> for two cobots</a></li>
+      <li><a href="#modifications2">Configuration in <code class="language-plaintext highlighter-rouge">MoveIt!</code> for two cobots</a></li>
+      <li><a href="#tests2">Execution of tests</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2>
+<a name="setup-inicial">
+Initial setup: setup for a robot
+</a>
+</h2>
+
+<p>In this section, a replication of the configuration for a single robot is made, which serves as a basis and thus later explains the changes made to be able to control two robots.</p>
+
+<h3 id="warning-contents-of-the-file">
+<img class="emoji" title=":warning:" alt=":warning:" src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png" height="20" width="20"> Contents of the file</h3>
+<p>Do not blindly copy and paste the contents of the files into this section. When you explain the configuration for one robot, the information is identical to that from the <strong>one_arm_moveit</strong> package, but you must adapt the contents to the new package, in this case <strong>two_arm_moveit</strong>.</p>
+
+<p>There are two ways to do this:</p>
+<ul>
+  <li>If you created the solution for a <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md">one_arm_moveit</a> robot, you can continue with what you implemented, but in the <em>Modifications</em> section you need to change <strong>two_arm_moveit</strong> to <strong>one_arm_moveit</strong>.</li>
+  <li>If the solution for a <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/moveit/ENG/one_arm_moveit.md">one_arm_moveit</a> robot has not yet been created, you can follow the steps presented in this section. Note, however, that the contents of the files at this stage of <em>initial configuration</em> are linked to the files of <strong>one_arm_moveit</strong>. Therefore, you must replace references to the <strong>one_arm_moveit</strong> package with <strong>two_arm_moveit</strong> when you create the copy.</li>
+</ul>
+
+<p>If this information is not taken into account, the package will not compile correctly and the compiler itself will force a choice between one of the previously suggested options.</p>
+
+<h2>
+<a name="phase1">
+Phase 1: URDF configuration
+</a>
+</h2>
+
+<h3 id="book-description-of-the-file-urdf">
+<img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Description of the file <em>URDF</em>
+</h3>
+
+<p>The <em>URDF</em> (United Robotics Description Format) file models the cobot in <em>XML</em> format, which is used by the various applications that <em>ROS</em> requires, but mainly to perform a simulation of the modeled robot.</p>
+
+<p>The file is built in the form of a tree in which there are three main tags: <code class="language-plaintext highlighter-rouge">&lt;robot&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;link&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;joint&gt;</code>. For clarification, you can take the arm of the human body as a reference. If you want to model the arm of a person, the tag <code class="language-plaintext highlighter-rouge">&lt;robot&gt;</code> stands for the arm as a whole. This arm consists of several bones (humerus, ulna and radius) represented by the tags <code class="language-plaintext highlighter-rouge">&lt;link&gt;</code> and a joint connecting these bones (elbow) represented by the tag <code class="language-plaintext highlighter-rouge">&lt;joint&gt;</code>.</p>
+
+<p>As with bones, additional information can be added to these tags, providing information about size, geometry, inertia, orientation, etc. Finally, the modeling of a robot can be connected to another model to form a more complex model that can be represented by adding the hand to the arm, where the wrist is a joint that connects the two. Note that <code class="language-plaintext highlighter-rouge">&lt;joint&gt;</code> tags are connected to <code class="language-plaintext highlighter-rouge">&lt;link&gt;</code> tags via a parent-child relationship.</p>
+
+<p>In this way, a representation of the robot components is created:</p>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/urdf-robot.png" alt="image" title="URDF file representation"></p>
+
+<p>The image shows the contents of the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro"><em>URDF</em> file</a> that models the robot next to the gripper. You can see how the component of the UR10 robot arm is connected to the link <code class="language-plaintext highlighter-rouge">world</code> which represents the <code class="language-plaintext highlighter-rouge">world</code> (yellow color) and the base of the UR10 arm <code class="language-plaintext highlighter-rouge">base_link</code> (green color) which is directly above it, also the joint <code class="language-plaintext highlighter-rouge">world_joint</code> is the yellow ball located between both links. In the same way, the component of the gripper <code class="language-plaintext highlighter-rouge">robotiq_85_gripper</code> is connected to the arm of the UR10 (<code class="language-plaintext highlighter-rouge">ur10_robot</code>). The ball representing the joint <code class="language-plaintext highlighter-rouge">robotiq_85_base_joint</code> connecting both components (purple color) connects the link <code class="language-plaintext highlighter-rouge">robotiq_85_base_link</code> of the gripper with the link <code class="language-plaintext highlighter-rouge">ee_link</code> of the UR10 arm.</p>
+
+<h4 id="computer-create-solution-directory">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Create solution directory</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot
+<span class="nb">mkdir </span>two_arm_moveit
+</code></pre></div></div>
+
+<h4 id="computer-description-of-the-directory-configuration">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Description of the directory configuration</h4>
+<p>A new package is created and the <em>two_arm_no_moveit</em> project directories are copied for later editing.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
+catkin_create_pkg two_arm_moveit_description rospy
+</code></pre></div></div>
+
+<p>The <em>two_arm_no_moveit_description</em> directory and the <em>launch</em> and <em>urdf</em> folders are copied to the directory created for <em>description</em>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_description
+<span class="nb">cp</span> <span class="nt">-r</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/launch <span class="nb">.</span>
+<span class="nb">cp</span> <span class="nt">-r</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_description/urdf <span class="nb">.</span>
+</code></pre></div></div>
+
+<h4 id="computer-modification-of-the-description-files">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Modification of the <em>description</em> files</h4>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/launch/ur10_upload.launch">multirobot/two_arm_moveit/two_arm_moveit_description/launch/ur10_upload.launch</a></p>
+  </li>
+  <li>
+    <p><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro">multirobot/two_arm_moveit/two_arm_moveit_description/urdf/ur10_robot.urdf.xacro</a></p>
+  </li>
+  <li>
+    <p><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro">multirobot/two_arm_moveit/two_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro</a></p>
+  </li>
+</ul>
+
+<p>It compiles:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+catkin_make
+</code></pre></div></div>
+
+<h2>
+<a name="phase2">
+Phase 2: Configuring MoveIt!
+</a>
+</h2>
+
+<h3 id="configuration-of-moveit">Configuration of <code class="language-plaintext highlighter-rouge">MoveIt!</code>
+</h3>
+
+<p>Before configuring with the <code class="language-plaintext highlighter-rouge">Setup Assitant</code>, you must already have the <code class="language-plaintext highlighter-rouge">URDF</code> well defined. Therefore the <code class="language-plaintext highlighter-rouge">Setup Assitant</code> configuration is started with the following command in the terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/
+<span class="nb">mkdir </span>two_arm_moveit_config
+roslaunch moveit_setup_assistant setup_assistant.launch
+</code></pre></div></div>
+
+<h4 id="computer-moveit-setup-assistant">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> <code class="language-plaintext highlighter-rouge">MoveIt!</code> Setup Assistant</h4>
+<p>The <em>URDF</em> file is selected as the robot model: <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro">multirobot/two_arm_moveit/two_arm_moveit_description/urdf/ur10_joint_limited_robot.urdf.xacro</a> (could be perfectly be <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_description/urdf/ur10_robot.urdf.xacro">ur10_robot.urdf.xacro</a>).</p>
+
+<ul>
+  <li>
+    <p>When you start the <code class="language-plaintext highlighter-rouge">Setup Assitant</code> configuration, you must tell it where the file <code class="language-plaintext highlighter-rouge">UR10_joint_limited_robot.urdf.xacro</code> is located, the model of the robot you want to configure:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_1.png" alt=" " title="Load UR10 robot URDF model">.</p>
+  </li>
+  <li>
+    <p>Then the <em>Load files</em> button is specified.
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_2.png" alt=" " title="URDF model of UR10 robot loaded"></p>
+  </li>
+  <li>
+    <p>On the <em>Self Collisions</em> tab, click on the <em>Generate Collision Matrix</em> button. This will create a matrix between the various robot components that may cause a self-collision during trajectory planning:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_3.png" alt=" " title="Generate collision matrix"></p>
+  </li>
+  <li>
+    <p>The <em>Virtual Joints</em> tab is specifically for robot arms installed on a mobile base. In this case it does not affect the configuration as the base is fixed, but for future configurations a joint must be created between the robot <code class="language-plaintext highlighter-rouge">base_link</code> and the <code class="language-plaintext highlighter-rouge">world</code> frame with the following configuration:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_4.png" alt=" " title="Defining Virtual Joint">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_5.png" alt=" " title="Defining Virtual Joint"></p>
+  </li>
+  <li>
+    <p>One of the most important tabs is the definition of <em>planning groups</em>. In this case, there are two groups: the <em>manipulator</em> group, which controls the robot arm, and the <em>gripper</em> group, which controls the gripper:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_6.png" alt=" " title="Manipulator kdl"></p>
+  </li>
+  <li>
+    <p>Then you need to click on the <em>Add Kin. Chain</em> button:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_7.png" alt=" " title="Manipulator Kinetic Chain setup"></p>
+  </li>
+  <li>
+    <p>Finally the configuration is saved:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_8.png" alt=" " title="Manipulator Group setup"></p>
+  </li>
+  <li>
+    <p>Now you need to do this for the <em>gripper</em> group that will control the gripper. Click the <em>Add Group</em> button, enter the name of the group, and enter <em>kdl</em> as <em>Kinematic Solver</em>:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_9.png" alt=" " title="gripper kdl"></p>
+  </li>
+  <li>
+    <p>After clicking the <em>Add joints</em> button, you need to search for <em>robotiq_85_left_knucle_joint</em> and add it with the arrow <em>-&gt;</em>:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_10.png" alt=" " title="grab joint setup"></p>
+  </li>
+  <li>
+    <p>After saving, the result on the <em>Planning group</em> tab should look like this:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_11.png" alt=" " title="Planning Group Final Setup"></p>
+  </li>
+  <li>
+    <p>The <em>Robot Poses</em> tab is used to configure fixed poses in the robot in advance. The <em>home</em> pose is configured to reflect the initial position of the robot:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_12.png" alt=" " title="Setup *Home* 1/3">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_13.png" alt=" " title="Setup *Home* 2/3">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_14.png" alt=" " title="Setup *Home* 3/3"></p>
+  </li>
+  <li>
+    <p>On the <em>Robot Poses</em> tab, the <em>gripper_open</em> pose is configured:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_24.png" alt=" " title="Setup *Open_gripper*"></p>
+  </li>
+  <li>
+    <p>The <em>gripper_close</em> pose is configured on the <em>robot poses</em> tab:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_25.png" alt=" " title="Set up *close_gripper*"></p>
+  </li>
+  <li>
+    <p>On the <em>End Effectors</em> tab, the gripper is added:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_15.png" alt=" " title="Set up end effector 1/3">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_16.png" alt=" " title="Set up end effector 2/3">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_17.png" alt=" " title="Set up end effector 3/3"></p>
+  </li>
+  <li>
+    <p>The <em>Passive Joints</em> tab contains the joints that cannot be actively moved. In the case of the <em>gripper</em> defined in your <em>URDF</em> file, these are the <code class="language-plaintext highlighter-rouge">joints</code> that mimic the movement of another joint. The <code class="language-plaintext highlighter-rouge">joints</code> defined as passive are not considered in the design, in which case the configuration is as follows:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_18.png" alt=" " title="Set up passive joints">.</p>
+  </li>
+  <li>
+    <p>On the <em>ROS control</em> tab it will be added automatically, the created files will be changed manually later.
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_19.png" alt=" " title=" ROS control setup">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_20.png" alt=" " title="Setting up the ROS controller"></p>
+  </li>
+  <li>
+    <p>To complete the configuration, you need to fill in the <em>Author Information</em> tab:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_21.png" alt=" " title="Set up author information">.</p>
+  </li>
+  <li>
+    <p>On the last tab <em>Configuration Files</em> you can specify where the <code class="language-plaintext highlighter-rouge">MoveIt!</code> configuration should be stored, in this case in the previously created file <code class="language-plaintext highlighter-rouge">two_arm_moveit_config</code>. The configuration is created using the <em>Generate Package</em> button and finally.
+<em>Exit Setup Assitant</em> to exit the programme:
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_22.png" alt=" " title="Set author information">
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_setup_assistant_23.png" alt=" " title="Set author information"></p>
+  </li>
+</ul>
+
+<h2>
+<a name="phase3">
+Phase 3: Simulation of a <i>pick &amp; place</i> in Gazebo
+</a>
+</h2>
+
+<p>This phase is divided into two stages</p>
+
+<h4 id="book-connection-between-gazebo-and-moveit">
+<img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Connection between <code class="language-plaintext highlighter-rouge">Gazebo</code> and <code class="language-plaintext highlighter-rouge">MoveIt!</code>
+</h4>
+
+<p>This stage is first about configuring <code class="language-plaintext highlighter-rouge">Gazebo</code> and the controllers to correctly simulate the robot’s movements. The package <em>two_arm_moveit_gazebo</em> is created, which contains all the configuration of <code class="language-plaintext highlighter-rouge">Gazebo</code>, including the controllers. Once the package is created, you need to configure the controllers, which are located in the <em>controller</em> directory. Although all controllers can be defined in a single file, we have spread them over three files for clarity.</p>
+
+<p>The controllers are defined in files with the extension <em>yaml</em>. To define these controllers, you must give them a name and specify the type of controller, the dynamic <code class="language-plaintext highlighter-rouge">joints</code> you want to control, the constraints it has, the publishing rate, and other options.</p>
+
+<p>These controllers are briefly explained below:</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/arm_controller_ur10.yaml">arm_controller_ur10.yaml</a> file: This file defines the controller for the UR10 cobot. It defines the controller name <code class="language-plaintext highlighter-rouge">arm_controller</code>, the controller type position <code class="language-plaintext highlighter-rouge">controllers/JointTrajectoryController</code>, which requires the definition of the message type and the correct formatting of the information needed to communicate with the controller. Then there is the <code class="language-plaintext highlighter-rouge">joints</code> field, which specifies which <code class="language-plaintext highlighter-rouge">joints</code> of the robot are part of the controller, all of these <code class="language-plaintext highlighter-rouge">joints</code> being dynamic. The other fields are left untouched, but consistency must be maintained in their naming.</p>
+  </li>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/gripper_controller_robotiq.yaml">gripper_controller_robotiq.yaml</a>: This file defines the controller for the <em>Robotiq</em> gripper. Here you define the controller name <code class="language-plaintext highlighter-rouge">gripper</code>, the controller type <code class="language-plaintext highlighter-rouge">position controllers/JointTrajectoryController</code> which defines the type of messages and the information needed to communicate with it. Then there is the <code class="language-plaintext highlighter-rouge">joints</code> field, which specifies which <code class="language-plaintext highlighter-rouge">joints</code> of the robot are part of the controller, in this case a single <code class="language-plaintext highlighter-rouge">joint_robotiq_85_left_knuckle_joint</code>, since the other <code class="language-plaintext highlighter-rouge">joints</code> of the controller mimic the movements of this one. The other fields remain untouched, but naming consistency must be maintained as in the previous case.</p>
+  </li>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/controller/joint_state_controller.yaml">joint_state_controller.yaml</a>: This file is not a controller in the strict sense. Its function is that of an interface that translates the <code class="language-plaintext highlighter-rouge">joint</code> information coming from the real cobot and converts it into messages of type <code class="language-plaintext highlighter-rouge">JointState</code> that will be published later. It is essential for correct operation both in simulation and with the real robot. It is part of the package <em>ROS</em> <em>ros_control</em>.</p>
+  </li>
+</ul>
+
+<h4 id="computer-starting-gazebo">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Starting <code class="language-plaintext highlighter-rouge">Gazebo</code>
+</h4>
+
+<p>We create the package for <code class="language-plaintext highlighter-rouge">Gazebo</code> and copy the contents of the solution from <em>one_arm_no_moveit</em> for later changes:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
+catkin_create_pkg two_arm_moveit_gazebo rospy
+</code></pre></div></div>
+
+<p>In the directory created for <code class="language-plaintext highlighter-rouge">Gazebo</code> it copies the directory <em>one_arm_no_moveit_gazebo</em>, the folders <em>controller</em>, <em>launch</em>, <em>models</em> and <em>world</em>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo
+<span class="nb">cp</span> <span class="nt">-r</span> ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/controller <span class="nb">.</span>
+<span class="nb">cp</span> <span class="nt">-r</span> ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/launch <span class="nb">.</span>
+<span class="nb">cp</span> <span class="nt">-r</span> ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/models <span class="nb">.</span>
+<span class="nb">cp</span> <span class="nt">-r</span> ~/MultiCobot-UR10-Gripper/src/multirobot/one_arm_no_moveit/one_arm_no_moveit_gazebo/world <span class="nb">.</span>
+</code></pre></div></div>
+
+<h4 id="computer-modification-of-gazebo-files">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Modification of <code class="language-plaintext highlighter-rouge">Gazebo</code> files</h4>
+<p>The files are created with the following content:</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10_joint_limited.launch">multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/ur10_joint_limited.launch</a></p>
+  </li>
+  <li>
+    <p><a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_gazebo/launch/ur10.launch">multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/ur10.launch</a></p>
+  </li>
+</ul>
+
+<p>It compiles:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+catkin_make
+</code></pre></div></div>
+
+<p>If you leave the configuration as it is, communication between <code class="language-plaintext highlighter-rouge">Gazebo</code> and <code class="language-plaintext highlighter-rouge">MoveIt!</code> is not possible. If you start <em>demo.launch</em>, it will also start <em>Rviz</em>, which you can use to visualize the data. As you can see it works correctly, but with the automatic configuration it is not possible to observe the operation in the <code class="language-plaintext highlighter-rouge">Gazebo</code> simulator.</p>
+
+<p>This is because there is no communication between <code class="language-plaintext highlighter-rouge">MoveIt!</code> and <code class="language-plaintext highlighter-rouge">Gazebo</code>, so this communication is solved.</p>
+
+<p>For simplicity, we will keep the start of <code class="language-plaintext highlighter-rouge">Gazebo</code> and <code class="language-plaintext highlighter-rouge">MoveIt!</code> separate for possible evaluation in the real robot.</p>
+
+<p>To make it easier to get started and to better understand the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package, we separate the contents of the packages into <code class="language-plaintext highlighter-rouge">MoveIt!</code> and <code class="language-plaintext highlighter-rouge">Gazebo</code>:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Gazebo</code>:</p>
+<ul>
+  <li>launch:
+    <ul>
+      <li>gazebo.launch</li>
+      <li>ros_controllers.launch</li>
+    </ul>
+  </li>
+  <li>config:
+    <ul>
+      <li><strong>ros_controllers.yaml</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p>The <em>gazebo.launch</em> file provided by <code class="language-plaintext highlighter-rouge">MoveIt!</code> is not required, as the <code class="language-plaintext highlighter-rouge">Gazebo</code> package to be used has already been configured. The configuration is very similar if you take a look at the files involved.</p>
+
+<p><code class="language-plaintext highlighter-rouge">MoveIt!</code>:</p>
+<ul>
+  <li>launch:
+    <ul>
+      <li>
+<strong>demo.launch</strong>
+        <ul>
+          <li>planning_context.launch
+            <ul>
+              <li>config:
+                <ul>
+                  <li>ur10.srdf</li>
+                  <li>joint_limits.yaml</li>
+                  <li>kinematics.yaml</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+<strong>move_group.launch</strong>
+            <ul>
+              <li>planning_context.launch</li>
+              <li>config:
+                <ul>
+                  <li>ur10.srdf</li>
+                  <li>joint_limits.yaml</li>
+                  <li>kinematics.yaml</li>
+                </ul>
+              </li>
+              <li>planning_pipeline.launch.xml
+                <ul>
+                  <li>ompl_planning_pipeline.launch.xml</li>
+                </ul>
+              </li>
+              <li>
+<strong>trajectory_execution.launch.xml</strong>
+                <ul>
+                  <li><strong>ur10_moveit_controller_manager.launch.xml</strong></li>
+                  <li>config:
+                    <ul>
+                      <li><strong>ros_controllers.yaml</strong></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>sensor_manager.launch.xml
+                <ul>
+                  <li>config:
+                    <ul>
+                      <li>sensors_3d.yaml</li>
+                    </ul>
+                  </li>
+                  <li>ur10_moveit_sensor_manager.launch.xml</li>
+                </ul>
+              </li>
+              <li>moveit_rviz.launch (Rviz)
+                <ul>
+                  <li>moveit.rviz</li>
+                  <li>config:
+                    <ul>
+                      <li>kinematics.yaml</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>In the directory diagram you can see how the files are connected. The files that have to be changed manually are printed in bold.</p>
+
+<p>The configuration file for the controllers is the same for <code class="language-plaintext highlighter-rouge">Gazebo</code> and <code class="language-plaintext highlighter-rouge">MoveIt!</code> This means that the configuration of the controllers must match the one previously created for <code class="language-plaintext highlighter-rouge">Gazebo</code> and configured in the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/doc/no_moveit/ENG/one_arm_no_moveit.md">Starting <code class="language-plaintext highlighter-rouge">Gazebo</code></a> section in order for the controllers to connect properly.</p>
+
+<p>You can therefore add the <code class="language-plaintext highlighter-rouge">Gazebo</code> controllers (.yaml files) to the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package to connect the robot controllers (manipulator and gripper) correctly.</p>
+
+<p>If you start <code class="language-plaintext highlighter-rouge">Gazebo</code> and <code class="language-plaintext highlighter-rouge">MoveIt!</code> without making any changes, you will get the following representation of nodes and <em>topic</em>s:</p>
+
+<ul>
+  <li>Terminal 1
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_config demo.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 2
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_gazebo ur10_joint_limited.launch
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_graph_no_changes.png" alt=" " title="Schematic without changes"></p>
+
+<p>You can see that <code class="language-plaintext highlighter-rouge">gazebo</code> correctly loads the controllers <code class="language-plaintext highlighter-rouge">arm_controller</code> and <code class="language-plaintext highlighter-rouge">gripper</code>, but there is no communication between the node <code class="language-plaintext highlighter-rouge">move_group</code> and the controllers of the node <code class="language-plaintext highlighter-rouge">gazebo</code>, the only common point is the <em>topic</em> <code class="language-plaintext highlighter-rouge">/joint_states </code>. This means that trajectories planned and executed with the <code class="language-plaintext highlighter-rouge">MoveIt!</code> plugin <em>Motion Planning</em> will not be rendered in <code class="language-plaintext highlighter-rouge">gazebo</code>, but only in <em>Rviz</em>. Since this is not the desired result, we need to change the configuration of <code class="language-plaintext highlighter-rouge">MoveIt!</code> so that it can communicate with the controllers loaded in <code class="language-plaintext highlighter-rouge">gazebo</code>.</p>
+
+<p>For this purpose the following files have to be changed. The modified files are in a different package to facilitate compression of the changes made to the configuration.</p>
+
+<p>For this purpose, the following files are modified based on their original files <em>demo.launch</em>, <em>move_group.launch</em>, <em>trajectory_execution.launch.xml</em> and <em>ur10_moveit_controller_manager.launch.xml</em> and the controllers are added by creating two files <em>controllers.yaml</em> and <em>joint_names.yaml</em>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
+catkin_create_pkg two_arm_moveit_manipulator rospy
+<span class="nb">mkdir </span>config
+<span class="nb">touch </span>config/controllers.yaml
+<span class="nb">touch </span>config/joint_names.yaml
+<span class="nb">mkdir </span>launch
+<span class="nb">touch </span>launch/two_arm_moveit_execution.launch
+<span class="nb">touch </span>launch/move_group.launch
+<span class="nb">touch </span>launch/trajectory_execution.launch.xml
+<span class="nb">touch </span>launch/ur10_moveit_controller_manager.launch.xml
+<span class="nb">mkdir </span>scripts
+</code></pre></div></div>
+
+<h4 id="computer-adding-the-controllers-to-interact-with-gazebo">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Adding the controllers to interact with <code class="language-plaintext highlighter-rouge">Gazebo</code>
+</h4>
+
+<ul>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/controllers.yaml">multirobot/two_arm_moveit/two_arm_moveit_manipulator/config/controllers.yaml</a>: The definition of the <em>ROS</em> controllers in <code class="language-plaintext highlighter-rouge">MoveIt!</code> is similar to that for <code class="language-plaintext highlighter-rouge">Gazebo</code>, the name of the controllers must match the names of the controllers described in <code class="language-plaintext highlighter-rouge">Gazebo</code>, the action server <code class="language-plaintext highlighter-rouge">follow_joint_trajectory</code> is defined, the type must be <code class="language-plaintext highlighter-rouge">FollowJointTrajectory</code> so that the message types sent between them are compatible and finally the names of the <code class="language-plaintext highlighter-rouge">joins</code> involved must be identical.</p>
+  </li>
+  <li>
+    <p>Another file to modify is <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/config/joint_names.yaml">multirobot/two_arm_moveit/two_arm_moveit_manipulator/config/joint_names.yaml</a>: This file defines the name of the <code class="language-plaintext highlighter-rouge">joints</code> of the cobot controller. It is saved as a server parameter and used as part of the <code class="language-plaintext highlighter-rouge">MoveIt!</code> configuration.</p>
+  </li>
+</ul>
+
+<p>From the files in the <em>launch</em> directory we will modify the <em>two_arm_moveit_execution</em> file, which is the entry point for using the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package and <em>Rviz</em>, which is based on the <em>demo.launch</em> file:</p>
+
+<ul>
+  <li>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch">multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_execution.launch</a>.</li>
+</ul>
+
+<p>Then optimise the controller launcher and <code class="language-plaintext highlighter-rouge">MoveIt!</code>:</p>
+
+<ul>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/move_group.launch">multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/move_group.launch</a>.</p>
+  </li>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/trajectory_execution.launch.xml">multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/trajectory_execution.launch.xml</a>: set up communication with a real robot. In this case, <code class="language-plaintext highlighter-rouge">Gazebo</code> is the one simulating the robot, but <code class="language-plaintext highlighter-rouge">MoveIt!</code> is not aware of it and treats it like a real robot.</p>
+  </li>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml">multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/ur10_moveit_controller_manager.launch.xml</a>: Loading controllers designed for <code class="language-plaintext highlighter-rouge">MoveIt!</code>.</p>
+  </li>
+</ul>
+
+<h4 id="computer-finally-a-test-is-performed">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Finally, a test is performed:</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+catkin_make
+</code></pre></div></div>
+
+<ul>
+  <li>Terminal 1
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_gazebo ur10_joint_limited.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 2
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_26.png" alt=" " title="example gazebo+rviz+moveit! (1/2)"></p>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_27.png" alt=" " title="example gazebo+rviz+moveit! (2/2)"></p>
+
+<p>And the graph of nodes and <em>topic</em>s, after the changes, you can see how now the node <em>move_group</em> communicates with the controllers and it is <em>Gazebo</em> that listens to what is published to perform the desired movements. These movements change the current state of the robot, which is published in the <em>topic</em> <code class="language-plaintext highlighter-rouge">/jont_states</code>, and this information is passed to the <code class="language-plaintext highlighter-rouge">robot_state_publisher</code> node and the <code class="language-plaintext highlighter-rouge">move_group</code> node. The <code class="language-plaintext highlighter-rouge">move_group</code> node can recalculate a new path with the information it receives from the <em>topic</em>s <code class="language-plaintext highlighter-rouge">/tf</code> and <code class="language-plaintext highlighter-rouge">/jont_states</code>.</p>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/one_arm_moveit_graph_changes.png" alt=" " title="rqt_graph representation of nodes and topics"></p>
+
+<h4 id="computer-pick-and-place">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Pick and Place</h4>
+
+<p>To script <em>pick &amp; place</em> in Python, the Python interface <code class="language-plaintext highlighter-rouge">moveit_commander</code> is used to communicate with the node <code class="language-plaintext highlighter-rouge">move_group</code> and its services and actions. Since it is not very problematic for controlling a single robot and there is good documentation, the script is described in detail for the solution with two or more cobots.</p>
+
+<p>Very simple tests are performed. To do this, you must first create the necessary scripts to correctly control the robot arm and gripper. Then the movements are performed so that the robot picks up a cube from the table and puts it into the basket.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>scripts
+<span class="nb">touch </span>two_arm_moveit.py
+</code></pre></div></div>
+
+<p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/scripts/one_arm_moveit.py">multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit.py</a></p>
+
+<h2>
+<a name="tests">
+Execution of the tests
+</a>
+</h2>
+
+<ul>
+  <li>Terminal 1
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_gazebo ur10_joint_limited.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 2
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 3
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>rosrun two_arm_moveit_manipulator two_arm_moveit.py 
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2>
+<a name="modifications">
+Modifications: Multirobot system consisting of two robots
+</a>
+</h2>
+
+<p>To be able to control two or more cobots at the same time and with different controllers, which means that they can be cobots of different brands and models, the <code class="language-plaintext highlighter-rouge">MoveIt!</code> node and the simulated robot are replicated in <code class="language-plaintext highlighter-rouge">Gazebo</code>.</p>
+
+<p>If you want to do a proper replication, you need to apply the concept of <em>namespace</em>, which can be seen like a <em>directory</em> containing nodes, <em>topics</em> or even other directories (<em>namespaces</em>) that also allow nested organization and <em>ROS</em> allows to run instances of the same node as long as they are in different <em>namespaces</em>. Building on what has been done so far, changes are made to the <code class="language-plaintext highlighter-rouge">two_arm_moveit_gazebo</code> and <code class="language-plaintext highlighter-rouge">two_arm_moveit_manipulator</code> packages, which include the changes to the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package (<code class="language-plaintext highlighter-rouge">two_arm_moveit_config</code>) previously configured by the <em>Setup Assitant</em>.</p>
+
+<p>The configuration process is divided into two parts: the configuration in <code class="language-plaintext highlighter-rouge">Gazebo</code> for two cobots and the configuration in <code class="language-plaintext highlighter-rouge">MoveIt!</code></p>
+
+<h3>
+<a name="modifications1">
+Configuration in `Gazebo` for two cobots
+</a>
+</h3>
+
+<p>To have two or more cobots in the simulation, it is explained what changes must be made in the <em>launch</em> files to allow adding two or more cobots in the simulation.</p>
+
+<p>The idea is to create an external file that replicates (launches instances of) as many cobots as you want to add to the simulation. Therefore, the <code class="language-plaintext highlighter-rouge">Gazebo</code> files from the <code class="language-plaintext highlighter-rouge">two_arm_moveit_gazebo</code> package are prepared first.</p>
+
+<ul>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/ur10_joint_limited.launch">ur10_joint_limited.launch</a>: Two arguments have been added to the original file, the robot name (<code class="language-plaintext highlighter-rouge">robot_name</code>) and the initial pose (<code class="language-plaintext highlighter-rouge">init_pose</code>). These two arguments are taken from the file that contains this <em>launch</em>.</p>
+  </li>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/ur10.launch">ur10.launch</a>: Similar to the <em>launch</em> file above (<code class="language-plaintext highlighter-rouge">ur10_joint_limited.launch</code>), two arguments have been added to this file, namely the robot name (<code class="language-plaintext highlighter-rouge">robot_name</code>) and the initial pose (<code class="language-plaintext highlighter-rouge">init_pose</code>), which are defined in the file that contains it. Apart from the addition of the arguments, the instantiation of the virtual world <code class="language-plaintext highlighter-rouge">Gazebo</code> and the loading of the robot model into the parameter server (<code class="language-plaintext highlighter-rouge">robot_description</code>) have been removed.</p>
+  </li>
+  <li>
+    <p>File [controller_utils.launch]https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/controller_utils.launch): In this file you only need to comment out the <code class="language-plaintext highlighter-rouge">tf_prefix</code> parameter. Its default value is an empty string, but this interferes when changing the default value.</p>
+  </li>
+</ul>
+
+<p>It compiles:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+catkin_make
+</code></pre></div></div>
+
+<h5 id="computer-replication-of-cobots-in-gazebo">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Replication of Cobots in <code class="language-plaintext highlighter-rouge">Gazebo</code>
+</h5>
+
+<p>Once the files of the <code class="language-plaintext highlighter-rouge">Gazebo</code> package <code class="language-plaintext highlighter-rouge">two_arm_moveit_gazebo</code> are configured, multiple cobots are instantiated in it. This is done by creating a <em>launch</em> file named <code class="language-plaintext highlighter-rouge">two_arm_moveit_gazebo</code> inside the <code class="language-plaintext highlighter-rouge">two_arm_moveit_manipulator</code> package (it can be any other package). The <em>launch</em> file contains the following:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;launch&gt;</span>
+   <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"/use_sim_time"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"robot_name"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"init_pose"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"paused"</span> <span class="na">default=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"gui"</span> <span class="na">default=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"limited"</span> <span class="na">default=</span><span class="s">"true"</span> <span class="na">doc=</span><span class="s">"If true, limits joint range [-PI, PI] on all joints."</span> <span class="nt">/&gt;</span>
+
+   <span class="c">&lt;!-- send robot urdf to param server --&gt;</span>
+   <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_description)/launch/ur10_upload.launch"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"limited"</span> <span class="na">value=</span><span class="s">"$(arg limited)"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/include&gt;</span>
+
+   <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find gazebo_ros)/launch/empty_world.launch"</span><span class="nt">&gt;</span>
+      <span class="c">&lt;!--arg name="world_name" default="worlds/empty.world"/--&gt;</span>
+      <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"verbose"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"world_name"</span> <span class="na">default=</span><span class="s">"$(find two_arm_moveit_gazebo)/world/multiarm_bot.world"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"paused"</span> <span class="na">value=</span><span class="s">"$(arg paused)"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"gui"</span> <span class="na">value=</span><span class="s">"$(arg gui)"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/include&gt;</span>
+   
+   <span class="nt">&lt;group</span> <span class="na">ns=</span><span class="s">"ur10_1"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"tf_prefix"</span> <span class="na">value=</span><span class="s">"ur10_1"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_gazebo)/launch/ur10_joint_limited.launch"</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"init_pose"</span> <span class="na">value=</span><span class="s">"-x 0.6 -y -0.6 -z 1.1"</span><span class="nt">/&gt;</span>
+         <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"robot_name"</span> <span class="na">value=</span><span class="s">"ur10_1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/include&gt;</span>
+   <span class="nt">&lt;/group&gt;</span>
+
+   <span class="nt">&lt;group</span> <span class="na">ns=</span><span class="s">"ur10_2"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"tf_prefix"</span> <span class="na">value=</span><span class="s">"ur10_2"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_gazebo)/launch/ur10_joint_limited.launch"</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"robot_name"</span> <span class="na">value=</span><span class="s">"ur10_2"</span><span class="nt">/&gt;</span>
+         <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"init_pose"</span> <span class="na">value=</span><span class="s">"-x 0.6 -y 1.38 -z 1.1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/include&gt;</span>
+   <span class="nt">&lt;/group&gt;</span>
+
+   <span class="nt">&lt;node</span> <span class="na">pkg=</span><span class="s">"tf"</span> <span class="na">type=</span><span class="s">"static_transform_publisher"</span> <span class="na">name=</span><span class="s">"world_frames_connection_1"</span> <span class="na">args=</span><span class="s">"0 0 0 0 0 0 /world /ur10_1/world 100"</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;node</span> <span class="na">pkg=</span><span class="s">"tf"</span> <span class="na">type=</span><span class="s">"static_transform_publisher"</span> <span class="na">name=</span><span class="s">"world_frames_connection_2"</span> <span class="na">args=</span><span class="s">"0 0 0 0 0 0 /world /ur10_2/world 100"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/launch&gt;</span>
+</code></pre></div></div>
+
+<p>The first thing to note in the contents of the file (<a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_gazebo.launch">two_arm_moveit_gazebo.launch</a>) is that it loads the robot model into the parameter server and instantiates the virtual world in <code class="language-plaintext highlighter-rouge">Gazebo</code> that was removed from the file <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_gazebo/launch/ur10.launch">ur10.launch</a>. This needs to be here because you only want to instantiate the world in <code class="language-plaintext highlighter-rouge">Gazebo</code> once.</p>
+
+<p>Then two groups appear, <code class="language-plaintext highlighter-rouge">ur10_1</code> and <code class="language-plaintext highlighter-rouge">ur10_2</code>, this is how you define the <em>namespaces</em>. The configuration of these cobots is identical except for three things, namely the value of the <code class="language-plaintext highlighter-rouge">tf_prefix</code> parameter, which is the prefix for the transformations. It is important that the group name (<em>namespace</em>), the name (<code class="language-plaintext highlighter-rouge">robot_name</code>) and the initial position (<code class="language-plaintext highlighter-rouge">init_pose</code>) match.</p>
+
+<p>If you want to add more cobots to the system, just copy the content of <em>group</em> and change the content accordingly. And note that the last two lines of code bind the base of the cobots to the <code class="language-plaintext highlighter-rouge">world</code> frame.</p>
+
+<h3>
+<a name="modifications2">
+Configuration in <i>MoveIt!</i> for two cobots
+</a>
+</h3>
+
+<p>The changes to the <code class="language-plaintext highlighter-rouge">MoveIt!</code> configuration are very minor, basically you need to group the code implemented for a <em>single cobot</em> under a <em>namespace</em>, adjust the <em>remap</em> with the <em>namespace</em>, and then repeat the process as many times as cobots are simulated. Comparing the contents of the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_manipulator/launch/one_arm_moveit_execution.launch">one_arm_moveit_execution.launch</a> file implemented for a single cobot to the contents of the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/launch/two_arm_moveit_execution.launch">two_arm_moveit_execution.launch</a> file, essentially everything has been grouped into a <em>namespace</em> and the name of the <em>namespace</em> has been added as a <em>prefix</em> in the names of the <em>topics</em> of the <em>remap</em> for proper communication with the controllers.</p>
+
+<p>Contents of the file <code class="language-plaintext highlighter-rouge">two_arm_moveit_execution.launch</code>:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;launch&gt;</span>
+    <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"sim"</span> <span class="na">default=</span><span class="s">"false"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"debug"</span> <span class="na">default=</span><span class="s">"false"</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- By default, we do not start a database (it can be large) --&gt;</span>
+    <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"demo"</span> <span class="na">default=</span><span class="s">"false"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;group</span> <span class="na">ns=</span><span class="s">"ur10_1"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;rosparam</span> <span class="na">command=</span><span class="s">"load"</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_manipulator)/config/joint_names.yaml"</span><span class="nt">/&gt;</span>
+
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_manipulator)/launch/move_group.launch"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"debug"</span> <span class="na">default=</span><span class="s">"$(arg debug)"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"publish_monitored_planning_scene"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!--arg name="info" value="true"/--&gt;</span>
+      <span class="nt">&lt;/include&gt;</span>
+
+      <span class="c">&lt;!-- If database loading was enabled, start mongodb as well --&gt;</span>
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_config)/launch/default_warehouse_db.launch"</span> <span class="na">if=</span><span class="s">"$(arg demo)"</span><span class="nt">/&gt;</span>
+
+      <span class="c">&lt;!-- Remap follow_joint_trajectory --&gt;</span>
+      <span class="nt">&lt;remap</span> <span class="na">from=</span><span class="s">"/ur10_1/follow_joint_trajectory"</span> <span class="na">to=</span><span class="s">"/ur10_1/arm_controller/follow_joint_trajectory"</span><span class="nt">/&gt;</span>
+
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_config)/launch/moveit_rviz.launch"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"config"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"debug"</span> <span class="na">default=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/include&gt;</span>
+    <span class="nt">&lt;/group&gt;</span>
+
+    <span class="nt">&lt;group</span> <span class="na">ns=</span><span class="s">"ur10_2"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;rosparam</span> <span class="na">command=</span><span class="s">"load"</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_manipulator)/config/joint_names.yaml"</span><span class="nt">/&gt;</span>
+
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_manipulator)/launch/move_group.launch"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"debug"</span> <span class="na">default=</span><span class="s">"$(arg debug)"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"publish_monitored_planning_scene"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!--arg name="info" value="true"/--&gt;</span>
+      <span class="nt">&lt;/include&gt;</span>
+
+      <span class="c">&lt;!-- If database loading was enabled, start mongodb as well --&gt;</span>
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_config)/launch/default_warehouse_db.launch"</span> <span class="na">if=</span><span class="s">"$(arg demo)"</span><span class="nt">/&gt;</span>
+
+      <span class="c">&lt;!-- Remap follow_joint_trajectory --&gt;</span>
+      <span class="nt">&lt;remap</span> <span class="na">from=</span><span class="s">"/ur10_2/follow_joint_trajectory"</span> <span class="na">to=</span><span class="s">"/ur10_2/arm_controller/follow_joint_trajectory"</span><span class="nt">/&gt;</span>
+
+      <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">"$(find two_arm_moveit_config)/launch/moveit_rviz.launch"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"config"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">"debug"</span> <span class="na">default=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/include&gt;</span>
+    <span class="nt">&lt;/group&gt;</span>
+<span class="nt">&lt;/launch&gt;</span>
+</code></pre></div></div>
+
+<p>A test of what has been implemented so far is performed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+catkin_make clean
+catkin_make
+rospack profile 
+</code></pre></div></div>
+
+<ul>
+  <li>Terminal 1
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_manipulator two_arm_moveit_gazebo.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 2
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="computer-pick-and-place-1">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Pick and Place</h5>
+<p>As with the previous solutions, a very simple test is performed. To do this, you must first create the necessary scripts to correctly control the robot arms and grippers. Then, the same movements as in the previously proposed solutions will be executed.</p>
+
+<p>The following piece of code corresponds to the configuration to be able to communicate with the API of the node <code class="language-plaintext highlighter-rouge">move_group</code> when it is in a <em>namespace</em>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[...]</span>
+
+<span class="mi">1</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="mi">2</span>     <span class="n">moveit_commander</span><span class="p">.</span><span class="n">roscpp_initializer</span><span class="p">.</span><span class="n">roscpp_initialize</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="mi">3</span>     <span class="n">rospy</span><span class="p">.</span><span class="n">init_node</span><span class="p">(</span><span class="s">'ur10_1_arm_moveit'</span><span class="p">,</span>
+<span class="mi">4</span>                   <span class="n">anonymous</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="mi">5</span>
+<span class="mi">6</span>     <span class="n">PLANNING_GROUP_GRIPPER</span> <span class="o">=</span> <span class="s">"gripper"</span>
+<span class="mi">7</span>     <span class="n">PLANNING_GROUP_ARM</span> <span class="o">=</span> <span class="s">"manipulator"</span>
+<span class="mi">8</span>     <span class="n">PLANNING_NS</span> <span class="o">=</span> <span class="s">"/ur10_1/"</span>
+<span class="mi">9</span>     <span class="n">REFERENCE_FRAME</span> <span class="o">=</span> <span class="s">"/ur10_1/world"</span>
+<span class="mi">10</span> 
+<span class="mi">11</span>     <span class="c1">## Instantiate a RobotCommander object.  This object is an interface to
+</span><span class="mi">12</span>     <span class="c1">## the robot as a whole.
+</span><span class="mi">13</span>     <span class="n">robot</span> <span class="o">=</span> <span class="n">moveit_commander</span><span class="p">.</span><span class="n">RobotCommander</span><span class="p">(</span>
+<span class="mi">14</span>       <span class="s">"%srobot_description"</span><span class="o">%</span><span class="n">PLANNING_NS</span><span class="p">,</span> 
+<span class="mi">15</span>       <span class="n">ns</span><span class="o">=</span><span class="s">"/ur10_1/"</span>
+<span class="mi">16</span>     <span class="p">)</span>
+<span class="mi">17</span> 
+<span class="mi">18</span>     <span class="n">arm</span> <span class="o">=</span> <span class="n">moveit_commander</span><span class="p">.</span><span class="n">move_group</span><span class="p">.</span><span class="n">MoveGroupCommander</span><span class="p">(</span>
+<span class="mi">19</span>       <span class="n">PLANNING_GROUP_ARM</span><span class="p">,</span>
+<span class="mi">20</span>       <span class="s">"%srobot_description"</span><span class="o">%</span><span class="n">PLANNING_NS</span><span class="p">,</span> 
+<span class="mi">21</span>       <span class="n">ns</span><span class="o">=</span><span class="s">"/ur10_1/"</span>
+<span class="mi">22</span>     <span class="p">)</span>
+<span class="mi">23</span>
+<span class="mi">24</span>     <span class="n">gripper</span> <span class="o">=</span> <span class="n">moveit_commander</span><span class="p">.</span><span class="n">move_group</span><span class="p">.</span><span class="n">MoveGroupCommander</span><span class="p">(</span>
+<span class="mi">25</span>       <span class="n">PLANNING_GROUP_GRIPPER</span><span class="p">,</span> 
+<span class="mi">26</span>       <span class="s">"%srobot_description"</span><span class="o">%</span><span class="n">PLANNING_NS</span><span class="p">,</span> 
+<span class="mi">27</span>       <span class="n">ns</span><span class="o">=</span><span class="s">"/ur10_1/"</span>
+<span class="mi">28</span>    <span class="p">)</span>
+<span class="mi">29</span>
+<span class="mi">30</span>     <span class="c1">## We create this DisplayTrajectory publisher which is used below to publish
+</span><span class="mi">31</span>     <span class="c1">## trajectories for RVIZ to visualize.
+</span><span class="mi">32</span>     <span class="n">display_trajectory_publisher</span> <span class="o">=</span> <span class="n">rospy</span><span class="p">.</span><span class="n">Publisher</span><span class="p">(</span>
+<span class="mi">33</span>       <span class="s">'/move_group/display_planned_path'</span><span class="p">,</span>
+<span class="mi">34</span>       <span class="n">moveit_msgs</span><span class="p">.</span><span class="n">msg</span><span class="p">.</span><span class="n">DisplayTrajectory</span><span class="p">,</span> 
+<span class="mi">35</span>    <span class="n">queue_size</span><span class="o">=</span><span class="mi">10</span>
+<span class="mi">36</span>     <span class="p">)</span>
+<span class="mi">37</span>
+<span class="mi">38</span>     <span class="n">rospy</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="mi">39</span> 
+<span class="mi">40</span>     <span class="n">arm</span><span class="p">.</span><span class="n">set_num_planning_attempts</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="mi">41</span>     <span class="n">arm</span><span class="p">.</span><span class="n">set_planning_time</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="mi">42</span>     <span class="n">arm</span><span class="p">.</span><span class="n">allow_looking</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="mi">43</span>     <span class="n">arm</span><span class="p">.</span><span class="n">allow_replanning</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="mi">44</span>     <span class="n">arm</span><span class="p">.</span><span class="n">set_pose_reference_frame</span><span class="p">(</span><span class="n">REFERENCE_FRAME</span><span class="p">)</span>
+<span class="mi">45</span>     <span class="n">arm</span><span class="p">.</span><span class="n">set_goal_position_tolerance</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="mi">46</span>     <span class="n">arm</span><span class="p">.</span><span class="n">set_goal_orientation_tolerance</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="mi">47</span> 
+<span class="mi">48</span>     <span class="n">gripper</span><span class="p">.</span><span class="n">set_num_planning_attempts</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="mi">49</span>     <span class="n">gripper</span><span class="p">.</span><span class="n">allow_replanning</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="mi">50</span>     <span class="n">gripper</span><span class="p">.</span><span class="n">allow_looking</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="mi">51</span>
+<span class="mi">52</span>     <span class="n">pick_place</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">gripper</span><span class="p">)</span>
+<span class="mi">53</span>
+<span class="mi">54</span>     <span class="c1">## When finished shut down moveit_commander.
+</span><span class="mi">55</span>     <span class="n">moveit_commander</span><span class="p">.</span><span class="n">roscpp_shutdown</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The configuration was defined in the function <code class="language-plaintext highlighter-rouge">main</code>, but it is not necessary to have it here. It is better to modulate it and pass the configuration via parameters, but it is sufficient for this explanation.</p>
+
+<ul>
+  <li>
+<strong>Line 2:</strong> The first thing you need to do is initialize <code class="language-plaintext highlighter-rouge">moveit_commander</code>. This is an API for the interface developed in <code class="language-plaintext highlighter-rouge">C++</code>, which is defined as a <em>wrapper</em> and provides most of the functionality of the interface of the <code class="language-plaintext highlighter-rouge">C++</code> version, but not all of the functionality of <em><code class="language-plaintext highlighter-rouge">MoveIt!</code></em> It is necessary because, among other things, it allows the calculation of Cartesian trajectories, which is the functionality that is mainly needed.</li>
+  <li>
+<strong>Line 3:</strong> Initialize the node named <code class="language-plaintext highlighter-rouge">ur10_1_arm</code> moveit.</li>
+  <li>
+<strong>Lines 6-9:</strong> The constants are defined to facilitate configuration. The first two lines (6 and 7) define the names given to the planning groups, in this case they were named <code class="language-plaintext highlighter-rouge">gripper</code> for the gripper and <code class="language-plaintext highlighter-rouge">manipulator</code> for the UR10 cobot arm. Lines 8 and 9 define the information needed to configure the planner. <code class="language-plaintext highlighter-rouge">PLANNING_NS</code> contains the name of the <em>namespace</em> containing the node <code class="language-plaintext highlighter-rouge">move_group</code> you want to communicate with, and <code class="language-plaintext highlighter-rouge">REFERENCE_FRAME</code> is the link used as reference for calculating the trajectory with respect to the <em>end-effector</em> (<code class="language-plaintext highlighter-rouge">ee_link</code>), in this case it would be the same as <code class="language-plaintext highlighter-rouge">/ur10_1/world</code>, but correct would be to take the link <code class="language-plaintext highlighter-rouge">/ur10_1/base_link</code> as reference.</li>
+  <li>
+<strong>Line 13:</strong> Initializes the <code class="language-plaintext highlighter-rouge">RobotCommander</code>, which is used to control the robot, as specified in the code. You need to pass the <em>namespace</em> as a parameter and which <code class="language-plaintext highlighter-rouge">robot_description</code> to use to define the robot, because at the moment there are three descriptions, namely the one for <code class="language-plaintext highlighter-rouge">Gazebo</code> (<code class="language-plaintext highlighter-rouge">robot_description</code>) and the other two defined in the <code class="language-plaintext highlighter-rouge">planning_context.launch</code> which are instantiated in their respective <em>namespaces</em>, so we have <code class="language-plaintext highlighter-rouge">/ur10_1/robot_description </code> and <code class="language-plaintext highlighter-rouge">/ur10_2/robot_description</code>.</li>
+  <li>
+<strong>Lines 18 and 24:</strong> An interface is created for a group of joints, in this case the <code class="language-plaintext highlighter-rouge">arm</code> interface for the group of dynamic <code class="language-plaintext highlighter-rouge">joints</code> of the UR10 cobot arm, and the <code class="language-plaintext highlighter-rouge">gripper</code> interface for the joint that controls the gripper. It is through these interfaces that the planning of the trajectories and their execution is done (it is possible to do it through the robot interface as it contains these two interfaces, but it is clearer and more convenient to do it this way.</li>
+  <li>
+<strong>Line 32:</strong> As it says in the comment, <code class="language-plaintext highlighter-rouge">display_trajectory_publisher</code> publishes in the <em>topic</em> <code class="language-plaintext highlighter-rouge">/move_group/display_planned_path</code> that <em>Rviz</em> subscribes to in order to display trajectories, it is not necessary, but for debugging it is recommended.</li>
+  <li>
+<strong>Line 38:</strong> Just wait two seconds, make sure that the previous instances have been correctly loaded into the system, you must take into account that some of them instantiate nodes and if the computer you start on is slow, you can cause an undesirable situation.</li>
+  <li>
+<strong>Lines 40-50:</strong> Here you configure some options of the motion planner to use, by default it is RTT but this can be changed. The most important options are the last ones in lines 44, 45 and 46. Line 44 defines the reference link that will be used to perform the planning, lines 45 and 45 define the acceptable margin of error of the result obtained by the motion planner for position and orientation. You have to be careful because the smaller the error you define, the longer the planner will take to give an answer. The same procedure applies to the <code class="language-plaintext highlighter-rouge">gripper</code> interface.</li>
+  <li>
+<strong>Line 52:</strong> Here is the <em>pick &amp; place</em>.</li>
+  <li>
+<strong>Line 55:</strong> Once the task is finished, <em>Pick &amp; Place</em> ends.</li>
+</ul>
+
+<p>After the detailed description of the code, it is easy for the script to control another robot that is in a different <em>namespace</em> to change the value of the variable <code class="language-plaintext highlighter-rouge">PLANNING_NS</code> to the name of the <em>namespace</em> where the target robot is defined. If you run <em>Pick &amp; Place</em> with both arms, you can see that they perform the task at the same time, with a small delay because one starts a little later than the other. You can run tests by starting the scripts at the wrong time and checking that they do indeed move at the same time.</p>
+
+<h5 id="computer-creation-of-the-scripts-that-will-carry-out-the-pick--place">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Creation of the scripts that will carry out the <em>Pick &amp; Place</em>
+</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>scripts
+<span class="nb">touch </span>two_arm_moveit_1.py
+<span class="nb">touch </span>two_arm_moveit_2.py
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py">multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_1.py</a></p>
+  </li>
+  <li>
+    <p>File <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py">multirobot/two_arm_moveit/two_arm_moveit_manipulator/scripts/two_arm_moveit_2.py</a></p>
+  </li>
+</ul>
+
+<h2>
+<a name="tests2">
+Execution of the tests
+</a>
+</h2>
+
+<p>To run the test:</p>
+
+<ul>
+  <li>Terminal 1
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_manipulator two_arm_moveit_gazebo.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 2
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>roslaunch two_arm_moveit_manipulator two_arm_moveit_execution.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 3
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>rosrun two_arm_moveit_manipulator two_arm_moveit_1.py 
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 4
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>rosrun two_arm_moveit_manipulator two_arm_moveit_2.py
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="book-final-results-information">
+<img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Final results information</h4>
+
+<ul>
+  <li>
+    <p>Visual result in <code class="language-plaintext highlighter-rouge">Gazebo</code>
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/two-arm-moveit-gazebo.png" alt="image" title="Result in Gazebo"></p>
+  </li>
+  <li>
+    <p>Scheme of the nodes and <em>topic</em>s of the system
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/two-arm-moveit-graph.png" alt="image" title="System nodes and topics"></p>
+  </li>
+</ul>
+
+<p>It checks if the communication between <code class="language-plaintext highlighter-rouge">Gazebo</code> and the replicas of <code class="language-plaintext highlighter-rouge">MoveIt!</code> works correctly. You can see two big groups where each cobot communicates with its assigned <code class="language-plaintext highlighter-rouge">move_group</code>. The communication with the controllers and the path of the transformations and values of the <code class="language-plaintext highlighter-rouge">joins</code> has a single origin, namely the <code class="language-plaintext highlighter-rouge">Gazebo</code> node, this is very important to avoid strange movements, depending on the frequency with which these disturbances occur.</p>
+
+<p>The path part of the <code class="language-plaintext highlighter-rouge">gazebo</code> node is the only one that can be found in the <em>topic</em>s <code class="language-plaintext highlighter-rouge">/joint_states</code> of both <em>namespaces</em>, the <code class="language-plaintext highlighter-rouge">move_group</code> node is also subscribed to this <em>topic</em>, then it reaches the <code class="language-plaintext highlighter-rouge">robot_state_publisher</code> node which performs the transformations and sends them through the <em>topic</em> <code class="language-plaintext highlighter-rouge">/tf</code> to which the <code class="language-plaintext highlighter-rouge">move_group</code> node is also subscribed, this is important because <code class="language-plaintext highlighter-rouge">move_group</code> uses the information coming from both for path planning.</p>
+
+<ul>
+  <li>Tree of transformations of the robot model
+<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/two-arm-moveit-tree.png" alt="image" title="Moveit Tree">
+</li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-13T01:19:56+01:00">March 13, 2022</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/moveit-one/" class="pagination--pager" title="One UR10 with gripper
+">Previous</a>
+    
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/moveit-four/" class="pagination--pager" title="Four UR10s with grippers
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      <div align="center" style="margin: 1em 0;">
+        <ins class="adsbygoogle" style="display:block; border-bottom: initial;" data-ad-client="ca-pub-7328585512091257" data-ad-slot="3049671934" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/Serru/MultiCobot-UR10-Gripper" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    
+      <li><a href="/MultiCobot-UR10-Gripper/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2022 Miguel Burgh. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/MultiCobot-UR10-Gripper/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+    <style>
+      .google-auto-placed {
+        margin: 2em auto;
+      }
+    </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  </body>
+</html>

@@ -1,0 +1,483 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Colaborative Multicobot System</title>
+<meta name="description" content="Multirobot system consisting of UR10s that allows simultaneous execution of tasks. It enables the control of different cobots with different controllers.">
+
+
+  <meta name="author" content="Miguel Burgh">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Colaborative Multicobot System">
+<meta property="og:title" content="Colaborative Multicobot System">
+<meta property="og:url" content="http://localhost:4000/MultiCobot-UR10-Gripper/">
+
+
+  <meta property="og:description" content="Multirobot system consisting of UR10s that allows simultaneous execution of tasks. It enables the control of different cobots with different controllers.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/MultiCobot-UR10-Gripper/assets/images/proyect-logo.png">
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/MultiCobot-UR10-Gripper/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Miguel Burgh",
+      "url": "http://localhost:4000/MultiCobot-UR10-Gripper/"
+    
+  }
+</script>
+
+
+  <meta name="google-site-verification" content="UQj93ERU9zgECodaaXgVpkjrFn9UrDMEzVamacSoQ8Y" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/MultiCobot-UR10-Gripper/feed.xml" type="application/atom+xml" rel="alternate" title="Colaborative Multicobot System Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/MultiCobot-UR10-Gripper/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--splash">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/MultiCobot-UR10-Gripper/">
+          Colaborative Multicobot System
+          <span class="site-subtitle">Developed with ROS Kinetic Kame</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/docs/introduction/">Documentation</a>
+            </li><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #2e2322; background-image: url('/MultiCobot-UR10-Gripper/assets/images/proyect-logo.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Colaborative Multicobot System
+
+        
+      </h1>
+      
+        <p class="page__lead">Multirobot system consisting of UR10s that allows simultaneous execution of tasks. It enables the control of different cobots with different controllers.
+</p>
+      
+      
+
+
+      
+      
+        <p>
+        
+          <a href="https://github.com/Serru/MultiCobot-UR10-Gripper" class="btn btn--light-outline btn--large"><i class='fab fa-fw fa-github'></i> View on Github</a>
+        
+      
+    </div>
+  
+  
+</div>
+
+
+
+<div id="main" role="main">
+  <article class="splash" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <meta itemprop="description" content="Multirobot system consisting of UR10s that allows simultaneous execution of tasks. It enables the control of different cobots with different controllers.">
+    
+    
+
+    <section class="page__content" itemprop="text">
+      <p>Multi-robot system of collaborative robots (cobots) <a href="https://www.universal-robots.com/products/ur10-robot/">UR10s</a> with grippers from Robotiq (<a href="https://robotiq.com/products/2f85-140-adaptive-robot-gripper">robotiq_85_gripper</a>) that allows simultaneous execution of tasks with different types of controllers and brands of cobots, as well as direct control of the cobot by a person via the Leap Motion device.</p>
+
+<h2 id="documentation">Documentation</h2>
+
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item--left">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/MultiCobot-UR10-Gripper/assets/images/mm-customizable-feature.png" alt="Basic System Configuration" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Basic System Configuration</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>Here is a step by step explanation of how to install <strong>ROS Kinetic Kame</strong> and all the necessary tools and packages.</p>
+
+            </div>
+          
+
+          
+            <p><a href="/MultiCobot-UR10-Gripper/docs/requirements/" class="btn btn--primary">Learn more</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item--right">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/MultiCobot-UR10-Gripper/assets/images/solo-dos-urdf-robot.png" alt="Design and development for one, two and four robots" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Design and development for one, two and four robots</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>The proposed solutions revolve around the changes and combinations between the robotic modeling (<code class="language-plaintext highlighter-rouge">URDF</code>) and the <code class="language-plaintext highlighter-rouge">ROS packages</code> to be used. Organizationally, the proposed solutions are divided into those that use the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package and those that do not.</p>
+
+            </div>
+          
+
+          
+            <p><a href="/MultiCobot-UR10-Gripper/docs/design-multi-robot-system/" class="btn btn--primary">Learn more</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item--left">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/MultiCobot-UR10-Gripper/assets/images/lm-moveit-up.png" alt="Design and integration of the Leap Motion device into the system to control one and two robots" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Design and integration of the Leap Motion device into the system to control one and two robots</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>Here we explain how Leap Motion is integrated into the system developed so far to control up to two robots simultaneously for the different solutions proposed.</p>
+
+            </div>
+          
+
+          
+            <p><a href="/MultiCobot-UR10-Gripper/docs/lm-design-integration/" class="btn btn--primary">Learn more</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item--right">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/MultiCobot-UR10-Gripper/assets/images/lm-campero-suela-2.png" alt="Configuration for a UR10 with gripper using its motion planning on the physical robot" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Configuration for a UR10 with gripper using its motion planning on the physical robot</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>All of the configuration previously done in the Gazebo simulator was tested on the physical robot named <strong>Campero</strong> owned by the university.</p>
+
+            </div>
+          
+
+          
+            <p><a href="/MultiCobot-UR10-Gripper/docs/robot-campero/" class="btn btn--primary">Learn more</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<h2 id="video-with-the-results">Video with the results</h2>
+<p>Here is a video with the results of the simulations performed in <code class="language-plaintext highlighter-rouge">Gazebo</code>. The video shows two and four robots performing a <em>pick &amp; place</em> without human intervention. Then it shows how a person controls two cobots with Leap Motion, and finally the developed result was tested with the physical Campero robot.</p>
+
+<p>
+<a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
+  <img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Results of the project." />
+</a>
+</p>
+
+<h2 id="quick-start">Quick start</h2>
+
+<ul>
+  <li>Clone this repository:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/Serru/MultiCobot-UR10-Gripper
+</code></pre></div>    </div>
+  </li>
+  <li>Set the catkin Workspace:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src
+catkin_init_workspace
+</code></pre></div>    </div>
+  </li>
+  <li>Install all the dependecies:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> /opt/ros/kinetic/setup.bash
+<span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+rosdep update
+rosdep <span class="nb">install</span> <span class="nt">-r</span> <span class="nt">--rosdistro</span> kinetic <span class="nt">--ignore-src</span> <span class="nt">--from-paths</span> src
+</code></pre></div>    </div>
+  </li>
+  <li>Build the repository
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>catkin_make
+rospack profile
+<span class="nb">source </span>devel/setup.bash
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Launch Gazebo with two robots doing a simple Pick &amp; Place</p>
+
+    <ul>
+      <li>Terminal 1:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>roslaunch two_arm_no_moveit_gazebo ur10_joint_limited.launch
+</code></pre></div>        </div>
+      </li>
+      <li>Terminal 2:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosrun two_arm_no_moveit_manipulator ur10_1_robot_manipulator.py
+</code></pre></div>        </div>
+      </li>
+      <li>Terminal 3:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosrun two_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="acknowledgement">Acknowledgement</h2>
+
+<p>This work is part of the <a href="https://i3a.unizar.es/es/grupos-de-investigacion/ropert">RoPeRT</a> research group of the <a href="https://i3a.unizar.es">i3A</a>, the <a href="http://www.unizar.es/">University of Zaragoza</a>.</p>
+
+<p><img src="https://www.unizar.es/sites/default/files/i3a.png" alt="image" /></p>
+
+<hr />
+
+<p>The developed work has been experimentally evaluated and validated, showing a correct operation of the physical robot <a href="http://commandia.unizar.es/wp-content/uploads/camperoRobot.jpg">Campero</a>. For this reason, this work is part of the activities of the project <a href="http://commandia.unizar.es/">COMMANDIA (2019)</a>, co-funded by the <a href="https://www.interreg-sudoe.eu/inicio">Interreg Sudoe Program</a> and the <a href="https://ec.europa.eu/regional_policy/es/funding/erdf/">European Regional Development Fund (ERDF)</a>.</p>
+
+<p><img src="http://commandia.unizar.es/wp-content/uploads/cropped-logoCommandia-1.png" alt="image" /></p>
+
+<h2 id="authors">Authors</h2>
+<ul>
+  <li><a href="https://github.com/Serru">Burgh Oliván, Miguel</a> - <em>Author of the Final Degree Project entitled <strong>Multirobot system for the collaborative transport of objects</strong>.</em></li>
+  <li><a href="https://i3a.unizar.es/es/investigadores/gonzalo-lopez-nicolas">López Nicolás, Gonzalo</a> - <em>Director of the Final Degree Project entitled <strong>Multirobot system for the collaborative transport of objects</strong>.</em></li>
+</ul>
+
+<p>The memory of the Final Degree Project can be found in the <a href="https://deposita.unizar.es/record/66296?ln=es">Repository</a> of TFGs of the <a href="http://www.unizar.es/">University of Zaragoza</a>.</p>
+
+<h2 id="recognition">Recognition</h2>
+
+<p>Please cite this work if the content of this repository has been useful to you:</p>
+
+<p>BibTeX:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@article{
+    BurghOliván:66296,
+    author = "Burgh Oliván, Miguel Yankan and López Nicolás, Gonzalo",
+    title = "{Sistema multirobot para el transporte colaborativo de objetos}",
+    year  = "2022",
+}
+</code></pre></div></div>
+
+    </section>
+  </article>
+</div>
+
+      <div align="center" style="margin: 1em 0;">
+        <ins class="adsbygoogle"
+             style="display:block; border-bottom: initial;"
+             data-ad-client="ca-pub-7328585512091257"
+             data-ad-slot="3049671934"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/Serru/MultiCobot-UR10-Gripper" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    
+      <li><a href="/MultiCobot-UR10-Gripper/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 Miguel Burgh. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/MultiCobot-UR10-Gripper/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+    <style>
+      .google-auto-placed {
+        margin: 2em auto;
+      }
+    </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  </body>
+</html>

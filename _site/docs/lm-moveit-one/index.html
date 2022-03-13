@@ -1,0 +1,608 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>One UR10 with gripper &amp; Leap Motion - Colaborative Multicobot System</title>
+<meta name="description" content="Here we explain how Leap Motion is integrated into the system developed so far to control one robot in this repository.">
+
+
+  <meta name="author" content="Miguel Burgh">
+  
+  <meta property="article:author" content="Miguel Burgh">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Colaborative Multicobot System">
+<meta property="og:title" content="One UR10 with gripper &amp; Leap Motion">
+<meta property="og:url" content="http://localhost:4000/MultiCobot-UR10-Gripper/docs/lm-moveit-one/">
+
+
+  <meta property="og:description" content="Here we explain how Leap Motion is integrated into the system developed so far to control one robot in this repository.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/MultiCobot-UR10-Gripper/assets/images/site-logo.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-03-13T01:19:56+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/MultiCobot-UR10-Gripper/docs/lm-moveit-one/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Miguel Burgh",
+      "url": "http://localhost:4000/MultiCobot-UR10-Gripper/"
+    
+  }
+</script>
+
+
+  <meta name="google-site-verification" content="UQj93ERU9zgECodaaXgVpkjrFn9UrDMEzVamacSoQ8Y" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/MultiCobot-UR10-Gripper/feed.xml" type="application/atom+xml" rel="alternate" title="Colaborative Multicobot System Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/MultiCobot-UR10-Gripper/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/MultiCobot-UR10-Gripper/">
+          Colaborative Multicobot System
+          <span class="site-subtitle">Developed with ROS Kinetic Kame</span>
+        </a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/docs/introduction/">Documentation</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/about/">About</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox">
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Getting Started</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/introduction/">Introduction</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Basic System Setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/requirements/">Requirements</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-dependencies/">ROS Kinetic &amp; dependencies</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-packages/">ROS packages</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup/">Leap Motion's setup</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup-testing/">Testing the setup</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Design &amp; development</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/design-multi-robot-system/">Design of a multi-robot system</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-planner-solution/">Solution with our motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-motion-planning/">Solution with MoveIt's motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Integration of Leap Motion</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-design-integration/">Design &amp; Integration</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; our own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-one/" class="active">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Physical robot's setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/robot-campero/">Robot Campero</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Others</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/help-support/">Help &amp; Support</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/authors/">Authors</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/acknowledgement/">Acknowledgement</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/recognition/">Recognition</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/license/">License</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="One UR10 with gripper &amp; Leap Motion">
+    <meta itemprop="description" content="Here we explain how Leap Motion is integrated into the system developed so far to control one robot in this repository.">
+    <meta itemprop="datePublished" content="2022-03-13T01:19:56+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">One UR10 with gripper &amp; Leap Motion
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title">
+<i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+<li>
+<a href="#book-implementing-the-manipulator-with-leap-motion"><img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Implementing the manipulator with Leap Motion</a><ul>
+<li><a href="#computer-create-package"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Create package</a></li>
+<li><a href="#computer-modified-from-the-original-repository"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Modified from the original repository.</a></li>
+</ul>
+</li>
+<li><a href="#computer-tests-with-the-gazebo-simulator"><img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Tests with the Gazebo simulator</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png" alt="image" title="Loaded the URDF model of the UR10 robot"></p>
+
+<p>This section is the continuation of phases 1, 2 and 3, where the integration of <em>Leap Motion</em> into the system takes place, i.e. phases 4 and 5. In the previous phases, the robots were controlled by sending the previously defined trajectories to perform the <em>Pick &amp; Place</em>, but now this is done by <em>Leap Motion</em>, controlled by a person who sends the commands to the robot.</p>
+
+<p>For this purpose, part of the <em>Leap Motion</em> repository is directly modified and adapted to properly control the simulated robot. The idea is identical to what was presented above, but the data input is the information provided by <em>Leap Motion</em>. This information needs to be properly processed and adapted for use with the API that provides it.</p>
+
+<h2 id="book-implementing-the-manipulator-with-leap-motion">
+<img class="emoji" title=":book:" alt=":book:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4d6.png" height="20" width="20"> Implementing the manipulator with <em>Leap Motion</em>
+</h2>
+
+<p>There are a few things to keep in mind when implementing this:</p>
+
+<ul>
+  <li>Determining the position of the robot using the API of the <code class="language-plaintext highlighter-rouge">move_group</code> node.</li>
+  <li>The working environment of the <em>robot</em>.</li>
+  <li>The working environment of <em>Leap Motion</em>.</li>
+</ul>
+
+<p>Since we want the robot to follow the movements of <em>Leap Motion</em>, we will implement a controller whose workspace is contained in the robot’s workspace.</p>
+
+<h3 id="computer-create-package">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Create package</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_moveit
+catkin_create_pkg two_arm_moveit_leap_motion rospy
+<span class="nb">cd </span>two_arm_moveit_leap_motion
+<span class="nb">mkdir </span>scripts
+<span class="nb">cd </span>scripts
+<span class="nb">cp</span> ~/MultiCobot-UR10-Gripper/src/multirobot/two_arm_no_moveit/two_arm_no_moveit_leap_motion/scripts/leap_interface.py <span class="nb">.</span>
+<span class="nb">touch </span>ur10_1_lm_robot_manipulator.py
+<span class="nb">touch </span>ur10_2_lm_robot_manipulator.py
+<span class="nb">touch </span>sender.py
+<span class="nb">touch </span>leap_interface.py
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Contents of the file <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/one_arm_moveit/one_arm_moveit_leap_motion/scripts/lm_robot_manipulator.py">lm_robot_manipulator.py</a>.</p>
+  </li>
+  <li>
+    <p>Contents of file <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/multirobot/two_arm_moveit/two_arm_moveit_leap_motion/scripts/sender.py">sender.py</a>.</p>
+  </li>
+</ul>
+
+<h3 id="computer-modified-from-the-original-repository">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Modified from the original repository.</h3>
+
+<p>The following files were created: <em>leapcobotright.msg</em> and <em>leapcobotleft.msg</em> in the <em>msg</em> directory of the <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/tree/main/src/leap_motion">Leap Motion</a> repository:</p>
+
+<ul>
+  <li>
+    <p>Contents of <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotright.msg">leapcobotright.msg</a>.</p>
+  </li>
+  <li>
+    <p>Contents of <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/msg/leapcobotleft.msg">leapcobotleft.msg</a>.</p>
+  </li>
+  <li>
+    <p>And the file <a href="https://github.com/Serru/MultiCobot-UR10-Gripper/blob/main/src/leap_motion/CMakeLists.txt">CMakeLists.txt</a>, where the newly created message files are added for compilation:</p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>...]
+<span class="c">## Generate messages in the 'msg' folder</span>
+add_message_files<span class="o">(</span>
+  FILES
+  Arm.msg
+  Bone.msg
+  Finger.msg
+  Gesture.msg
+  Hand.msg
+  Human.msg
+
+  <span class="c"># For backwards compatibility with the old driver files</span>
+  leap.msg
+  leapros.msg
+  leapcobotright.msg
+  leapcobotleft.msg
+<span class="o">)</span>
+<span class="o">[</span>...]
+</code></pre></div></div>
+
+<h2 id="computer-tests-with-the-gazebo-simulator">
+<img class="emoji" title=":computer:" alt=":computer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png" height="20" width="20"> Tests with the <em>Gazebo</em> simulator</h2>
+<p>At least 4 terminals are needed to run the tests, although they can be reduced in the startup files to run them automatically. But to better visualize the information sent and for debugging, it was left like this.</p>
+
+<ul>
+  <li>Terminal 1:
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+<span class="nb">source </span>devel/setup.bash
+roslaunch one_arm_moveit_gazebo ur10_joint_limited.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 2:
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+<span class="nb">source </span>devel/setup.bash
+roslaunch one_arm_moveit_manipulator one_arm_moveit_execution.launch
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 3:
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/MultiCobot-UR10-Gripper
+<span class="nb">source </span>devel/setup.bash
+rosrun one_arm_moveit_leap_motion sender.py
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 4:
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>cd ~/MultiCobot-UR10-Gripper
+source devel/setup.bash
+rosrun one_arm_moveit_leap_motion lm_robot_manipulator.py 
+</code></pre></div>    </div>
+  </li>
+  <li>Terminal 5 (in case the <em>Leap Motion</em> device fails):
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>service leapd restart
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-13T01:19:56+01:00">March 13, 2022</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/lm-own-two/" class="pagination--pager" title="Two UR10s with grippers &amp; Leap Motion
+">Previous</a>
+    
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-two/" class="pagination--pager" title="Two UR10s with grippers &amp; Leap Motion
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      <div align="center" style="margin: 1em 0;">
+        <ins class="adsbygoogle" style="display:block; border-bottom: initial;" data-ad-client="ca-pub-7328585512091257" data-ad-slot="3049671934" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/Serru/MultiCobot-UR10-Gripper" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    
+      <li><a href="/MultiCobot-UR10-Gripper/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2022 Miguel Burgh. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/MultiCobot-UR10-Gripper/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+    <style>
+      .google-auto-placed {
+        margin: 2em auto;
+      }
+    </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  </body>
+</html>

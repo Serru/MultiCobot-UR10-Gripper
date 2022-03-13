@@ -1,0 +1,555 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Solution with MoveIt’s motion planning - Colaborative Multicobot System</title>
+<meta name="description" content="In the schematic design, the main component that performs the motion planning functions is the MoveIt! package. This design is based on replication of the components that motion planner needs for its operation (the main node is move_group). Each replication is a motion planner assigned to each of the cobots, which are delimited in their own space or namespace.">
+
+
+  <meta name="author" content="Miguel Burgh">
+  
+  <meta property="article:author" content="Miguel Burgh">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Colaborative Multicobot System">
+<meta property="og:title" content="Solution with MoveIt’s motion planning">
+<meta property="og:url" content="http://localhost:4000/MultiCobot-UR10-Gripper/docs/moveit-motion-planning/">
+
+
+  <meta property="og:description" content="In the schematic design, the main component that performs the motion planning functions is the MoveIt! package. This design is based on replication of the components that motion planner needs for its operation (the main node is move_group). Each replication is a motion planner assigned to each of the cobots, which are delimited in their own space or namespace.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/MultiCobot-UR10-Gripper/assets/images/site-logo.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-03-13T01:19:56+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/MultiCobot-UR10-Gripper/docs/moveit-motion-planning/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Miguel Burgh",
+      "url": "http://localhost:4000/MultiCobot-UR10-Gripper/"
+    
+  }
+</script>
+
+
+  <meta name="google-site-verification" content="UQj93ERU9zgECodaaXgVpkjrFn9UrDMEzVamacSoQ8Y" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/MultiCobot-UR10-Gripper/feed.xml" type="application/atom+xml" rel="alternate" title="Colaborative Multicobot System Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/MultiCobot-UR10-Gripper/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/MultiCobot-UR10-Gripper/">
+          Colaborative Multicobot System
+          <span class="site-subtitle">Developed with ROS Kinetic Kame</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/docs/introduction/">Documentation</a>
+            </li><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Getting Started</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/introduction/">Introduction</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Basic System Setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/requirements/">Requirements</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-dependencies/">ROS Kinetic &amp; dependencies</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/ros-packages/">ROS packages</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup/">Leap Motion's setup</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-setup-testing/">Testing the setup</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Design &amp; development</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/design-multi-robot-system/">Design of a multi-robot system</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-planner-solution/">Solution with our motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/own-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-motion-planning/" class="active">Solution with MoveIt's motion planning</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-one/">One UR10 with gripper</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-two/">Two UR10s with grippers</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/moveit-four/">Four UR10s with grippers</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Integration of Leap Motion</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-design-integration/">Design &amp; Integration</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; our own motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-own-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Leap Motion &amp; MoveIt! motion planner</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-one/">One UR10 with gripper &amp; Leap Motion</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/lm-moveit-two/">Two UR10s with grippers &amp; Leap Motion</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Physical robot's setup</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/robot-campero/">Robot Campero</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Others</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/help-support/">Help &amp; Support</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/authors/">Authors</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/acknowledgement/">Acknowledgement</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/recognition/">Recognition</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/docs/license/">License</a></li>
+          
+            <li><a href="/MultiCobot-UR10-Gripper/terms/">Terms &amp; Privacy Policy</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Solution with MoveIt’s motion planning">
+    <meta itemprop="description" content="In the schematic design, the main component that performs the motion planning functions is the MoveIt! package. This design is based on replication of the components that motion planner needs for its operation (the main node is move_group). Each replication is a motion planner assigned to each of the cobots, which are delimited in their own space or namespace.">
+    <meta itemprop="datePublished" content="2022-03-13T01:19:56+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Solution with MoveIt’s motion planning
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#index">Index</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="index">Index</h2>
+<ul>
+  <li><a href="#modeling">Modeling of multiple robots in the <em>URDF</em> file</a></li>
+  <li><a href="#replication">Replicating the <code class="language-plaintext highlighter-rouge">MoveIt!</code> node</a></li>
+</ul>
+
+<h2>
+<a name="modeling">
+Modeling of multiple robots in the <i>URDF</i> file
+</a>
+</h2>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion-urdf.png" alt="image" title="Multirobot system by modeling the URDF file" /></p>
+
+<p>In the schematic design, the main component that performs the planner functions is the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package. It is based on adding robots in the <em>URDF</em> file and the <code class="language-plaintext highlighter-rouge">MoveIt!</code> planner recognizes them as a single robot that receives the shared values with the motion planner of its <code class="language-plaintext highlighter-rouge">end-effectors</code> (API of the <code class="language-plaintext highlighter-rouge">move_group</code> node) and sends these received values as a single trajectory to the controller to execute the desired motion.</p>
+
+<p><strong>The advantages of this proposal are:</strong></p>
+
+<ul>
+  <li>The power of the functions offered by <code class="language-plaintext highlighter-rouge">MoveIt!</code> for each robot as a whole.</li>
+  <li>The simplicity of setup, which is largely automatic with the <code class="language-plaintext highlighter-rouge">MoveIt Setup Assistant</code>.</li>
+  <li>The flexibility to adapt or integrate future elements that require the functionalities of <code class="language-plaintext highlighter-rouge">MoveIt!</code>, such as devices for the development of computer vision, <em>deep learning</em>, navigation, etc.</li>
+</ul>
+
+<p><strong>The disadvantages are:</strong></p>
+
+<ul>
+  <li>Time required to plan trajectories, since the trajectories of each <code class="language-plaintext highlighter-rouge">end-effector</code> must be determined in advance, to be combined later, as if it were the movement of a single robot.</li>
+  <li>There is only one group that manages the movements of the cobots, which means that it has to be reconfigured each time a robot is added to the system, which affects the scalability of the system.</li>
+  <li>It is not possible to control different models and brands of cobots at the same time, as they may require different controls.</li>
+</ul>
+
+<p>This solution has a very important advantage: it knows the movements of all robots and can avoid them when planning paths to reach the desired position. But the package architecture of <code class="language-plaintext highlighter-rouge">MoveIt!</code> does not allow to control multiple robots with different controllers.</p>
+
+<p>If you want to control multiple robots with this design, you could achieve this by executing the movements of each robot one after the other, instead of achieving the desired simultaneity.</p>
+
+<p>If you force this (by running two scripts that send instructions to schedule the desired trajectories for each controller), the <code class="language-plaintext highlighter-rouge">MoveIt!</code> node <code class="language-plaintext highlighter-rouge">move_group</code> sends a message saying that the instruction is <em>PREEMTED</em>, which means that the system scheduler has deferred it as future work.</p>
+
+<p>To work around this problem, the <code class="language-plaintext highlighter-rouge">move_group</code> node would need to be set to assume that it is processing a single controller. To achieve this, you need to create at least three manipulator groups during setup with the <code class="language-plaintext highlighter-rouge">MoveIt Setup Assistant</code>, one for each arm along with its <code class="language-plaintext highlighter-rouge">end-effector</code> and another group containing the two previously created groups.</p>
+
+<p>Once you have this configuration, you need to create the trajectory of each arm without executing it and properly enter the values of the joints of each robot for this trajectory into the group with both robots to be executed later.</p>
+
+<p>This proposal has already been implemented by <a href="https://github.com/o2ac/o2ac-ur/"><em>TEAM O2AC for the World Robot Summit 2020 Assembly Challenge</em></a>.</p>
+
+<h2>
+<a name="replication">
+Replicating the <a href="https://github.com/ros-planning/moveit"><i> MoveIt!</i></a> node
+</a>
+</h2>
+
+<p><img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/Diseno-moveit-general-dos-cobots-leap-motion.png" alt="image" title="Multirobot system through node replication" /></p>
+
+<p>In the schematic design, the main component that performs the motion planning functions is the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package. This design is based on replication of the components that motion planner needs for its operation (the main node is <code class="language-plaintext highlighter-rouge">move_group</code>). Each replication is a motion planner assigned to each of the cobots, which are delimited in their own space or <code class="language-plaintext highlighter-rouge">namespace</code>.</p>
+
+<p>In the robot description, only one cobot description is needed and the number of robots it can control simultaneously is directly related to the number of motion planner replications with different <code class="language-plaintext highlighter-rouge">namespaces</code>. The numbers in the figure indicate the order of the phases during development.</p>
+
+<p><strong>The advantages of this proposal are:</strong></p>
+
+<ul>
+  <li>The scalability of the system and the number of cobots.</li>
+  <li>The power of the features offered by <code class="language-plaintext highlighter-rouge">MoveIt!</code> for each robot.</li>
+  <li>A simple configuration, most of which is created automatically with the <code class="language-plaintext highlighter-rouge">MoveIt Setup Assistant</code>.</li>
+  <li>Flexibility to adapt or integrate future elements that require the functionalities of <code class="language-plaintext highlighter-rouge">MoveIt!</code>, such as devices for computer vision work development, <em>deep learning</em>, navigation, etc.</li>
+  <li>Enables simultaneous control of different models and brands of cobots.</li>
+  <li>Behind the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package is a very active community that supports its users.</li>
+</ul>
+
+<p><strong>The disadvantages are:</strong></p>
+
+<ul>
+  <li>Little documentation on proper configuration for simultaneous control of multiple robots.</li>
+  <li>Restriction of the functionalities of the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package to each robot but not as a whole, e.g.: the function to plan paths to avoid collisions between robots would not work properly because it has no knowledge of it.</li>
+  <li>Loss of efficiency when scaling: if you scale the system and increase the number of cobots it controls, the functions that currently occupy a resource will also be replicated, but will not perform any work.</li>
+  <li>It is difficult to make changes to the source code of the <code class="language-plaintext highlighter-rouge">MoveIt!</code> package functions.</li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-13T01:19:56+01:00">March 13, 2022</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/own-four/" class="pagination--pager" title="Four UR10s with grippers
+">Previous</a>
+    
+    
+      <a href="/MultiCobot-UR10-Gripper/docs/moveit-one/" class="pagination--pager" title="One UR10 with gripper
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      <div align="center" style="margin: 1em 0;">
+        <ins class="adsbygoogle"
+             style="display:block; border-bottom: initial;"
+             data-ad-client="ca-pub-7328585512091257"
+             data-ad-slot="3049671934"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/Serru/MultiCobot-UR10-Gripper" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    
+      <li><a href="/MultiCobot-UR10-Gripper/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 Miguel Burgh. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/MultiCobot-UR10-Gripper/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+    <style>
+      .google-auto-placed {
+        margin: 2em auto;
+      }
+    </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  </body>
+</html>

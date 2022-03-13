@@ -1,0 +1,153 @@
+# example navigation
+foo:
+  - title: "Parent Link 1"
+    url: /parent-1-page-url/
+    children:
+      - title: "Child Link 1"
+        url: /child-1-page-url/
+      - title: "Child Link 2"
+        url: /child-2-page-url/
+  - title: "Parent Link 2"
+    url: /parent-2-page-url/
+    children:
+      - title: "Child Link 1"
+        url: /child-1-page-url/
+      - title: "Child Link 2"
+        url: /child-2-page-url/
+      - title: "Child Link 3"
+        url: /child-3-page-url/
+
+
+# main links
+main:
+  - title: "Documentation"
+    url: /docs/introduction/
+  - title: "About"
+    url: /about/
+  #- title: "Sample Posts"
+  #  url: /year-archive/
+  #- title: "Sample Collections"
+  #  url: /collection-archive/
+  - title: "Terms &amp; Privacy Policy"
+    url: /terms/
+
+
+# documentation links
+docs:
+  - title: Getting Started
+    children:
+      - title: "Introduction"
+        url: /docs/introduction/
+  - title: Basic System Setup
+    children:
+      - title: "Requirements"
+        url: /docs/requirements/
+      - title: "ROS Kinetic &amp; dependencies"
+        url: /docs/ros-dependencies/
+      - title: "ROS packages"
+        url: /docs/ros-packages/
+      - title: "Leap Motion's setup"
+        url: /docs/lm-setup/
+      - title: "Testing the setup"
+        url: /docs/lm-setup-testing/
+  - title: Design &amp; development
+    children:
+      - title: "Design of a multi-robot system"
+        url: /docs/design-multi-robot-system/
+  - title: Own motion planner
+    children:
+      - title: "Solution with our motion planning"
+        url: /docs/own-planner-solution/
+      - title: "One UR10 with gripper"
+        url: /docs/own-one/
+      - title: "Two UR10s with grippers"
+        url: /docs/own-two/
+      - title: "Four UR10s with grippers"
+        url: /docs/own-four/
+  - title: MoveIt! motion planner
+    children:
+      - title: "Solution with MoveIt's motion planning"
+        url: /docs/moveit-motion-planning/
+      - title: "One UR10 with gripper"
+        url: /docs/moveit-one/
+      - title: "Two UR10s with grippers"
+        url: /docs/moveit-two/
+      - title: "Four UR10s with grippers"
+        url: /docs/moveit-four/
+  - title: Integration of Leap Motion
+    children:
+      - title: "Design &amp; Integration"
+        url: /docs/lm-design-integration/
+  - title: Leap Motion &amp; our own motion planner
+    children:
+      - title: "One UR10 with gripper &amp; Leap Motion"
+        url: /docs/lm-own-one/
+      - title: "Two UR10s with grippers &amp; Leap Motion"
+        url: /docs/lm-own-two/
+  - title: Leap Motion &amp; MoveIt! motion planner
+    children:
+      - title: "One UR10 with gripper &amp; Leap Motion"
+        url: /docs/lm-moveit-one/
+      - title: "Two UR10s with grippers &amp; Leap Motion"
+        url: /docs/lm-moveit-two/
+  - title: Physical robot's setup
+    children:
+      - title: "Robot Campero"
+        url: /docs/robot-campero/
+  - title: Others
+    children:
+      - title: "Help &amp; Support"
+        url: /docs/help-support/
+      - title: "Authors"
+        url: /docs/authors/
+      - title: "Acknowledgement"
+        url: /docs/acknowledgement/
+      - title: "Recognition"
+        url: /docs/recognition/
+      - title: "License"
+        url: /docs/license/
+      - title: "Terms &amp; Privacy Policy"
+        url: /terms/
+
+# sidebar navigation list sample
+sidebar-sample:
+  - title: "Parent Page A"
+    children:
+      - title: "Child Page A1"
+        url: /
+      - title: "Child Page A2"
+        url: /
+      - title: "Child Page A3"
+        url: /
+      - title: "Child Page A4"
+        url: /
+  - title: "Parent Page B"
+    children:
+      - title: "Child Page B1"
+        url: /
+      - title: "Child Page B2"
+        url: /
+      - title: "Child Page B3"
+        url: /
+      - title: "Child Page B4"
+        url: /
+      - title: "Child Page B5"
+        url: /
+  - title: "Parent Page C"
+    children:
+      - title: "Child Page C1"
+        url: /
+      - title: "Child Page C2"
+        url: /
+      - title: "Child Page C3"
+        url: /
+      - title: "Child Page C4"
+        url: /
+      - title: "Child Page C5"
+        url: /
+  - title: "Parent Page D"
+    children:
+      - title: "Child Page D1"
+        url: /
+      - title: "Child Page D2"
+        url: /
