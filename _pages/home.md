@@ -12,7 +12,7 @@ header:
 excerpt: >
   Multirobot system consisting of UR10s that allows simultaneous execution of tasks. It enables the control of different cobots with different controllers.
 feature_row_1:
-  - image_path: /assets/images/mm-customizable-feature.png
+  - image_path: /assets/images/basic-setup.png
     alt: "Basic System Configuration"
     title: "Basic System Configuration"
     excerpt: "Here is a step by step explanation of how to install **ROS Kinetic Kame** and all the necessary tools and packages."
