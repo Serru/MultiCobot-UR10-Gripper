@@ -1,1 +1,1 @@
-Sitemap: https://serru.github.io/MultiCobot-UR10-Gripper/sitemap.xml
+Sitemap: http://localhost:4000/MultiCobot-UR10-Gripper/sitemap.xml
