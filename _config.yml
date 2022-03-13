@@ -11,7 +11,7 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Colaborative Multicobot System"
+title                    : "Collaborative Multicobot System with/without MoveIt!"
 title_separator          : "-"
 subtitle                 : "Developed with ROS Kinetic Kame"
 name                     : &name "Miguel Burgh" # &name is a YAML anchor which can be *referenced later
