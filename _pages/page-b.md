@@ -1,7 +1,7 @@
 ---
 title: "Page B"
 permalink: /page-b/
-date: 2011-06-23T18:39:14+00:00
+date: 2022-03-13T14:46:59+01:00
 ---
 
 (lorem ipsum)

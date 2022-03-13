@@ -2,6 +2,7 @@
 permalink: /about/
 title: "About this project"
 excerpt: "This thesis project focuses on developing a multi-robot system that can cooperatively perform tasks such as transporting objects."
+date: 2022-03-13T14:46:59+01:00
 layouts_gallery:
   - url: /assets/images/one-arm-moveit-gazebo.png
     image_path: /assets/images/one-arm-moveit-gazebo.png
