@@ -19,8 +19,8 @@ description              : &description "Multirobot system consisting of UR10s t
 url                      : "https://Serru.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "/MultiCobot-UR10-Gripper" # the subpath of your site, e.g. "/blog"
 repository               : "Serru/MultiCobot-UR10-Gripper"
-teaser                   : "/assets/images/proyect-logo.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : "/assets/images/android-chrome-72x72.png" # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
+teaser                   : "/assets/images/proyect-logo-2.png" #"/assets/images/proyect-logo.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+logo                     : "/assets/images/proyect-logo-2.png" #"/assets/images/android-chrome-96x96.png" # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
@@ -66,7 +66,7 @@ facebook:
   username               : #&facebook "michaelrose"
   app_id                 :
   publisher              :
-og_image                 : "/assets/images/site-logo.png" # Open Graph/Twitter default site image
+og_image                 : "/assets/images/site-logo-2.png" # Open Graph/Twitter default site image
 # For specifying social profiles, used in _includes/seo.html
 # - https://developers.google.com/structured-data/customize/social-profiles
 social:
@@ -117,6 +117,9 @@ footer:
     #- label: "Instagram"
     #  icon: "fab fa-fw fa-instagram"
     #  url: "https://instagram.com/mmistakes"
+    - label: "Sitemap"
+    #  icon: "fab fa-fw fa-instagram"
+      url: "https://serru.github.io/MultiCobot-UR10-Gripper/sitemap.xml"
 
 
 # Reading Files
