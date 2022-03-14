@@ -16,7 +16,7 @@ title_separator          : "-"
 subtitle                 : "Developed with ROS Kinetic Kame"
 name                     : &name "Miguel Burgh" # &name is a YAML anchor which can be *referenced later
 description              : &description "Multirobot system consisting of UR10s that allows simultaneous execution of tasks. It enables the control of different cobots with different controllers."
-url                      : https://Serru.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://Serru.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "/MultiCobot-UR10-Gripper" # the subpath of your site, e.g. "/blog"
 repository               : "Serru/MultiCobot-UR10-Gripper"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
