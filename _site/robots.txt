@@ -1,1 +1,7 @@
+User-agent: Googlebot
+Disallow: /nogooglebot/
+
+User-agent: *
+Allow: /
+
 Sitemap: https://serru.github.io/MultiCobot-UR10-Gripper/sitemap.xml
