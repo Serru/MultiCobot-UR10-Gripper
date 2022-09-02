@@ -105,7 +105,7 @@ rosrun two_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
 Here is a video with the results of the simulations performed in `Gazebo`. The video shows two and four robots performing a *pick & place* without human intervention. Then it shows how a person controls two cobots with Leap Motion, and finally the developed result was tested with the physical Campero robot.
 
 <p>
-<a href="https://drive.google.com/file/d/1oqVyre4vlfHqH9SrQuyXH00GcmwIuP97/view?usp=sharing" title="Link Title">
+<a href="https://drive.google.com/file/d/1tSQhoj_FoAtpLjpX_puJgrlwuJCzKOLm/view?usp=sharing" title="Link Title">
 	<img src="https://raw.githubusercontent.com/Serru/MultiCobot-UR10-Gripper/main/doc/imgs_md/img-fondo-video.png" alt="Results of the project." />
 </a>
 </p>
