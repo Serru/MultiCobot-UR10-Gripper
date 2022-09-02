@@ -157,4 +157,14 @@ BibTeX:
     title = "{Sistema multirobot para el transporte colaborativo de objetos}",
     year  = "2022",
 }
+
+@inproceedings{Burgh2022,
+author = {Burgh Oliv{\'{a}}n and Gonzalo L{\'{o}}pez{-}Nicol{\'{a}}s and Rosario Arag{\"{u}}{\'{e}}s},
+title = {ROS-based multirobot system for collaborative
+interaction},
+booktitle = {{ROBOT}: Fifth Iberian Robotics Conference, Zaragoza, Spain, 23-25 November},
+volume = {},
+pages = {},
+year = {2022}
+}
 ```
