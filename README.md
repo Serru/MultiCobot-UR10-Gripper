@@ -158,13 +158,12 @@ BibTeX:
     year  = "2022",
 }
 
-@inproceedings{Burgh2022,
-author = {Burgh Oliv{\'{a}}n and Gonzalo L{\'{o}}pez{-}Nicol{\'{a}}s and Rosario Arag{\"{u}}{\'{e}}s},
-title = {ROS-based multirobot system for collaborative
-interaction},
-booktitle = {{ROBOT}: Fifth Iberian Robotics Conference, Zaragoza, Spain, 23-25 November},
-volume = {},
-pages = {},
-year = {2022}
-} 
+@inproceedings{burgh2023ros,
+  title={ROS-Based Multirobot System for Collaborative Interaction},
+  author={Burgh-Oliv{\'a}n, Miguel and Arag{\"u}{\'e}s, Rosario and L{\'o}pez-Nicol{\'a}s, Gonzalo},
+  booktitle={Iberian Robotics conference},
+  pages={411--422},
+  year={2023},
+  organization={Springer}
+}
 ```
