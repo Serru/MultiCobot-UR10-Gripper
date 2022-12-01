@@ -154,10 +154,12 @@ Por favor, cita esta publicación si el contenido de este repositorio te ha sido
 
 BibTeX: 
 ```
-@article{
-    BurghOliván:66296,
-    author = "Burgh Oliván, Miguel Yankan and López Nicolás, Gonzalo",
-    title = "{Sistema multirobot para el transporte colaborativo de objetos}",
-    year  = "2022",
+@inproceedings{burgh2023ros,
+  title={ROS-Based Multirobot System for Collaborative Interaction},
+  author={Burgh-Oliv{\'a}n, Miguel and Arag{\"u}{\'e}s, Rosario and L{\'o}pez-Nicol{\'a}s, Gonzalo},
+  booktitle={Iberian Robotics conference},
+  pages={411--422},
+  year={2023},
+  organization={Springer}
 }
 ```
