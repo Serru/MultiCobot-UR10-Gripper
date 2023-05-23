@@ -133,12 +133,22 @@ Please cite this work if the content of this repository has been useful to you:
 
 BibTeX: 
 ```
-@inproceedings{burgh2023ros,
-  title={ROS-Based Multirobot System for Collaborative Interaction},
-  author={Burgh-Oliv{\'a}n, Miguel and Arag{\"u}{\'e}s, Rosario and L{\'o}pez-Nicol{\'a}s, Gonzalo},
-  booktitle={Iberian Robotics conference},
-  pages={411--422},
-  year={2023},
-  organization={Springer}
+@InProceedings{10.1007/978-3-031-21065-5_34,
+author="Burgh-Oliv{\'a}n, Miguel
+and Arag{\"u}{\'e}s, Rosario
+and L{\'o}pez-Nicol{\'a}s, Gonzalo",
+editor="Tardioli, Danilo
+and Matell{\'a}n, Vicente
+and Heredia, Guillermo
+and Silva, Manuel F.
+and Marques, Lino",
+title="ROS-Based Multirobot System for Collaborative Interaction",
+booktitle="ROBOT2022: Fifth Iberian Robotics Conference",
+year="2023",
+publisher="Springer International Publishing",
+address="Cham",
+pages="411--422",
+abstract="This paper presents the design and implementation of a collaborative multi-robot system based on ROS. The goal is to manipulate objects with multiple cobots simultaneously by following commands given by a user via gestures. Two methods have been designed, developed, implemented and experimentally evaluated: The first one is based on the ROS package called MoveIt! and focuses mainly on configuration to allow simultaneous control of different cobots. The second method involves the development of a third-party motion planner that sends commands directly to the controllers responsible for executing the cobots' movements. The Leap Motion, a device that can be used for gesture recognition, is also integrated into the system to enable user interaction in object manipulation. The system has been tested in simulation using Gazebo and evaluated in a real UR10 robot. The main contribution of the proposed architecture is that it solves the problem of controlling multiple robots simultaneously in ROS. In particular, our approach allows simultaneous execution of tasks with different types of controllers, brands and models, as well as direct control of the robots by using the Leap Motion device.",
+isbn="978-3-031-21065-5"
 }
 ```
