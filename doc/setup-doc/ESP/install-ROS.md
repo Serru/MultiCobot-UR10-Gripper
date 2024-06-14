@@ -15,6 +15,7 @@ sudo apt-get install ros-kinetic-desktop-full
 
 
 sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+sudo apt install libignition-math2-dev
 
 sudo apt install python-rosdep
 sudo rosdep init
