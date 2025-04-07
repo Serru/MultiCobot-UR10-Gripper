@@ -137,7 +137,7 @@ The memory of the Final Degree Project can be found in the [Repository](https://
 
 This work is part of the [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigacion/ropert) research group of the [i3A](https://i3a.unizar.es), the [University of Zaragoza](http://www.unizar.es/).
 
-![image](https://www.unizar.es/sites/default/files/i3a.png)
+![image](https://i3a.unizar.es/sites/default/files/logo_i3a.jpg)
 
 ---
 
