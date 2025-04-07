@@ -112,7 +112,7 @@ rosrun two_arm_no_moveit_manipulator ur10_2_robot_manipulator.py
 
 This work is part of the [RoPeRT](https://i3a.unizar.es/es/grupos-de-investigacion/ropert) research group of the [i3A](https://i3a.unizar.es), the [University of Zaragoza](https://www.unizar.es/).
 
-![image](https://www.unizar.es/sites/default/files/i3a.png)
+![image](https://i3a.unizar.es/sites/default/files/logo_i3a.jpg)
 
 ---
 
